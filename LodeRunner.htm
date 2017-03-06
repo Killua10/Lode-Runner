@@ -1,0 +1,109 @@
+﻿<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="fr" xml:lang="fr">
+<head>
+
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>Dessin du fond</title>
+  <link rel="stylesheet" type="text/css" href="" />
+  <!-- Code JavaScript local -->
+  <script type="text/javascript">
+	var objCanvas = null;
+	var objC2D = null;
+	var objCycleAnimation = null;
+	var objImageFond = null;
+  var tabMappe = [ ['F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F'],
+                   ['F','F','F','F','F','F','F','F','F','F','F','O','F','F','F','F','F','F','O','F','F','F','F','F','F','F','F','F'],
+                   ['F','F','E','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','F','F','F','F','F'],
+                   ['F','F','E','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','F','F','F','F','F'],
+                   ['F','F','E','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','F','F','F','F','F'],
+                   ['F','F','E','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','F','F','F','F','F'],
+                   ['F','F','E','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','F','F','F','F','F'],
+                   ['F','F','E','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','F','F','F','F','F'],
+                   ['F','F','E','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','F','F','F','F','F'],
+                   ['F','F','E','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','F','F','F','F','F'],
+                   ['F','F','E','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','F','F','F','F','F'],
+                   ['F','F','E','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','F','F','F','F','F'],
+                   ['F','F','E','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','F','F','F','F','F'],
+                   ['F','F','E','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','F','F','F','F','F'],
+                   ['F','F','E','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','F','F','F','F','F'],
+                   ['F','F','E','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','F','F','F','F','F'],
+                   ['F','F','E','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','F','F','F','F','F']  ];
+
+    function initAnimation() {
+        objCanvas = document.getElementById('monCanvas');
+        objC2D = objCanvas.getContext('2d');
+        initImageFond();
+	      dessiner(); // Dessiner une première fois
+        animer();
+
+    }
+
+    // Aller chercher l'image de fond
+    function initImageFond() {
+        objImageFond = new Image();
+        objImageFond.src = 'img/O.png';
+
+
+    }
+
+    // Un cycle d'animation
+    function animer() {
+        // Requête pour le prochain cycle
+        objCycleAnimation = requestAnimationFrame(animer);
+    		// Le cycle d'animation
+    		effacerDessin();
+    		mettreAjourAnimation();
+    		dessiner();
+	}
+
+    // Arrêter l'animation
+	function arreterAnimation() {
+	    if (objCycleAnimation != null)
+	        cancelAnimationFrame(objCycleAnimation);
+	}
+
+	// Pour effacer le dessin
+	function effacerDessin() {
+		objC2D.clearRect(0,0, objCanvas.width, objCanvas.height);
+	}
+
+	// Pour mettre à jour l'animation
+	function mettreAjourAnimation(){
+
+	}
+
+	// Pour dessiner
+	function dessiner() {
+	    dessinerMappe();
+	}
+
+	// Pour dessiner l'image de fond
+	function dessinerMappe() {
+	    objC2D.save();  // Sauvegarde le contexte
+      var block = 40;
+
+      for (var y = 0; y < tabMappe.length; y++) {
+        for (var x = 0; x < tabMappe[y].length; x++) {
+          var tile_x = x * block;
+          var tile_y = y * block;
+
+          objC2D.drawImage(objImageFond, tile_x, tile_y, 40, 40);
+        }
+      }
+
+
+
+
+	    objC2D.restore(); // Restaure le contexte
+	}
+   </script>
+</head>
+
+<body onload="initAnimation()">
+	<canvas id="monCanvas" width="1120" height="680" style="display: block; margin: auto;">
+		Votre navigateur ne supporte pas la balise canvas
+	</canvas
+</body>
+
+</html>
