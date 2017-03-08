@@ -43,19 +43,19 @@
     function initImageFond() {
         objImageFond = new Image();
         objImageFond.src = 'img/F.png';
-			
+
 				objImageEchelle = new Image();
         objImageEchelle.src = 'img/E.png';
-			
+
 				objImageCorde = new Image();
         objImageCorde.src = 'img/C.png';
-			
+
 				objImageMur = new Image();
         objImageMur.src = 'img/M.png';
-			
+
 				objImageOr = new Image();
         objImageOr.src = 'img/O.png';
-			
+
 				objImageBottom = new Image();
         objImageBottom.src = 'img/B.png';
 
@@ -101,7 +101,7 @@
       var tile_y = block;
 
       for (var row = 0; row < tabMappe.length; row++) {
-				
+
         for (var col = 0; col < tabMappe[row].length; col++) {
           tile_x = col * block;
 					tile_y = row * block;
@@ -109,6 +109,7 @@
          objC2D.drawImage(objImageCorde, tile_x, tile_y, 40, 40);
         }
       }
+
 
 
 
