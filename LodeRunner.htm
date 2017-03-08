@@ -13,21 +13,21 @@
 	var objCycleAnimation = null;
 	var objImageFond = null;
   var tabMappe = [ ['F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F'],
-                   ['F','F','F','F','F','F','F','F','F','F','F','O','F','F','F','F','F','F','O','F','F','F','F','F','F','F','F','F'],
-                   ['F','F','E','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','F','F','F','F','F'],
-                   ['F','F','E','L','L','L','L','L','L','L','L','L','L','L','L','L','L','L','L','L','L','L','M','F','F','F','F','F'],
-                   ['F','F','E','L','L','L','L','L','L','L','L','L','L','L','L','L','L','L','L','L','L','L','M','F','F','F','F','F'],
-                   ['F','F','E','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','F','F','F','F','F'],
-                   ['F','F','E','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','F','F','F','F','F'],
-                   ['F','F','E','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','F','F','F','F','F'],
-                   ['F','F','E','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','F','F','F','F','F'],
-                   ['F','F','E','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','F','F','F','F','F'],
-                   ['F','F','E','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','F','F','F','F','F'],
-                   ['F','F','E','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','F','F','F','F','F'],
-                   ['F','F','E','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','F','F','F','F','F'],
-                   ['F','F','E','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','F','F','F','F','F'],
-                   ['F','F','E','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','F','F','F','F','F'],
-                   ['F','F','E','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','F','F','F','F','F'],
+                   ['F','F','F','F','O','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F'],
+                   ['M','M','M','M','M','M','M','E','M','M','M','M','M','M','M','F','F','F','F','F','F','F','F','F','F','F','F','F'],
+                   ['F','F','F','F','F','F','F','E','C','C','C','C','C','C','C','C','C','C','F','F','F','F','F','O','F','F','F','F'],
+                   ['F','F','F','F','F','F','F','E','F','F','F','F','M','M','E','F','F','F','M','M','M','M','M','M','M','E','M','M'],
+                   ['F','F','F','F','F','F','F','E','F','F','F','F','M','M','E','F','F','F','F','F','F','F','F','F','F','E','F','F'],
+                   ['F','F','F','F','F','F','F','E','F','F','F','F','M','M','E','F','F','F','F','F','F','F','O','F','F','E','F','F'],
+                   ['M','M','E','M','M','M','M','M','F','F','F','F','M','M','M','M','M','M','M','M','E','M','M','M','M','M','M','M'],
+                   ['F','F','E','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','E','F','F','F','F','F','F','F'],
+                   ['F','F','E','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','E','F','F','F','F','F','F','F'],
+                   ['M','M','M','M','M','M','M','M','M','E','M','M','M','M','M','M','M','M','M','M','E','F','F','F','F','F','F','F'],
+                   ['F','F','F','F','F','F','F','F','F','E','F','F','F','F','F','F','F','F','F','F','E','F','F','F','F','F','F','F'],
+                   ['F','F','F','F','F','F','F','O','F','E','C','C','C','C','C','C','C','C','C','C','E','F','F','F','O','F','F','F'],
+                   ['F','F','F','F','E','M','M','M','M','M','M','F','F','F','F','F','F','F','F','F','M','M','M','M','M','M','M','E'],
+                   ['F','F','F','F','E','F','F','F','F','F','F','F','F','F','F','F','F','F','O','F','F','F','F','F','F','F','F','E'],
+                   ['M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M'],
                    ['B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B']  ];
 
     function initAnimation() {
@@ -106,9 +106,45 @@
           tile_x = col * block;
 					tile_y = row * block;
 
-         objC2D.drawImage(objImageCorde, tile_x, tile_y, 40, 40);
+          switch (tabMappe[row][col]) {
+            case 'F':
+            objC2D.drawImage(objImageFond, tile_x, tile_y, 40, 40);
+
+              break;
+
+            case 'E':
+            objC2D.drawImage(objImageEchelle, tile_x, tile_y, 40, 40);
+
+              break;
+
+            case 'C':
+            objC2D.drawImage(objImageCorde, tile_x, tile_y, 40, 40);
+
+              break;
+
+            case 'M':
+            objC2D.drawImage(objImageMur, tile_x, tile_y, 40, 40);
+
+              break;
+
+            case 'O':
+            objC2D.drawImage(objImageOr, tile_x, tile_y, 40, 40);
+
+              break;
+
+            case 'B':
+            objC2D.drawImage(objImageBottom, tile_x, tile_y, 40, 40);
+
+              break;
+
+            default:
+
+          }
+
+         //objC2D.drawImage(objImageCorde, tile_x, tile_y, 40, 40);
         }
       }
+
 
 
 
