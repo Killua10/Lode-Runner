@@ -96,52 +96,38 @@
 	// Pour dessiner l'image de fond
 	function dessinerMappe() {
 	    objC2D.save();  // Sauvegarde le contexte
-      var block = 40;
-			var tile_x = block;
-      var tile_y = block;
+      var intTuile = 40;
+			var intTuileX = block;
+      var intTuileY = block;
 
       for (var row = 0; row < tabMappe.length; row++) {
 
         for (var col = 0; col < tabMappe[row].length; col++) {
-          tile_x = col * block;
-					tile_y = row * block;
+          tile_x = col * intTuile;
+					tile_y = row * intTuile;
 
           switch (tabMappe[row][col]) {
-            case 'F':
-            objC2D.drawImage(objImageFond, tile_x, tile_y, 40, 40);
-
+            case 'F': objC2D.drawImage(objImageFond, intTuileX, intTuileY, 40, 40);
               break;
 
-            case 'E':
-            objC2D.drawImage(objImageEchelle, tile_x, tile_y, 40, 40);
-
+            case 'E': objC2D.drawImage(objImageEchelle, intTuileX, intTuileY, 40, 40);
               break;
 
-            case 'C':
-            objC2D.drawImage(objImageCorde, tile_x, tile_y, 40, 40);
-
+            case 'C': objC2D.drawImage(objImageCorde, intTuileX, intTuileY, 40, 40);
               break;
 
-            case 'M':
-            objC2D.drawImage(objImageMur, tile_x, tile_y, 40, 40);
-
+            case 'M': objC2D.drawImage(objImageMur, intTuileX, intTuileY, 40, 40);
               break;
 
-            case 'O':
-            objC2D.drawImage(objImageOr, tile_x, tile_y, 40, 40);
-
+            case 'O': objC2D.drawImage(objImageOr, intTuileX, intTuileY, 40, 40);
               break;
 
-            case 'B':
-            objC2D.drawImage(objImageBottom, tile_x, tile_y, 40, 40);
-
+            case 'B': objC2D.drawImage(objImageBottom, intTuileX, intTuileY, 40, 40);
               break;
-
-            default:
 
           }
 
-         //objC2D.drawImage(objImageCorde, tile_x, tile_y, 40, 40);
+
         }
       }
 
