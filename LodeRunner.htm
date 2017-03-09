@@ -34,6 +34,7 @@
         objCanvas = document.getElementById('monCanvas');
         objC2D = objCanvas.getContext('2d');
         initImageFond();
+        initRunner();
 	      dessiner(); // Dessiner une première fois
         animer();
 
@@ -82,39 +83,42 @@
 		objC2D.clearRect(0,0, objCanvas.width, objCanvas.height);
 	}
 
-  objImageDebut = new Image();
-  objImageDebut.onload = animer;
-  objImageDebut.src = 'img/debut.png';
-
-  var posX = 550;
-  var posY = 575;
-  var step = 0;
+  function initRunner(){
+    var objImageDebut = new Image();
+    objImageDebut.src = 'img/debut.png';
+    objRunner = new Object();
+    objRunner.objImage = objImageDebut;
+    objRunner.intLongeur = 35;
+    objRunner.intLargeur = 23;
+    objRunner.posX = objCanvas.width/2;
+    objRunner.posY = 575;
+    objRunner.intVitesse = 5;
+    objRunner.intDirection = 0; //-1=left, 0=middle, +1=right
+    objRunner.binChute = false;
+    objRunner.intFrame = 0;
+  }
 
 	// Pour mettre à jour l'animation
 	function mettreAjourAnimation(){
 
-    step+=0.08;
-    if (step >= 22) {
-      step = 0;
+    objRunner.intFrame+=0.08;
+    if (objRunner.intFrame >= 22) {
+      objRunner.intFrame = 0;
     }
 
 	}
 
-
-
-
-
-  function dessinerTim(x, y, step){
+  function dessinerRunner(x, y, intFrame){
     //objC2D.drawImage(objImageDebut, 25*step, 0, posX-12, posY-12, 0, 0, 35, 35);
-    objC2D.drawImage(objImageDebut, (objImageDebut.width/22)*step, 0, 23, 35, posX-12, posY-12, 23, 35);
+    objC2D.drawImage(objRunner.objImage, (objRunner.objImage.width/22)*intFrame, 0, 23, 35, objRunner.posX-12, objRunner.posY-12, 23, 35);
   }
 
 
 	// Pour dessiner
 	function dessiner() {
 	    dessinerMappe();
-      //draw each frame + place them in the middle
-      dessinerTim(posX, posY, Math.floor(step));
+
+      dessinerRunner(objRunner.posX, objRunner.posY, Math.floor(objRunner.intFrame));
       debug();
 
 
@@ -123,7 +127,7 @@
   function debug(){
     objC2D.font="20px calibri";
     objC2D.fillStyle = 'gray';
-    objC2D.fillText("posX: " + posX + " - posY: " + posY + " - step: " + step,10,670);
+    objC2D.fillText("posX: " + objRunner.posX + " - posY: " + objRunner.posY + " - frame: " + objRunner.intFrame.toFixed(2),10,670);
 
   }
 
@@ -167,11 +171,12 @@
 
     var x = event.keyCode;
 
-    if (x == 39 && posX >= 22 && posX <= objCanvas.width) {
-      posX += 5
+    if (x == 39) {
+      objRunner.posX += 5
     }
-    else if (x == 37 && posX >= 22 && posX <= objCanvas.width) {
-      posX -= 5
+
+    if (x == 37) {
+      objRunner.posX -= 5
     }
 
   }
