@@ -192,7 +192,23 @@
 
     var x = event.keyCode;
 
+<<<<<<< HEAD
     if (x == 39) {
+=======
+    var binDroite = false;
+    var binGauche = false;
+    var binMonter = false;
+
+    // Deplacement droite
+    if (x == 39)
+      binDroite = true;
+
+    // Deplacement gauche
+    if (x == 37)
+      binGauche = true;
+
+    if (binDroite) {
+>>>>>>> origin/master
       objRunner.intDirection = 1;
       objRunner.posX += objRunner.intVitesse;
     }
