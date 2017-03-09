@@ -35,6 +35,7 @@
         objC2D = objCanvas.getContext('2d');
         initImageFond();
         initRunner();
+        initOr();
 	      dessiner(); // Dessiner une première fois
         animer();
 
@@ -114,7 +115,12 @@
 
 	// Pour mettre à jour l'animation
 	function mettreAjourAnimation(){
-    //Animation pour le Runner
+
+    // (FRAME) Animation pour le Runner
+    objRunner.intFrame+=0.05;
+    if (objRunner.intFrame >= 22) {
+      objRunner.intFrame = 0;
+    }
 
     if (objRunner.posX < objRunner.intLargeur - objRunner.intLargeur2) {
       objRunner.posX = objRunner.intLargeur;
