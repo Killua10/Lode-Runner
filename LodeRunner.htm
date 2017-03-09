@@ -90,8 +90,15 @@
   function initRunner(){
     var objImageDebut = new Image();
     objImageDebut.src = 'img/debut.png';
+    var objImageDroit = new Image();
+    objImageDroit.src = 'img/courirDroit.png';
+    var objImageGauche = new Image();
+    objImageGauche.src = 'img/courirGauche.png';
+
     objRunner = new Object();
     objRunner.objImage = objImageDebut;
+    objRunner.objAnimationDroit = objImageDroit;
+    objRunner.objAnimationGauche = objImageGauche;
     objRunner.intLongeur = 35;
     objRunner.intLargeur = 23;
     objRunner.intLargeur2 = 12;
@@ -101,6 +108,8 @@
     objRunner.intDirection = 0; //-1=left, 0=middle, +1=right
     objRunner.binChute = false;
     objRunner.intFrame = 0;
+    objRunner.intFrameGauche = 0;
+    objRunner.intFrameDroit = 0;
   }
 
   function initOr(){
@@ -119,11 +128,21 @@
 	// Pour mettre à jour l'animation
 	function mettreAjourAnimation(){
 
+    animationRunner();
+
+
+	}
+
+  function animationRunner(){
     // (FRAME) Animation pour le Runner
-    objRunner.intFrame+=0.05;
-    if (objRunner.intFrame >= 22) {
-      objRunner.intFrame = 0;
+
+    if (objRunner.intDirection == 0) {
+      objRunner.intFrame+=0.05;
+      if (objRunner.intFrame >= 22) {
+        objRunner.intFrame = 0;
+      }
     }
+
 
     if (objRunner.posX < objRunner.intLargeur - objRunner.intLargeur2) {
       objRunner.posX = objRunner.intLargeur;
@@ -138,15 +157,15 @@
     if (binDroite) {
       objRunner.intDirection = 1;
       objRunner.posX += objRunner.intVitesse;
+
     }
 
     if (binGauche) {
       objRunner.intDirection = -1;
       objRunner.posX -= objRunner.intVitesse;
+
     }
-
-
-	}
+  }
 
   function dessinerRunner(x, y, intFrame){
     //objC2D.drawImage(objImageDebut, 25*step, 0, posX-12, posY-12, 0, 0, 35, 35);
@@ -166,7 +185,7 @@
   function debug(){
     objC2D.font="20px calibri";
     objC2D.fillStyle = 'gray';
-    objC2D.fillText("posX: " + objRunner.posX + " - posY: " + objRunner.posY + " - frame: " + objRunner.intFrame.toFixed(2),10,670);
+    objC2D.fillText("posX: " + objRunner.posX + " - posY: " + objRunner.posY + " - frame: " + objRunner.intFrame.toFixed(2) + " - direction: " + objRunner.intDirection,10,670);
 
   }
 
@@ -208,26 +227,30 @@
 
   function keyDown(){
     var x = event.keyCode;
+
     // Deplacement droite
-    if (x == 39)
-      binDroite = true;
-
+    if (x == 39)  binDroite = true;
     // Deplacement gauche
-    if (x == 37)
-      binGauche = true;
-
+    if (x == 37)  binGauche = true;
 
   }
 
   function keyUp(){
     var x = event.keyCode;
-    // Deplacement droite
-    if (x == 39)
-      binDroite = false;
 
+    // Deplacement droite
+    if (x == 39){
+      binDroite = false;
+      objRunner.intDirection = 0;
+    }
     // Deplacement gauche
-    if (x == 37)
+    if (x == 37){
       binGauche = false;
+<<<<<<< HEAD
+=======
+      objRunner.intDirection = 0;
+    }
+>>>>>>> origin/master
 
   }
 
