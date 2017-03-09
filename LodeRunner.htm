@@ -167,11 +167,10 @@
 
     var x = event.keyCode;
 
-    if (x == 39) {
+    if (x == 39 && posX >= 22 && posX <= objCanvas.width) {
       posX += 5
     }
-
-    if (x == 37) {
+    else if (x == 37 && posX >= 22 && posX <= objCanvas.width) {
       posX -= 5
     }
 
