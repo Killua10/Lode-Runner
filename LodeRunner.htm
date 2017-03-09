@@ -90,8 +90,15 @@
   function initRunner(){
     var objImageDebut = new Image();
     objImageDebut.src = 'img/debut.png';
+    var objImageDroit = new Image();
+    objImageDroit.src = 'img/courirDroit.png';
+    var objImageGauche = new Image();
+    objImageGauche.src = 'img/courirGauche.png';
+
     objRunner = new Object();
     objRunner.objImage = objImageDebut;
+    objRunner.objAnimationDroit = objImageDroit;
+    objRunner.objAnimationGauche = objImageGauche;
     objRunner.intLongeur = 35;
     objRunner.intLargeur = 23;
     objRunner.intLargeur2 = 12;
@@ -138,11 +145,13 @@
     if (binDroite) {
       objRunner.intDirection = 1;
       objRunner.posX += objRunner.intVitesse;
+      
     }
 
     if (binGauche) {
       objRunner.intDirection = -1;
       objRunner.posX -= objRunner.intVitesse;
+
     }
 
 
@@ -208,27 +217,21 @@
 
   function keyDown(){
     var x = event.keyCode;
+
     // Deplacement droite
-    if (x == 39)
-      binDroite = true;
-
+    if (x == 39)  binDroite = true;
     // Deplacement gauche
-    if (x == 37)
-      binGauche = true;
-
+    if (x == 37)  binGauche = true;
 
   }
 
   function keyUp(){
     var x = event.keyCode;
+
     // Deplacement droite
-    if (x == 39)
-      binDroite = false;
-
+    if (x == 39)  binDroite = false;
     // Deplacement gauche
-    if (x == 37)
-      binGauche = false;
-
+    if (x == 37)  binGauche = false;
 
   }
 
