@@ -12,6 +12,9 @@
 	var objC2D = null;
 	var objCycleAnimation = null;
 	var objImageFond = null;
+  var binDroite = false;
+  var binGauche = false;
+
   var tabMappe = [ ['F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F'],
                    ['F','F','F','F','O','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F'],
                    ['M','M','M','M','M','M','M','E','M','M','M','M','M','M','M','F','F','F','F','F','F','F','F','F','F','F','F','F'],
@@ -94,7 +97,7 @@
     objRunner.intLargeur2 = 12;
     objRunner.posX = objCanvas.width/2;
     objRunner.posY = 575;
-    objRunner.intVitesse = 7;
+    objRunner.intVitesse = 4;
     objRunner.intDirection = 0; //-1=left, 0=middle, +1=right
     objRunner.binChute = false;
     objRunner.intFrame = 0;
@@ -132,6 +135,15 @@
       objRunner.posX = objRunner.posX+objRunner.intLargeur2;
     }
 
+    if (binDroite) {
+      objRunner.intDirection = 1;
+      objRunner.posX += objRunner.intVitesse;
+    }
+
+    if (binGauche) {
+      objRunner.intDirection = -1;
+      objRunner.posX -= objRunner.intVitesse;
+    }
 
 
 	}
@@ -194,14 +206,8 @@
 	    objC2D.restore(); // Restaure le contexte
 	}
 
-  function gererClavier(){
-
+  function keyDown(){
     var x = event.keyCode;
-
-    var binDroite = false;
-    var binGauche = false;
-    var binMonter = false;
-
     // Deplacement droite
     if (x == 39)
       binDroite = true;
@@ -210,15 +216,18 @@
     if (x == 37)
       binGauche = true;
 
-    if (binDroite) {
-      objRunner.intDirection = 1;
-      objRunner.posX += objRunner.intVitesse;
-    }
 
-    if (binGauche) {
-      objRunner.intDirection = -1;
-      objRunner.posX -= objRunner.intVitesse;
-    }
+  }
+
+  function keyUp(){
+    var x = event.keyCode;
+    // Deplacement droite
+    if (x == 39)
+      binDroite = false;
+
+    // Deplacement gauche
+    if (x == 37)
+      binGauche = false;
 
 
   }
@@ -227,7 +236,7 @@
 </head>
 
 <body onload="initAnimation()">
-	<canvas id="monCanvas" tabindex="1" width="1120" height="680" style="display: block; margin: auto;" onkeydown="gererClavier()">
+	<canvas id="monCanvas" tabindex="1" width="1120" height="680" style="display: block; margin: auto;" onkeydown="keyDown()" onkeyup="keyUp()">
 		Votre navigateur ne supporte pas la balise canvas
 	</canvas
 </body>
