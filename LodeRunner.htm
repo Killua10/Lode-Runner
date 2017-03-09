@@ -33,12 +33,18 @@
                    ['M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M'],
                    ['B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B']  ];
 
+  var tabObjMap = [[]];
+
     function initAnimation() {
         objCanvas = document.getElementById('monCanvas');
         objC2D = objCanvas.getContext('2d');
         initImageFond();
         initRunner();
         initOr();
+        initMur();
+        initCorde();
+        initEchelle();
+        initFond();
 	      dessiner(); // Dessiner une première fois
         animer();
 
@@ -278,6 +284,7 @@
 
           switch (tabMappe[row][col]) {
             case 'F': objC2D.drawImage(objImageFond, intTuileX, intTuileY, 40, 40);
+            tabObjMap[row][col] = objFond;
               break;
 
             case 'E': objC2D.drawImage(objImageEchelle, intTuileX, intTuileY, 40, 40);
