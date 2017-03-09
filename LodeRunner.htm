@@ -170,7 +170,6 @@
     objFond.intLargeur = 40;
     objFond.posX = 0;
     objFond.posY = 0;
-    //objFond.binSurEchelle = false;
   }
 
 
@@ -190,6 +189,18 @@
       objRunner.intFrame+=0.05;
       if (objRunner.intFrame >= 22) {
         objRunner.intFrame = 0;
+      }
+    }
+    if (objRunner.intDirection == -1) {
+      objRunner.intFrameGauche+=1;
+      if (objRunner.intFrameGauche >= 27) {
+        objRunner.intFrameGauche = 0;
+      }
+    }
+    if (objRunner.intDirection == 1) {
+      objRunner.intFrameDroit+=1;
+      if (objRunner.intFrameDroit >= 22) {
+        objRunner.intFrameDroit = 0;
       }
     }
 
@@ -219,14 +230,28 @@
 
   function dessinerRunner(x, y, intFrame){
     //objC2D.drawImage(objImageDebut, 25*step, 0, posX-12, posY-12, 0, 0, 35, 35);
-    objC2D.drawImage(objRunner.objImage, (objRunner.objImage.width/22)*intFrame, 0, 23, 35, objRunner.posX-12, objRunner.posY-12, 23, 35);
+    if (objRunner.intDirection == 0) {
+      objC2D.drawImage(objRunner.objImage, (objRunner.objImage.width/22)*intFrame, 0, 23, 35, objRunner.posX-12, objRunner.posY-12, 23, 35);
+    }else if (objRunner.intDirection == -1) {
+      objC2D.drawImage(objRunner.objAnimationGauche, (objRunner.objAnimationGauche.width/27)*intFrame, 0, 23, 35, objRunner.posX-12, objRunner.posY-12, 23, 35);
+    }else if (objRunner.intDirection == 1) {
+      objC2D.drawImage(objRunner.objAnimationDroit, (objRunner.objAnimationDroit.width/27)*intFrame, 0, 23, 35, objRunner.posX-12, objRunner.posY-12, 23, 35);
+    }
+
   }
 
 
 	// Pour dessiner
 	function dessiner() {
 	    dessinerMappe();
-      dessinerRunner(objRunner.posX, objRunner.posY, Math.floor(objRunner.intFrame));
+      if (objRunner.intDirection == 0) {
+        dessinerRunner(objRunner.posX, objRunner.posY, Math.floor(objRunner.intFrame));
+      }else if (objRunner.intDirection == -1) {
+        dessinerRunner(objRunner.posX, objRunner.posY, Math.floor(objRunner.intFrameGauche));
+      }else if (objRunner.intDirection == 1) {
+        dessinerRunner(objRunner.posX, objRunner.posY, Math.floor(objRunner.intFrameDroit));
+      }
+
       debug();
 
 
