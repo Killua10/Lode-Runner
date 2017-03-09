@@ -35,7 +35,6 @@
         objC2D = objCanvas.getContext('2d');
         initImageFond();
         initRunner();
-        initOr();
 	      dessiner(); // Dessiner une première fois
         animer();
 
@@ -115,12 +114,7 @@
 
 	// Pour mettre à jour l'animation
 	function mettreAjourAnimation(){
-
-    // (FRAME) Animation pour le Runner
-    objRunner.intFrame+=0.05;
-    if (objRunner.intFrame >= 22) {
-      objRunner.intFrame = 0;
-    }
+    //Animation pour le Runner
 
     if (objRunner.posX < objRunner.intLargeur - objRunner.intLargeur2) {
       objRunner.posX = objRunner.intLargeur;
@@ -193,33 +187,22 @@
       }
 	    objC2D.restore(); // Restaure le contexte
 	}
-  var binDroite = false;
-  var binGauche = false;
-  var binMonter = false;
+
   function gererClavier(){
 
     var x = event.keyCode;
 
-
-
-    // Deplacement droite
-    if (x == 39)
-      binDroite = true;
-
-    // Deplacement gauche
-    if (x == 37)
-      binGauche = true;
-
-    if (binDroite) {
+    if (x == 39) {
       objRunner.intDirection = 1;
       objRunner.posX += objRunner.intVitesse;
     }
 
-    if (binGauche) {
+
+
+    if (x == 37) {
       objRunner.intDirection = -1;
       objRunner.posX -= objRunner.intVitesse;
     }
-
 
   }
 
