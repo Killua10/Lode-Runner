@@ -84,7 +84,7 @@
 
   objImageDebut = new Image();
   objImageDebut.onload = animer;
-  objImageDebut.src = 'img/suit.png';
+  objImageDebut.src = 'img/debut.png';
 
   var posX = 550;
   var posY = 575;
@@ -93,8 +93,8 @@
 	// Pour mettre à jour l'animation
 	function mettreAjourAnimation(){
 
-    step+=0.09;
-    if (step >= 9) {
+    step+=0.08;
+    if (step >= 22) {
       step = 0;
     }
 
@@ -106,7 +106,7 @@
 
   function dessinerTim(x, y, step){
     //objC2D.drawImage(objImageDebut, 25*step, 0, posX-12, posY-12, 0, 0, 35, 35);
-    objC2D.drawImage(objImageDebut, 25*step, 0, 23, 37, posX-12, posY-12, 23, 37);
+    objC2D.drawImage(objImageDebut, (objImageDebut.width/22)*step, 0, 23, 35, posX-12, posY-12, 23, 35);
   }
 
 
