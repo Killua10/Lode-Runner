@@ -101,10 +101,12 @@
 	// Pour mettre à jour l'animation
 	function mettreAjourAnimation(){
 
+    //Animation pour le Runner
     objRunner.intFrame+=0.08;
     if (objRunner.intFrame >= 22) {
       objRunner.intFrame = 0;
     }
+
 
 	}
 
@@ -117,7 +119,6 @@
 	// Pour dessiner
 	function dessiner() {
 	    dessinerMappe();
-
       dessinerRunner(objRunner.posX, objRunner.posY, Math.floor(objRunner.intFrame));
       debug();
 
