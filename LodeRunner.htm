@@ -96,15 +96,14 @@
 	// Pour dessiner l'image de fond
 	function dessinerMappe() {
 	    objC2D.save();  // Sauvegarde le contexte
-      var intTuile = 40;
-			var intTuileX = block;
-      var intTuileY = block;
+      var intTailleTuile = 40;
+			var intTuileX = intTailleTuile;
+      var intTuileY = intTailleTuile;
 
       for (var row = 0; row < tabMappe.length; row++) {
-
         for (var col = 0; col < tabMappe[row].length; col++) {
-          tile_x = col * intTuile;
-					tile_y = row * intTuile;
+          intTuileX = col * intTailleTuile;
+					intTuileY = row * intTailleTuile;
 
           switch (tabMappe[row][col]) {
             case 'F': objC2D.drawImage(objImageFond, intTuileX, intTuileY, 40, 40);
@@ -126,16 +125,8 @@
               break;
 
           }
-
-
         }
       }
-
-
-
-
-
-
 	    objC2D.restore(); // Restaure le contexte
 	}
    </script>
