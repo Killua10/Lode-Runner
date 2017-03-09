@@ -33,11 +33,14 @@
                    ['M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M'],
                    ['B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B']  ];
 
-  var tabObjMap = [[]];
+  var tabObjMap = new Array(16);
 
     function initAnimation() {
         objCanvas = document.getElementById('monCanvas');
         objC2D = objCanvas.getContext('2d');
+        for (var i = 0; i < tabObjMap.length; i++) {
+          tabObjMap[i] = new Array(27);
+        }
         initImageFond();
         initRunner();
         initOr();
@@ -122,6 +125,7 @@
     objImageOr = new Image();
     objImageOr.src = 'img/O.png';
     objOr = new Object();
+    objOr.objNom = "OR";
     objOr.objImage = objImageOr;
     objOr.intLongeur = 40;
     objOr.intLargeur = 40;
@@ -135,6 +139,7 @@
     objImageMur = new Image();
     objImageMur.src = 'img/M.png';
     objMur = new Object();
+    objMur.objNom = "MUR";
     objMur.objImage = objImageMur;
     objMur.intLongeur = 40;
     objMur.intLargeur = 40;
@@ -147,6 +152,7 @@
     objImageCorde = new Image();
     objImageCorde.src = 'img/C.png';
     objCorde = new Object();
+    objCorde.objNom = "CORDE";
     objCorde.objImage = objImageCorde;
     objCorde.intLongeur = 40;
     objCorde.intLargeur = 40;
@@ -157,8 +163,9 @@
 
   function initEchelle(){
     objImageEchelle = new Image();
-    objImageEchelle.src = 'img/C.png';
+    objImageEchelle.src = 'img/E.png';
     objEchelle = new Object();
+    objEchelle.objNom = "ECHELLE";
     objEchelle.objImage = objImageEchelle;
     objEchelle.intLongeur = 40;
     objEchelle.intLargeur = 40;
@@ -169,8 +176,9 @@
 
   function initFond(){
     objImageFond = new Image();
-    objImageFond.src = 'img/C.png';
+    objImageFond.src = 'img/F.png';
     objFond = new Object();
+    objEchelle.objNom = "FOND";
     objFond.objImage = objImageFond;
     objFond.intLongeur = 40;
     objFond.intLargeur = 40;
@@ -182,6 +190,21 @@
 
 	// Pour mettre à jour l'animation
 	function mettreAjourAnimation(){
+
+    /*for (var row = 0; row < tabObjMap.length; row++) {
+      for (var col = 0; col < tabObjMap[row].length; col++) {
+
+        if (tabObjMap[row][col] == objOr) {
+          if (objRunner.posX == tabObjMap[row][col].posX && objRunner.posY == tabObjMap[row][col].posY) {
+            tabMappe[row][col] = 'F';
+            tabObjMap[row][col] = objFond;
+
+          }
+
+        }
+
+      }
+    }*/
 
     animationRunner();
 
@@ -235,13 +258,17 @@
   }
 
   function dessinerRunner(x, y, intFrame){
-    //objC2D.drawImage(objImageDebut, 25*step, 0, posX-12, posY-12, 0, 0, 35, 35);
+    //objC2D.drawImage(objImageDebut, 25*step, 0, posX-12, posY-12, 0, 0, 35, 35)0
+
+
+
     if (objRunner.intDirection == 0) {
       objC2D.drawImage(objRunner.objImage, (objRunner.objImage.width/22)*intFrame, 0, 23, 35, objRunner.posX-12, objRunner.posY-12, 23, 35);
     }else if (objRunner.intDirection == -1) {
-      objC2D.drawImage(objRunner.objAnimationGauche, (objRunner.objAnimationGauche.width/27)*intFrame, 0, 23, 35, objRunner.posX-12, objRunner.posY-12, 23, 35);
+      //tabMappe[1][1] = 'O';
+      objC2D.drawImage(objRunner.objAnimationGauche, (objRunner.objAnimationGauche.width/26.7)*intFrame, 0, 23, 35, objRunner.posX-12, objRunner.posY-12, 23, 35);
     }else if (objRunner.intDirection == 1) {
-      objC2D.drawImage(objRunner.objAnimationDroit, (objRunner.objAnimationDroit.width/27)*intFrame, 0, 23, 35, objRunner.posX-12, objRunner.posY-12, 23, 35);
+      objC2D.drawImage(objRunner.objAnimationDroit, (objRunner.objAnimationDroit.width/26.9)*intFrame, 0, 23, 35, objRunner.posX-12, objRunner.posY-12, 23, 35);
     }
 
   }
@@ -262,11 +289,19 @@
 
 
 	}
-
+  var compteur = 0 ;
   function debug(){
     objC2D.font="20px calibri";
     objC2D.fillStyle = 'gray';
-    objC2D.fillText("posX: " + objRunner.posX + " - posY: " + objRunner.posY + " - frame: " + objRunner.intFrame.toFixed(2) + " - direction: " + objRunner.intDirection,10,670);
+    objC2D.fillText("posX: " + objRunner.posX + " - posY: " + objRunner.posY + " - frame: " + objRunner.intFrame.toFixed(2) +
+     " - direction: " + objRunner.intDirection,10,670);
+
+
+     if (compteur == 0) {
+      console.log(tabObjMap);
+      compteur++;
+     }
+
 
   }
 
@@ -277,6 +312,8 @@
 			var intTuileX = intTailleTuile;
       var intTuileY = intTailleTuile;
 
+
+
       for (var row = 0; row < tabMappe.length; row++) {
         for (var col = 0; col < tabMappe[row].length; col++) {
           intTuileX = col * intTailleTuile;
@@ -285,18 +322,32 @@
           switch (tabMappe[row][col]) {
             case 'F': objC2D.drawImage(objImageFond, intTuileX, intTuileY, 40, 40);
             tabObjMap[row][col] = objFond;
+            tabObjMap[row][col].posX = intTuileX;
+            tabObjMap[row][col].posY = intTuileY;
               break;
 
             case 'E': objC2D.drawImage(objImageEchelle, intTuileX, intTuileY, 40, 40);
+            tabObjMap[row][col] = objEchelle;
+            tabObjMap[row][col].posX = intTuileX;
+            tabObjMap[row][col].posY = intTuileY;
               break;
 
             case 'C': objC2D.drawImage(objImageCorde, intTuileX, intTuileY, 40, 40);
+            tabObjMap[row][col] = objCorde;
+            tabObjMap[row][col].posX = intTuileX;
+            tabObjMap[row][col].posY = intTuileY;
               break;
 
             case 'M': objC2D.drawImage(objImageMur, intTuileX, intTuileY, 40, 40);
+            tabObjMap[row][col] = objMur;
+            tabObjMap[row][col].posX = intTuileX;
+            tabObjMap[row][col].posY = intTuileY;
               break;
 
             case 'O': objC2D.drawImage(objImageOr, intTuileX, intTuileY, 40, 40);
+            tabObjMap[row][col] = objOr;
+            tabObjMap[row][col].posX = intTuileX;
+            tabObjMap[row][col].posY = intTuileY;
               break;
 
             case 'B': objC2D.drawImage(objImageBase, intTuileX, intTuileY, 40, 40);
@@ -305,6 +356,7 @@
         }
       }
 	    objC2D.restore(); // Restaure le contexte
+
 	}
 
   function keyDown(){
