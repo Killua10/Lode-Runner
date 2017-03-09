@@ -98,8 +98,33 @@
     objRunner.intFrame = 0;
   }
 
+  function initOr(){
+    objImageOr = new Image();
+    objImageOr.src = 'img/O.png';
+    objOr = new Object();
+    objOr.objImage = objImageOr;
+    objOr.intLongeur = 40;
+    objOr.intLargeur = 40;
+    objOr.posX = 0;
+    objOr.posY = 0;
+    //objOr.intVitesse = 5;
+    objOr.binRamasser = false; //-1=left, 0=middle, +1=right
+    //objOr.binChute = false;
+    //objOr.intFrame = 0;
+  }
+
 	// Pour mettre à jour l'animation
 	function mettreAjourAnimation(){
+
+    if (objRunner.posX < objRunner.intLargeur-12) {
+      objRunner.posX = objRunner.intLargeur;
+      objRunner.posX = objRunner.posX-12;
+    }
+
+    if (objRunner.posX > (objCanvas.width - objRunner.intLargeur)+12) {
+      objRunner.posX = objCanvas.width - objRunner.intLargeur;
+      objRunner.posX = objRunner.posX+12;
+    }
 
     objRunner.intFrame+=0.08;
     if (objRunner.intFrame >= 22) {
@@ -167,15 +192,17 @@
 	    objC2D.restore(); // Restaure le contexte
 	}
 
-  function move(){
+  function gererClavier(){
 
     var x = event.keyCode;
 
     if (x == 39) {
+      objRunner.intDirection = 1;
       objRunner.posX += 5
     }
 
     if (x == 37) {
+      objRunner.intDirection = -1;
       objRunner.posX -= 5
     }
 
@@ -185,7 +212,7 @@
 </head>
 
 <body onload="initAnimation()">
-	<canvas id="monCanvas" tabindex="1" width="1120" height="680" style="display: block; margin: auto;" onkeydown="move()">
+	<canvas id="monCanvas" tabindex="1" width="1120" height="680" style="display: block; margin: auto;" onkeydown="gererClavier()">
 		Votre navigateur ne supporte pas la balise canvas
 	</canvas
 </body>
