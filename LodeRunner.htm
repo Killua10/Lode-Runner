@@ -56,9 +56,8 @@
 				objImageOr = new Image();
         objImageOr.src = 'img/O.png';
 
-				objImageBottom = new Image();
-        objImageBottom.src = 'img/B.png';
-
+				objImageBase = new Image();
+        objImageBase.src = 'img/B.png';
 
     }
 
@@ -83,15 +82,50 @@
 		objC2D.clearRect(0,0, objCanvas.width, objCanvas.height);
 	}
 
+  objImageDebut = new Image();
+  objImageDebut.onload = animer;
+  objImageDebut.src = 'img/suit.png';
+
+  var posX = 550;
+  var posY = 575;
+  var step = 0;
+
 	// Pour mettre à jour l'animation
 	function mettreAjourAnimation(){
 
+    step+=0.09;
+    if (step >= 9) {
+      step = 0;
+    }
+
 	}
+
+
+
+
+
+  function dessinerTim(x, y, step){
+    //objC2D.drawImage(objImageDebut, 25*step, 0, posX-12, posY-12, 0, 0, 35, 35);
+    objC2D.drawImage(objImageDebut, 25*step, 0, 23, 37, posX-12, posY-12, 23, 37);
+  }
+
 
 	// Pour dessiner
 	function dessiner() {
 	    dessinerMappe();
+      //draw each frame + place them in the middle
+      dessinerTim(posX, posY, Math.floor(step));
+      debug();
+
+
 	}
+
+  function debug(){
+    objC2D.font="20px calibri";
+    objC2D.fillStyle = 'gray';
+    objC2D.fillText("posX: " + posX + " - posY: " + posY + " - step: " + step,10,670);
+
+  }
 
 	// Pour dessiner l'image de fond
 	function dessinerMappe() {
@@ -121,9 +155,8 @@
             case 'O': objC2D.drawImage(objImageOr, intTuileX, intTuileY, 40, 40);
               break;
 
-            case 'B': objC2D.drawImage(objImageBottom, intTuileX, intTuileY, 40, 40);
+            case 'B': objC2D.drawImage(objImageBase, intTuileX, intTuileY, 40, 40);
               break;
-
           }
         }
       }
