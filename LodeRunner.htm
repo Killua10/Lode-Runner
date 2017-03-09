@@ -125,6 +125,56 @@
 
   }
 
+  function initMur(){
+    objImageMur = new Image();
+    objImageMur.src = 'img/M.png';
+    objMur = new Object();
+    objMur.objImage = objImageMur;
+    objMur.intLongeur = 40;
+    objMur.intLargeur = 40;
+    objMur.posX = 0;
+    objMur.posY = 0;
+    objMur.binCreuser = false;
+  }
+
+  function initCorde(){
+    objImageCorde = new Image();
+    objImageCorde.src = 'img/C.png';
+    objCorde = new Object();
+    objCorde.objImage = objImageCorde;
+    objCorde.intLongeur = 40;
+    objCorde.intLargeur = 40;
+    objCorde.posX = 0;
+    objCorde.posY = 0;
+    objCorde.binSurCorde = false;
+  }
+
+  function initEchelle(){
+    objImageEchelle = new Image();
+    objImageEchelle.src = 'img/C.png';
+    objEchelle = new Object();
+    objEchelle.objImage = objImageEchelle;
+    objEchelle.intLongeur = 40;
+    objEchelle.intLargeur = 40;
+    objEchelle.posX = 0;
+    objEchelle.posY = 0;
+    objEchelle.binSurEchelle = false;
+  }
+
+  function initFond(){
+    objImageFond = new Image();
+    objImageFond.src = 'img/C.png';
+    objFond = new Object();
+    objFond.objImage = objImageFond;
+    objFond.intLongeur = 40;
+    objFond.intLargeur = 40;
+    objFond.posX = 0;
+    objFond.posY = 0;
+    //objFond.binSurEchelle = false;
+  }
+
+
+
 	// Pour mettre à jour l'animation
 	function mettreAjourAnimation(){
 
@@ -246,11 +296,8 @@
     // Deplacement gauche
     if (x == 37){
       binGauche = false;
-<<<<<<< HEAD
-=======
       objRunner.intDirection = 0;
     }
->>>>>>> origin/master
 
   }
 
