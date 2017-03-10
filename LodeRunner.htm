@@ -12,6 +12,11 @@
 	var objC2D = null;
 	var objCycleAnimation = null;
 	var objImageFond = null;
+  var objImageEchelle = null;
+  var objImageCorde = null;
+  var objImageMur = null;
+  var objImageOr = null;
+  var objImageBase = null;
   var binDroite = false;
   var binGauche = false;
 
@@ -33,21 +38,16 @@
                    ['M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M'],
                    ['B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B']  ];
 
-  var tabObjMap = new Array(16);
+  var tabObjMap = new Array(17);
 
     function initAnimation() {
         objCanvas = document.getElementById('monCanvas');
         objC2D = objCanvas.getContext('2d');
         for (var i = 0; i < tabObjMap.length; i++) {
-          tabObjMap[i] = new Array(27);
+          tabObjMap[i] = new Array(28);
         }
         initImageFond();
         initRunner();
-        initOr();
-        initMur();
-        initCorde();
-        initEchelle();
-        initFond();
 	      dessiner(); // Dessiner une première fois
         animer();
 
@@ -121,80 +121,15 @@
     objRunner.intFrameDroit = 0;
   }
 
-  function initOr(){
-    objImageOr = new Image();
-    objImageOr.src = 'img/O.png';
-    objOr = new Object();
-    objOr.objNom = "OR";
-    objOr.objImage = objImageOr;
-    objOr.intLongeur = 40;
-    objOr.intLargeur = 40;
-    objOr.posX = 0;
-    objOr.posY = 0;
-    objOr.binRamasser = false;
-
-  }
-
-  function initMur(){
-    objImageMur = new Image();
-    objImageMur.src = 'img/M.png';
-    objMur = new Object();
-    objMur.objNom = "MUR";
-    objMur.objImage = objImageMur;
-    objMur.intLongeur = 40;
-    objMur.intLargeur = 40;
-    objMur.posX = 0;
-    objMur.posY = 0;
-    objMur.binCreuser = false;
-  }
-
-  function initCorde(){
-    objImageCorde = new Image();
-    objImageCorde.src = 'img/C.png';
-    objCorde = new Object();
-    objCorde.objNom = "CORDE";
-    objCorde.objImage = objImageCorde;
-    objCorde.intLongeur = 40;
-    objCorde.intLargeur = 40;
-    objCorde.posX = 0;
-    objCorde.posY = 0;
-    objCorde.binSurCorde = false;
-  }
-
-  function initEchelle(){
-    objImageEchelle = new Image();
-    objImageEchelle.src = 'img/E.png';
-    objEchelle = new Object();
-    objEchelle.objNom = "ECHELLE";
-    objEchelle.objImage = objImageEchelle;
-    objEchelle.intLongeur = 40;
-    objEchelle.intLargeur = 40;
-    objEchelle.posX = 0;
-    objEchelle.posY = 0;
-    objEchelle.binSurEchelle = false;
-  }
-
-  function initFond(){
-    objImageFond = new Image();
-    objImageFond.src = 'img/F.png';
-    objFond = new Object();
-    objEchelle.objNom = "FOND";
-    objFond.objImage = objImageFond;
-    objFond.intLongeur = 40;
-    objFond.intLargeur = 40;
-    objFond.posX = 0;
-    objFond.posY = 0;
-  }
-
 
 
 	// Pour mettre à jour l'animation
 	function mettreAjourAnimation(){
 
-    /*for (var row = 0; row < tabObjMap.length; row++) {
+    for (var row = 0; row < tabObjMap.length; row++) {
       for (var col = 0; col < tabObjMap[row].length; col++) {
 
-        if (tabObjMap[row][col] == objOr) {
+        if (tabObjMap[row][col].objNom == "OR") {
           if (objRunner.posX == tabObjMap[row][col].posX && objRunner.posY == tabObjMap[row][col].posY) {
             tabMappe[row][col] = 'F';
             tabObjMap[row][col] = objFond;
@@ -204,7 +139,7 @@
         }
 
       }
-    }*/
+    }
 
     animationRunner();
 
@@ -314,45 +249,70 @@
 
 
 
-      for (var row = 0; row < tabMappe.length; row++) {
-        for (var col = 0; col < tabMappe[row].length; col++) {
+      for (var row = 0; row < 17; row++) {
+        for (var col = 0; col < 28; col++) {
           intTuileX = col * intTailleTuile;
 					intTuileY = row * intTailleTuile;
 
+          var objet = new Object();
+
           switch (tabMappe[row][col]) {
             case 'F': objC2D.drawImage(objImageFond, intTuileX, intTuileY, 40, 40);
-            tabObjMap[row][col] = objFond;
-            tabObjMap[row][col].posX = intTuileX;
-            tabObjMap[row][col].posY = intTuileY;
+            objet.objNom = "FOND";
+            objet.objImage = objImageFond;
+            objet.intLongeur = 40;
+            objet.intLargeur = 40;
+            objet.posX = intTuileX + 20;
+            objet.posY = intTuileY + 20;
               break;
 
             case 'E': objC2D.drawImage(objImageEchelle, intTuileX, intTuileY, 40, 40);
-            tabObjMap[row][col] = objEchelle;
-            tabObjMap[row][col].posX = intTuileX;
-            tabObjMap[row][col].posY = intTuileY;
+            objet.objNom = "ECHELLE";
+            objet.objImage = objImageEchelle;
+            objet.intLongeur = 40;
+            objet.intLargeur = 40;
+            objet.posX = intTuileX + 20;
+            objet.posY = intTuileY + 20;
               break;
 
             case 'C': objC2D.drawImage(objImageCorde, intTuileX, intTuileY, 40, 40);
-            tabObjMap[row][col] = objCorde;
-            tabObjMap[row][col].posX = intTuileX;
-            tabObjMap[row][col].posY = intTuileY;
+            objet.objNom = "CORDE";
+            objet.objImage = objImageCorde;
+            objet.intLongeur = 40;
+            objet.intLargeur = 40;
+            objet.posX = intTuileX + 20;
+            objet.posY = intTuileY + 20;
               break;
 
             case 'M': objC2D.drawImage(objImageMur, intTuileX, intTuileY, 40, 40);
-            tabObjMap[row][col] = objMur;
-            tabObjMap[row][col].posX = intTuileX;
-            tabObjMap[row][col].posY = intTuileY;
+            objet.objNom = "MUR";
+            objet.objImage = objImageMur;
+            objet.intLongeur = 40;
+            objet.intLargeur = 40;
+            objet.posX = intTuileX + 20;
+            objet.posY = intTuileY + 20;
               break;
 
             case 'O': objC2D.drawImage(objImageOr, intTuileX, intTuileY, 40, 40);
-            tabObjMap[row][col] = objOr;
-            tabObjMap[row][col].posX = intTuileX;
-            tabObjMap[row][col].posY = intTuileY;
+            objet.objNom = "OR";
+            objet.objImage = objImageFond;
+            objet.intLongeur = 40;
+            objet.intLargeur = 40;
+            objet.posX = intTuileX + 20;
+            objet.posY = intTuileY + 20;
               break;
 
             case 'B': objC2D.drawImage(objImageBase, intTuileX, intTuileY, 40, 40);
+            objet.objNom = "BASE";
+            objet.objImage = objImageBase;
+            objet.intLongeur = 40;
+            objet.intLargeur = 40;
+            objet.posX = intTuileX + 20;
+            objet.posY = intTuileY + 20;
               break;
           }
+
+          tabObjMap[row][col] = objet;
         }
       }
 	    objC2D.restore(); // Restaure le contexte
