@@ -141,7 +141,6 @@
 
     for (var row = 0; row < tabObjMap.length; row++) {
       for (var col = 0; col < tabObjMap[row].length; col++) {
-        console.log(tabObjMap[row][col].objNom);
 
         if (tabObjMap[row][col].objNom == "OR") {
           if (objRunner.posX == tabObjMap[row][col].posX && objRunner.posY == tabObjMap[row][col].posY) {
@@ -233,7 +232,7 @@
 
     if (objRunner.binMonter) {
       objC2D.drawImage(objRunner.objAnimationMonter, (objRunner.objAnimationDroit.width/8)*intFrame, 0, 23, 35, objRunner.posX-12, objRunner.posY-12, 23, 35);
-    } 
+    }
 
 
   }
