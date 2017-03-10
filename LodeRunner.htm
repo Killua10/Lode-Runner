@@ -82,6 +82,20 @@
 
     }
 
+    function initSons(){
+      objSons = new Object();
+
+      var objSon = document.createElement('audio');
+      objSon.setAttribute('src', 'sons/coin.mp3');
+      objSon.load();
+      objSons.rammaserOr = objSon;
+
+      /*objSon = document.createElement('audio');
+      objSon.setAttribute('src', 'sons/coin.mp3');
+      objSon.load();
+      objSons.rammaserOr = objSon;*/
+    }
+
     // Un cycle d'animation
     function animer() {
         // Requête pour le prochain cycle
