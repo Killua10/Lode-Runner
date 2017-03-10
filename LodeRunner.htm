@@ -19,6 +19,7 @@
   var objImageBase = null;
   var binDroite = false;
   var binGauche = false;
+  var binMonter = false;
 
   var tabMappe = [ ['F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F'],
                    ['F','F','F','F','O','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F'],
@@ -103,11 +104,14 @@
     objImageDroit.src = 'img/courirDroit.png';
     var objImageGauche = new Image();
     objImageGauche.src = 'img/courirGauche.png';
+    var objImageMonter = new Image();
+    objImageMonter.src = 'img/monter.png';
 
     objRunner = new Object();
     objRunner.objImage = objImageDebut;
     objRunner.objAnimationDroit = objImageDroit;
     objRunner.objAnimationGauche = objImageGauche;
+    objRunner.objAnimationMonter = objImageMonter;
     objRunner.intLongeur = 35;
     objRunner.intLargeur = 23;
     objRunner.intLargeur2 = 12;
@@ -115,10 +119,12 @@
     objRunner.posY = 575;
     objRunner.intVitesse = 4;
     objRunner.intDirection = 0; //-1=left, 0=middle, +1=right
+    objRunner.binMonter = false;
     objRunner.binChute = false;
     objRunner.intFrame = 0;
     objRunner.intFrameGauche = 0;
     objRunner.intFrameDroit = 0;
+    objRunner.intFrameMonter = 0;
   }
 
 
@@ -151,20 +157,26 @@
 
     if (objRunner.intDirection == 0) {
       objRunner.intFrame+=0.05;
-      if (objRunner.intFrame >= 22) {
+      if (objRunner.intFrame >= 22) { // 22 frames dans l'image
         objRunner.intFrame = 0;
       }
     }
     if (objRunner.intDirection == -1) {
       objRunner.intFrameGauche+=1;
-      if (objRunner.intFrameGauche >= 27) {
+      if (objRunner.intFrameGauche >= 27) { // 27 frames dans l'image
         objRunner.intFrameGauche = 0;
       }
     }
     if (objRunner.intDirection == 1) {
       objRunner.intFrameDroit+=1;
-      if (objRunner.intFrameDroit >= 22) {
+      if (objRunner.intFrameDroit >= 22) { // 22 frames dans l'image
         objRunner.intFrameDroit = 0;
+      }
+    }
+    if (objRunner.binMonter) {
+      objRunner.intFrameMonter+=8;
+      if (objRunner.intFrameMonter >= 8) { // 8 frames dans l'image
+        objRunner.intFrameMonter = 0;
       }
     }
 
@@ -190,11 +202,17 @@
       objRunner.posX -= objRunner.intVitesse;
 
     }
+
+    if (binMonter) {
+      objRunner.binMonter = true;
+      objRunner.posY -= objRunner.intVitesse/2; //deplacement vers le haut
+      //TODO: VERIFIER SI SE TROUVE SUR UNE ECHELLE AVANT DE MONTER!!
+      binGauche = false;
+      binDroite = false;
+    }
   }
 
   function dessinerRunner(x, y, intFrame){
-    //objC2D.drawImage(objImageDebut, 25*step, 0, posX-12, posY-12, 0, 0, 35, 35)0
-
 
 
     if (objRunner.intDirection == 0) {
@@ -206,18 +224,28 @@
       objC2D.drawImage(objRunner.objAnimationDroit, (objRunner.objAnimationDroit.width/26.9)*intFrame, 0, 23, 35, objRunner.posX-12, objRunner.posY-12, 23, 35);
     }
 
+    if (objRunner.binMonter) {
+      objC2D.drawImage(objRunner.objAnimationMonter, (objRunner.objAnimationDroit.width/8)*intFrame, 0, 23, 35, objRunner.posX-12, objRunner.posY-12, 23, 35);
+    } 
+
+
   }
 
 
 	// Pour dessiner
 	function dessiner() {
 	    dessinerMappe();
+
       if (objRunner.intDirection == 0) {
         dessinerRunner(objRunner.posX, objRunner.posY, Math.floor(objRunner.intFrame));
       }else if (objRunner.intDirection == -1) {
         dessinerRunner(objRunner.posX, objRunner.posY, Math.floor(objRunner.intFrameGauche));
       }else if (objRunner.intDirection == 1) {
         dessinerRunner(objRunner.posX, objRunner.posY, Math.floor(objRunner.intFrameDroit));
+      }
+
+      if (objRunner.binMonter) {
+        dessinerRunner(objRunner.posX, objRunner.posY, Math.floor(objRunner.intFrameMonter));
       }
 
       debug();
@@ -229,7 +257,7 @@
     objC2D.font="20px calibri";
     objC2D.fillStyle = 'gray';
     objC2D.fillText("posX: " + objRunner.posX + " - posY: " + objRunner.posY + " - frame: " + objRunner.intFrame.toFixed(2) +
-     " - direction: " + objRunner.intDirection,10,670);
+     " - direction: " + objRunner.intDirection + " - monter: " + objRunner.binMonter,10,670);
 
 
      if (compteur == 0) {
@@ -326,7 +354,11 @@
     if (x == 39)  binDroite = true;
     // Deplacement gauche
     if (x == 37)  binGauche = true;
-
+    // Monter
+    if (x == 38){
+      binMonter = true;
+      objRunner.intDirection = 38;
+    }
   }
 
   function keyUp(){
@@ -340,6 +372,12 @@
     // Deplacement gauche
     if (x == 37){
       binGauche = false;
+      objRunner.intDirection = 0;
+    }
+    // Monter
+    if (x == 38){
+      binMonter = false;
+      objRunner.binMonter = false;
       objRunner.intDirection = 0;
     }
 
