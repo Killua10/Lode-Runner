@@ -55,6 +55,7 @@
         initImageFond();
         initRunner();
         initFantome();
+        initSons();
 	      dessiner(); // Dessiner une première fois
         animer();
 
@@ -201,6 +202,7 @@
     animationRunner();
 
 
+
 	}
 
   function colissionOr(){
@@ -220,9 +222,9 @@
               objet.posX = tabObjMap[row][col].posX;
               objet.posY = tabObjMap[row][col].posY;
 
-            tabMappe[row][col] = 'F';
-            tabObjMap[row][col] = objet;
-
+              tabMappe[row][col] = 'F';
+              tabObjMap[row][col] = objet;
+              objSons.rammaserOr.play();
             intCompteurOR++;
 
           }
