@@ -131,26 +131,33 @@
 
 	// Pour mettre à jour l'animation
 	function mettreAjourAnimation(){
-
-    for (var row = 0; row < tabObjMap.length; row++) {
-      for (var col = 0; col < tabObjMap[row].length; col++) {
-
-        if (tabObjMap[row][col].objNom == "OR") {
-          if (objRunner.posX == tabObjMap[row][col].posX && objRunner.posY == tabObjMap[row][col].posY) {
-            tabMappe[row][col] = 'F';
-            tabObjMap[row][col] = objFond;
-
-          }
-
-        }
-
-      }
-    }
-
+    colissionOr();
     animationRunner();
 
 
 	}
+
+  function colissionOr(){
+
+    for (var row = 0; row < tabObjMap.length; row++) {
+      for (var col = 0; col < tabObjMap[row].length; col++) {
+        console.log(tabObjMap[row][col].objNom);
+
+        if (tabObjMap[row][col].objNom == "OR") {
+          if (objRunner.posX == tabObjMap[row][col].posX && objRunner.posY == tabObjMap[row][col].posY) {
+            console.log(tabObjMap[row][col].posX);
+            console.log(tabObjMap[row][col].posY);
+            console.log(objRunner.posX);
+            console.log(objRunner.posY);
+            tabMappe[row][col] = 'F';
+            //tabObjMap[row][col] = objFond;
+
+          }
+        }
+      }
+    }
+
+  }
 
   function animationRunner(){
     // (FRAME) Animation pour le Runner
