@@ -141,15 +141,21 @@
 
     for (var row = 0; row < tabObjMap.length; row++) {
       for (var col = 0; col < tabObjMap[row].length; col++) {
+        var objet = new Object();
 
         if (tabObjMap[row][col].objNom == "OR") {
-          if (objRunner.posX == tabObjMap[row][col].posX && objRunner.posY == tabObjMap[row][col].posY) {
-            console.log(tabObjMap[row][col].posX);
-            console.log(tabObjMap[row][col].posY);
-            console.log(objRunner.posX);
-            console.log(objRunner.posY);
+          if (objRunner.posX >= tabObjMap[row][col].posX - 20 && objRunner.posX <= tabObjMap[row][col].posX + 20 &&
+            objRunner.posY >= tabObjMap[row][col].posY - 20 && objRunner.posY <= tabObjMap[row][col].posY + 20) {
+
+              objet.objNom = "FOND";
+              objet.objImage = objImageFond;
+              objet.intLongeur = 40;
+              objet.intLargeur = 40;
+              objet.posX = tabObjMap[row][col].posX;
+              objet.posY = tabObjMap[row][col].posY;
+
             tabMappe[row][col] = 'F';
-            //tabObjMap[row][col] = objFond;
+            tabObjMap[row][col] = objet;
 
           }
         }
@@ -263,7 +269,8 @@
     objC2D.font="20px calibri";
     objC2D.fillStyle = 'gray';
     objC2D.fillText("posX: " + objRunner.posX + " - posY: " + objRunner.posY + " - frame: " + objRunner.intFrame.toFixed(2) +
-     " - direction: " + objRunner.intDirection + " - monter: " + objRunner.binMonter,10,670);
+     " - direction: " + objRunner.intDirection + " - monter: " + objRunner.binMonter +
+     " ROnaldo: " + tabObjMap[14][18].objNom + " posX OR:" + tabObjMap[14][18].posX + " posY OR:" + tabObjMap[14][18].posY,10,670);
 
 
      if (compteur == 0) {
