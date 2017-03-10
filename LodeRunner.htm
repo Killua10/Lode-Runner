@@ -49,6 +49,7 @@
         }
         initImageFond();
         initRunner();
+        initFantome();
 	      dessiner(); // Dessiner une première fois
         animer();
 
@@ -127,6 +128,52 @@
     objRunner.intFrameMonter = 0;
   }
 
+  function initFantome(){
+
+    //tabObjFantomes = new Array();
+    var objFantome = null;
+
+    objFantome = new Object();
+      var objImageFantome0 = new Image();
+      objImageFantome0.src = 'img/fantome0.png';
+
+      objFantome.objImage = objImageFantome0;
+      objFantome.intVitesse = 2;
+      objFantome.intFrame = 0;
+      objFantome.posX = 300; // random
+      objFantome.posY = 575; // random
+    //tabObjFantomes.push(objFantome);
+
+    /*var objImageFantome1 = new Image();
+    objImageFantome1.src = 'img/fantome1.png';
+    var objImageFantome2 = new Image();
+    objImageFantome2.src = 'img/fantome2.png';
+    var objImageFantome3 = new Image();
+    objImageFantome3.src = 'img/fantome3.png';
+    var objImageFantome4 = new Image();
+    objImageFantome4.src = 'img/fantome4.png';
+    var objImageFantome5 = new Image();
+    objImageFantome5.src = 'img/fantome5.png';*/
+
+
+  }
+
+  function dessinerFantome(posX, posY, intFrame){
+    objC2D.save();
+    objC2D.globalAlpha = 0.8;
+
+    /*for (var noFantome = 0; noFantome < tabObjFantomes.length; noFantome++) {
+      var objFantome = tabObjFantomes[noFantome];
+
+
+
+    }*/
+
+    objC2D.drawImage(objFantome.objImage, (objFantome.objImage.width/12)*intFrame, 0, 36, 40, objFantome.posX-12, objFantome.posY-12, 36, 40);
+
+    objC2D.restore();
+
+  }
 
 
 	// Pour mettre à jour l'animation
@@ -225,12 +272,11 @@
   }
 
   function dessinerRunner(x, y, intFrame){
-
+    objC2D.save();
 
     if (objRunner.intDirection == 0) {
       objC2D.drawImage(objRunner.objImage, (objRunner.objImage.width/22)*intFrame, 0, 23, 35, objRunner.posX-12, objRunner.posY-12, 23, 35);
     }else if (objRunner.intDirection == -1) {
-      //tabMappe[1][1] = 'O';
       objC2D.drawImage(objRunner.objAnimationGauche, (objRunner.objAnimationGauche.width/26.7)*intFrame, 0, 23, 35, objRunner.posX-12, objRunner.posY-12, 23, 35);
     }else if (objRunner.intDirection == 1) {
       objC2D.drawImage(objRunner.objAnimationDroit, (objRunner.objAnimationDroit.width/26.9)*intFrame, 0, 23, 35, objRunner.posX-12, objRunner.posY-12, 23, 35);
@@ -240,6 +286,7 @@
       objC2D.drawImage(objRunner.objAnimationMonter, (objRunner.objAnimationDroit.width/8)*intFrame, 0, 23, 35, objRunner.posX-12, objRunner.posY-12, 23, 35);
     }
 
+    objC2D.restore();
 
   }
 
@@ -259,6 +306,9 @@
       if (objRunner.binMonter) {
         dessinerRunner(objRunner.posX, objRunner.posY, Math.floor(objRunner.intFrameMonter));
       }
+
+      //TODO: CAUSE PROBLEME!!
+      //dessinerFantome(objFantome.posX, objFantome.posY, Math.floor(objFantome.intFrame));
 
       debug();
 
