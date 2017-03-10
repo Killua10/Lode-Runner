@@ -20,6 +20,7 @@
   var binDroite = false;
   var binGauche = false;
   var binMonter = false;
+  var intCompteurOR = 0;
 
   var tabMappe = [ ['F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F'],
                    ['F','F','F','F','O','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F'],
@@ -37,7 +38,11 @@
                    ['F','F','F','F','E','M','M','M','M','M','M','F','F','F','F','F','F','F','F','F','M','M','M','M','M','M','M','E'],
                    ['F','F','F','F','E','F','F','F','F','F','F','F','F','F','F','F','F','F','O','F','F','F','F','F','F','F','F','E'],
                    ['M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M'],
-                   ['B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B']  ];
+                   ['B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B'],
+                   ['F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F'],
+                   ['F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F'],
+                   ['F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F'],
+                   ['F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F'] ];
 
   var tabObjMap = new Array(17);
 
@@ -45,7 +50,7 @@
         objCanvas = document.getElementById('monCanvas');
         objC2D = objCanvas.getContext('2d');
         for (var i = 0; i < tabObjMap.length; i++) {
-          tabObjMap[i] = new Array(28);
+          tabObjMap[i] = new Array();
         }
         initImageFond();
         initRunner();
@@ -204,6 +209,8 @@
             tabMappe[row][col] = 'F';
             tabObjMap[row][col] = objet;
 
+            intCompteurOR++;
+
           }
         }
       }
@@ -319,8 +326,7 @@
     objC2D.font="20px calibri";
     objC2D.fillStyle = 'gray';
     objC2D.fillText("posX: " + objRunner.posX + " - posY: " + objRunner.posY + " - frame: " + objRunner.intFrame.toFixed(2) +
-     " - direction: " + objRunner.intDirection + " - monter: " + objRunner.binMonter +
-     " ROnaldo: " + tabObjMap[14][18].objNom + " posX OR:" + tabObjMap[14][18].posX + " posY OR:" + tabObjMap[14][18].posY,10,670);
+     " - direction: " + objRunner.intDirection + " - monter: " + objRunner.binMonter,10,670);
 
 
      if (compteur == 0) {
@@ -340,8 +346,8 @@
 
 
 
-      for (var row = 0; row < 17; row++) {
-        for (var col = 0; col < 28; col++) {
+      for (var row = 0; row < tabMappe.length; row++) {
+        for (var col = 0; col < tabMappe[row].length; col++) {
           intTuileX = col * intTailleTuile;
 					intTuileY = row * intTailleTuile;
 
@@ -403,7 +409,11 @@
               break;
           }
 
-          tabObjMap[row][col] = objet;
+          if (row < 17 && col < 28) {
+            tabObjMap[row][col] = objet;
+          }
+
+
         }
       }
 	    objC2D.restore(); // Restaure le contexte
@@ -450,7 +460,7 @@
 </head>
 
 <body onload="initAnimation()">
-	<canvas id="monCanvas" tabindex="1" width="1120" height="680" style="display: block; margin: auto;" onkeydown="keyDown()" onkeyup="keyUp()">
+	<canvas id="monCanvas" tabindex="1" width="1120" height="830" style="display: block; margin: auto;" onkeydown="keyDown()" onkeyup="keyUp()">
 		Votre navigateur ne supporte pas la balise canvas
 	</canvas
 </body>
