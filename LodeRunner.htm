@@ -101,6 +101,7 @@
       objSons = new Object();
 
       var objSon = document.createElement('audio');
+      objSon.volume = 0.2;
       objSon.setAttribute('src', 'sons/coin.mp3');
       objSon.load();
       objSons.rammaserOr = objSon;
@@ -552,6 +553,18 @@
             tabObjMap[row][col] = objet;
           }
 
+          // Verification victoire
+          if (intCompteurOR == 6 && col == 18 && row >= 0 && row <= 3 ) {
+            objet.objNom = "ECHELLE";
+            objet.objImage = objImageEchelle;
+            objet.intLongeur = 40;
+            objet.intLargeur = 40;
+            objet.posX = intTuileX + 20;
+            objet.posY = intTuileY + 20;
+            objC2D.drawImage(objImageEchelle, intTuileX, intTuileY, 40, 40);
+            tabObjMap[row][col] = objet;
+          }
+
 
         }
       }
@@ -607,7 +620,7 @@
 </head>
 
 <body onload="initAnimation()">
-	<canvas id="monCanvas" tabindex="1" width="1120" height="830" style="display: block; margin: auto;" onkeydown="keyDown()" onkeyup="keyUp()">
+	<canvas id="monCanvas" width="1120" height="830" style="display: block; margin: auto;" onkeydown="keyDown()" onkeyup="keyUp()" tabindex="1">
 		Votre navigateur ne supporte pas la balise canvas
 	</canvas
 </body>
