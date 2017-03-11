@@ -404,14 +404,14 @@
       //TODO: CAUSE PROBLEME!! JE SAIS MAN!!
       //dessinerFantome(objFantome.posX, objFantome.posY, Math.floor(objFantome.intFrame));
 
-      afficherHUD();
+      dessinerHUD();
       debug();
 
 
 	}
 
   /*HEADS UP DISPLAY*/
-  function afficherHUD(){
+  function dessinerHUD(){
 
     //Contour Score
     objC2D.beginPath(); // Définir un nouveau tracé
@@ -475,7 +475,7 @@
   var compteur = 0 ; //test
   function debug(){
     objC2D.font="20px calibri";
-    objC2D.fillStyle = 'gray';
+    objC2D.fillStyle = 'white';
     objC2D.fillText("posX: " + objRunner.posX + " - posY: " + objRunner.posY + " - frame: " + objRunner.intFrame.toFixed(2) +
      " - direction: " + objRunner.intDirection + " - monter: " + objRunner.binMonter,265,660);
     objC2D.closePath();
