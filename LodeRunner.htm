@@ -21,6 +21,17 @@
   var binGauche = false;
   var binMonter = false;
   var intCompteurOR = 0;
+  var intScore = 0;
+  var intCompteurNiveau = 1;
+  var intCompteurVie = 5;
+
+  var intHeureChrono = 0;
+  var intMinuteChrono = 0;
+  var intSecondeChrono = 0;
+  var intMiliSecondeChrono = 0;
+  var objDateHeure1 = (new Date()).getTime();
+  var chronoMarche = false;
+  var intMsEcoulees = 0;
 
   var tabMappe = [ ['F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F'],
                    ['F','F','F','F','O','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F'],
@@ -50,6 +61,8 @@
         objCanvas = document.getElementById('monCanvas');
         objC2D = objCanvas.getContext('2d');
         objC2D.imageSmoothingEnabled = false;
+        intMinuteChrono = ajoutezZeros(intMinuteChrono);
+        intSecondeChrono = ajoutezZeros(intSecondeChrono);
         for (var i = 0; i < tabObjMap.length; i++) {
           tabObjMap[i] = new Array();
         }
@@ -202,9 +215,29 @@
     colissionOr();
     animationRunner();
 
+    if (chronoMarche) {
+        var objDateHeure2 = (new Date()).getTime();
+        intMsEcoulees =  objDateHeure2 - objDateHeure1;
 
+        objDateHeure1 = objDateHeure2;
+
+       intMiliSecondeChrono += intMsEcoulees;
+
+       intMinuteChrono = parseInt((intMiliSecondeChrono/(1000*60))%60)
+       intSecondeChrono = ((intMiliSecondeChrono % 60000) / 1000).toFixed(0);
+
+       intMinuteChrono = ajoutezZeros(intMinuteChrono);
+       intSecondeChrono = ajoutezZeros(intSecondeChrono);
+
+   }
 
 	}
+
+  function ajoutezZeros(intNbr) {
+
+  return (intNbr < 10 ? '0' : '') + intNbr;
+
+  }
 
   function colissionOr(){
 
@@ -226,7 +259,8 @@
               tabMappe[row][col] = 'F';
               tabObjMap[row][col] = objet;
               objSons.rammaserOr.play();
-            intCompteurOR++;
+              intCompteurOR++;
+              intScore += 250;
 
           }
         }
@@ -363,20 +397,84 @@
     objC2D.font="20px calibri";
     objC2D.fillStyle = 'gray';
     objC2D.fillText("posX: " + objRunner.posX + " - posY: " + objRunner.posY + " - frame: " + objRunner.intFrame.toFixed(2) +
-     " - direction: " + objRunner.intDirection + " - monter: " + objRunner.binMonter,10,670);
+     " - direction: " + objRunner.intDirection + " - monter: " + objRunner.binMonter,265,660);
+    objC2D.closePath();
 
-     objC2D.font="20px calibri";
-     objC2D.fillStyle = 'gray';
-     objC2D.fillText("Ronaldo",10,800);
+    //Contour Score
+    objC2D.beginPath(); // Définir un nouveau tracé
+    objC2D.strokeStyle = 'rgb(172, 168, 64)';
+    objC2D.rect(10, 680 + 10, 1100, 130);
+    objC2D.lineWidth = 5;
+    objC2D.stroke();
 
+
+    // Score
+    objC2D.beginPath();
+    objC2D.fillStyle = 'rgb(236, 193, 13)';
+
+    var strScore = 'Score:' + formaterScore(intScore,7);
+    objC2D.font = '55pt Old English Text MT';
+
+    objC2D.textAlign = "center";
+    objC2D.textBaseline = "middle";
+    objC2D.strokeStyle = 'rgb(179, 102, 59)';
+
+    objC2D.fillText(strScore, objCanvas.width / 4.49, 680 + 75 );
+    objC2D.lineWidth = 2;
+    objC2D.strokeText(strScore,  objCanvas.width / 4.49, 680 + 75 );
+
+
+   //}s
 
      if (compteur == 0) {
       console.log(tabObjMap);
       compteur++;
     }
 
+    // Chrono
+    objC2D.beginPath();
+    objC2D.fillStyle = 'rgb(148, 62, 13)';
+    var strTemp = 'Temps:' + intMinuteChrono + ":" + intSecondeChrono;
+    objC2D.font = '55pt Old English Text MT';
+    objC2D.strokeStyle = 'rgb(223, 118, 8)';
+    objC2D.fillText(strTemp, objCanvas.width / 1.62, 680 + 75 );
+    objC2D.lineWidth = 2;
+    objC2D.strokeText(strTemp,   objCanvas.width / 1.62, 680 + 75);
+
+    // Niveau
+    objC2D.beginPath();
+    objC2D.fillStyle = 'rgb(236, 193, 13)';
+    var strTemp = 'Niveau:' + intCompteurNiveau;
+    objC2D.font = '50pt Brush Script MT';
+    objC2D.strokeStyle = 'rgb(222, 160, 21)';
+    objC2D.fillText(strTemp, objCanvas.width / 1.12, 650 + 75 );
+    objC2D.lineWidth = 2;
+    objC2D.strokeText(strTemp,   objCanvas.width / 1.12, 650 + 75);
+
+    // Vie
+    objC2D.beginPath();
+    objC2D.fillStyle = 'rgb(236, 193, 13)';
+    var strTemp = 'Vies:' + intCompteurVie;
+    objC2D.font = '50pt Brush Script MT';
+    objC2D.strokeStyle = 'rgb(222, 160, 21)';
+    objC2D.fillText(strTemp, objCanvas.width / 1.12, 710 + 75 );
+    objC2D.lineWidth = 2;
+    objC2D.strokeText(strTemp,   objCanvas.width / 1.12, 710 + 75);
+
+
+
 
   }
+
+  function formaterScore(intNbr, intTaille) {
+    var strScore = "" + intNbr;
+    while (strScore.length < intTaille) {
+        strScore = "0" + strScore;
+    }
+    return strScore;
+}
+
+
 
 	// Pour dessiner l'image de fond
 	function dessinerMappe() {
@@ -462,7 +560,15 @@
 	}
 
   function keyDown(){
+
     var x = event.keyCode;
+
+    if (chronoMarche) {
+      chronoMarche = false;
+    }else {
+      chronoMarche = true;
+      objDateHeure1 = new Date();
+    }
 
     // Deplacement droite
     if (x == 39)  binDroite = true;
