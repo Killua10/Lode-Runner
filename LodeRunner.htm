@@ -289,7 +289,7 @@
         // Checks if its a ladder
         if (tabObjMap[row][col].objNom == "ECHELLE") {
           // the square where the ladder is
-          if (objRunner.posX - objRunner.intLargeur2  >= tabObjMap[row][col].posX - 20 && objRunner.posX - objRunner.intLargeur2  <= tabObjMap[row][col].posX + 20 &&
+          if (objRunner.posX  >= tabObjMap[row][col].posX - 20 && objRunner.posX - objRunner.intLargeur2  <= tabObjMap[row][col].posX + 20 &&
             objRunner.posY +20 >= tabObjMap[row][col].posY - 20 && objRunner.posY +20 <= tabObjMap[row][col].posY + 20) {
 
               binMonter = true;
@@ -506,7 +506,6 @@
     objC2D.fillStyle = 'white';
     objC2D.fillText("posX: " + objRunner.posX + " - posY: " + objRunner.posY + " - frame: " + objRunner.intFrame.toFixed(2) +
      " - direction: " + objRunner.intDirection + " - monter: " + objRunner.binMonter,265,660);
-    objC2D.closePath();
 
 
 
