@@ -155,7 +155,7 @@
     objRunner.objAnimationGauche = objImageGauche;
     objRunner.objAnimationMonter = objImageMonter;
     objRunner.intLongeur = 35;
-    objRunner.intLargeur = 23;
+    objRunner.intLargeur = 24;
     objRunner.intLargeur2 = 12;
     objRunner.posX = objCanvas.width/2;
     objRunner.posY = 575;
@@ -220,9 +220,10 @@
 
 	// Pour mettre à jour l'animation
 	function mettreAjourAnimation(){
+
+    animationRunner();
     collisionOr();
     collisionEchelle();
-    animationRunner();
 
     if (chronoMarche) {
         var objDateHeure2 = (new Date()).getTime();
@@ -279,6 +280,7 @@
   }
 
   function collisionEchelle(){
+    binMonter = false;
 
     for (var row = 0; row < tabObjMap.length; row++) {
       for (var col = 0; col < tabObjMap[row].length; col++) {
@@ -287,13 +289,12 @@
         // Checks if its a ladder
         if (tabObjMap[row][col].objNom == "ECHELLE") {
           // the square where the ladder is
-          if (objRunner.posX >= tabObjMap[row][col].posX - 20 && objRunner.posX <= tabObjMap[row][col].posX + 20 &&
-            objRunner.posY >= tabObjMap[row][col].posY - 20 && objRunner.posY <= tabObjMap[row][col].posY + 20) {
+          if (objRunner.posX - objRunner.intLargeur2  >= tabObjMap[row][col].posX - 20 && objRunner.posX - objRunner.intLargeur2  <= tabObjMap[row][col].posX + 20 &&
+            objRunner.posY +20 >= tabObjMap[row][col].posY - 20 && objRunner.posY +20 <= tabObjMap[row][col].posY + 20) {
 
-              //binMonter = true;
+              binMonter = true;
 
-              //objRunner.binMonter = true;
-            }
+          }
 
         }
 
