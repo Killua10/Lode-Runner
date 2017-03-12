@@ -220,7 +220,8 @@
 
 	// Pour mettre à jour l'animation
 	function mettreAjourAnimation(){
-    colissionOr();
+    collisionOr();
+    collisionEchelle();
     animationRunner();
 
     if (chronoMarche) {
@@ -247,7 +248,7 @@
 
   }
 
-  function colissionOr(){
+  function collisionOr(){
 
     for (var row = 0; row < tabObjMap.length; row++) {
       for (var col = 0; col < tabObjMap[row].length; col++) {
@@ -274,6 +275,32 @@
         }
       }
     }
+
+  }
+
+  function collisionEchelle(){
+
+    for (var row = 0; row < tabObjMap.length; row++) {
+      for (var col = 0; col < tabObjMap[row].length; col++) {
+
+
+        // Checks if its a ladder
+        if (tabObjMap[row][col].objNom == "ECHELLE") {
+          // the square where the ladder is
+          if (objRunner.posX >= tabObjMap[row][col].posX - 20 && objRunner.posX <= tabObjMap[row][col].posX + 20 &&
+            objRunner.posY >= tabObjMap[row][col].posY - 20 && objRunner.posY <= tabObjMap[row][col].posY + 20) {
+
+              //binMonter = true;
+
+              //objRunner.binMonter = true;
+            }
+
+        }
+
+      }
+    }
+
+
 
   }
 
@@ -614,7 +641,7 @@
     // Deplacement gauche
     if (x == 37)  binGauche = true;
     // Monter
-    if (x == 38){
+    if (x == 38 && binMonter == true){
       binMonter = true;
       objRunner.intDirection = 38;
     }
