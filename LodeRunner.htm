@@ -163,6 +163,7 @@
     objRunner.intDirection = 0; //-1=left, 0=middle, +1=right
     objRunner.binMonter = false;
     objRunner.binChute = false;
+    objRunner.binSurMur = true;
     objRunner.intFrame = 0;
     objRunner.intFrameGauche = 0;
     objRunner.intFrameDroit = 0;
@@ -326,6 +327,7 @@
   function collisionMur(){
 
 
+    objRunner.binSurMur = false;
     objRunner.binChute = false;
 
     for (var row = 0; row < tabObjMap.length; row++) {
@@ -336,10 +338,12 @@
         if (tabObjMap[row][col].objNom == "MUR") {
           // the square where the ladder is
           if (objRunner.posX >= tabObjMap[row][col].posX && objRunner.posX - objRunner.intLargeur2  <= tabObjMap[row][col].posX + 20 &&
-            objRunner.posY +20 >= tabObjMap[row][col].posY - 20 && objRunner.posY +20 <= tabObjMap[row][col].posY + 20) {
+            objRunner.posY +25 >= tabObjMap[row][col].posY - 20 && objRunner.posY +25 <= tabObjMap[row][col].posY + 20) {
 
+              objRunner.binSurMur = true;
               objRunner.binChute = true;
-
+              //not wokring yet
+              //objRunner.posY--;
 
           }
         }
@@ -549,7 +553,7 @@
     objC2D.fillStyle = 'lime';
 
     objC2D.fillText("MODE DEBUG: direction: " + objRunner.intDirection + " - monter: "
-    + objRunner.binMonter + " - chute: " + objRunner.binChute,10,20);
+    + objRunner.binMonter + " - surMur: " + objRunner.binSurMur,10,20);
 
      objC2D.fillStyle = 'lime';
      objC2D.beginPath();
@@ -558,7 +562,7 @@
      objC2D.stroke();
      objC2D.closePath();
      objC2D.font="12px calibri";
-     objC2D.fillText("(" + objRunner.posX + "," + objRunner.posY + ")",objRunner.posX, objRunner.posY-25);
+     objC2D.fillText("(" + objRunner.posX + ", " + objRunner.posY + ")",objRunner.posX, objRunner.posY-25);
 
      if (compteur == 0) {
       console.log(tabObjMap);
