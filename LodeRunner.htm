@@ -65,8 +65,8 @@
         objCanvas = document.getElementById('monCanvas');
         objC2D = objCanvas.getContext('2d');
         objC2D.imageSmoothingEnabled = false;
-        intMinuteChrono = ajoutezZeros(intMinuteChrono);
-        intSecondeChrono = ajoutezZeros(intSecondeChrono);
+        intMinuteChrono = ajouteZeros(intMinuteChrono);
+        intSecondeChrono = ajouteZeros(intSecondeChrono);
         for (var i = 0; i < tabObjMap.length; i++) {
           tabObjMap[i] = new Array();
         }
@@ -158,7 +158,7 @@
     objRunner.intLargeur = 24;
     objRunner.intLargeur2 = 12;
     objRunner.posX = objCanvas.width/2;
-    objRunner.posY = 575;
+    objRunner.posY = 577;
     objRunner.intVitesse = 4;
     objRunner.intDirection = 0; //-1=left, 0=middle, +1=right
     objRunner.binMonter = false;
@@ -167,6 +167,7 @@
     objRunner.intFrameGauche = 0;
     objRunner.intFrameDroit = 0;
     objRunner.intFrameMonter = 0;
+    objRunner.intFrameChute = 0;
   }
 
   //initialisation du fantome (guardien)
@@ -224,6 +225,7 @@
     animationRunner();
     collisionOr();
     collisionEchelle();
+    collisionMur();
 
     if (chronoMarche) {
         var objDateHeure2 = (new Date()).getTime();
@@ -236,19 +238,30 @@
        intMinuteChrono = parseInt((intMiliSecondeChrono/(1000*60))%60)
        intSecondeChrono = ((intMiliSecondeChrono % 60000) / 1000).toFixed(0);
 
-       intMinuteChrono = ajoutezZeros(intMinuteChrono);
-       intSecondeChrono = ajoutezZeros(intSecondeChrono);
+       intMinuteChrono = ajouteZeros(intMinuteChrono);
+       intSecondeChrono = ajouteZeros(intSecondeChrono);
 
    }
 
 	}
 
-  function ajoutezZeros(intNbr) {
+  /******************************************************************************************
+    * ajouteZeros(intNbr)
+    * Ajoute un zero si le nombre est plus petit que 10.
+    *
+    *****************************************************************************************/
+  function ajouteZeros(intNbr) {
 
   return (intNbr < 10 ? '0' : '') + intNbr;
 
   }
 
+  /******************************************************************************************
+    * collisionEchelle()
+    * Verifie une collision entre le point X,Y du personnage avec les points X,Y
+    * des lingots d'or
+    *
+    *****************************************************************************************/
   function collisionOr(){
 
     for (var row = 0; row < tabObjMap.length; row++) {
@@ -279,6 +292,11 @@
 
   }
 
+  /******************************************************************************************
+    * collisionEchelle()
+    * Verifie une collision entre le point X,Y du personnage avec les points X,Y des echelles
+    *
+    *****************************************************************************************/
   function collisionEchelle(){
     binMonter = false;
 
@@ -295,14 +313,38 @@
               binMonter = true;
 
           }
-
         }
-
       }
     }
+  }
+
+/******************************************************************************************
+  * collisionMur()
+  * Verifie une collision entre le point X,Y du personnage avec les points X,Y des murs
+  *
+  *****************************************************************************************/
+  function collisionMur(){
+
+
+    objRunner.binChute = false;
+
+    for (var row = 0; row < tabObjMap.length; row++) {
+      for (var col = 0; col < tabObjMap[row].length; col++) {
 
 
 
+        if (tabObjMap[row][col].objNom == "MUR") {
+          // the square where the ladder is
+          if (objRunner.posX >= tabObjMap[row][col].posX && objRunner.posX - objRunner.intLargeur2  <= tabObjMap[row][col].posX + 20 &&
+            objRunner.posY +20 >= tabObjMap[row][col].posY - 20 && objRunner.posY +20 <= tabObjMap[row][col].posY + 20) {
+
+              objRunner.binChute = true;
+
+
+          }
+        }
+      }
+    }
   }
 
   function animationRunner(){
@@ -502,12 +544,21 @@
 
   var compteur = 0 ; //test
   function debug(){
+    objC2D.textAlign = "left";
     objC2D.font="20px calibri";
-    objC2D.fillStyle = 'white';
-    objC2D.fillText("posX: " + objRunner.posX + " - posY: " + objRunner.posY + " - frame: " + objRunner.intFrame.toFixed(2) +
-     " - direction: " + objRunner.intDirection + " - monter: " + objRunner.binMonter,265,660);
+    objC2D.fillStyle = 'lime';
 
+    objC2D.fillText("MODE DEBUG: direction: " + objRunner.intDirection + " - monter: "
+    + objRunner.binMonter + " - chute: " + objRunner.binChute,10,20);
 
+     objC2D.fillStyle = 'lime';
+     objC2D.beginPath();
+     objC2D.fillRect(objRunner.posX, objRunner.posY, 5,5);
+
+     objC2D.stroke();
+     objC2D.closePath();
+     objC2D.font="12px calibri";
+     objC2D.fillText("(" + objRunner.posX + "," + objRunner.posY + ")",objRunner.posX, objRunner.posY-25);
 
      if (compteur == 0) {
       console.log(tabObjMap);
