@@ -439,10 +439,16 @@
         objRunner.intFrameDescendre -= 8;
       }
     }
-    if (binSurCorde ) {
+    if (binSurCorde && objRunner.intDirection == 1) {
       objRunner.intFrameCordeDroite += 0.3
       if (objRunner.intFrameCordeDroite >= 8) { // 8 frames dans l'image
         objRunner.intFrameCordeDroite -= 8;
+      }
+    }
+    if (binSurCorde && objRunner.intDirection == -1) {
+      objRunner.intFrameCordeGauche += 0.3
+      if (objRunner.intFrameCordeGauche >= 8) { // 8 frames dans l'image
+        objRunner.intFrameCordeGauche -= 8;
       }
     }
 
@@ -551,13 +557,20 @@
       objC2D.drawImage(objRunner.objAnimationMonter, sx, sy, 23, dh, dx, dy, 23, dh);
     }
 
-    if (binSurCorde) {
+    if (binSurCorde && objRunner.intDirection == 1) {
       sx = (289/8)*intFrame;
       sw = objRunner.objAnimationCordeDroite.width/8;
       dx = objRunner.posX-12;
       dy = objRunner.posY-12;
       dw = objRunner.objAnimationCordeDroite.width/8;
       objC2D.drawImage(objRunner.objAnimationCordeDroite, sx, sy, sw, dh, dx, dy, dw, dh);
+    }else if (binSurCorde && objRunner.intDirection == -1) {
+      sx = (289/8)*intFrame;
+      sw = objRunner.objAnimationCordeDroite.width/8;
+      dx = objRunner.posX-12;
+      dy = objRunner.posY-12;
+      dw = objRunner.objAnimationCordeDroite.width/8;
+      objC2D.drawImage(objRunner.objAnimationCordeGauche, sx, sy, sw, dh, dx, dy, dw, dh);
     }
     //
     objC2D.restore();
@@ -583,8 +596,10 @@
         dessinerRunner(objRunner.posX, objRunner.posY, Math.floor(objRunner.intFrameDescendre));
       }
 
-      if (binSurCorde) {
+      if (binSurCorde && objRunner.intDirection == 1) {
         dessinerRunner(objRunner.posX, objRunner.posY, Math.floor(objRunner.intFrameCordeDroite));
+      }else if (binSurCorde && objRunner.intDirection == -1) {
+        dessinerRunner(objRunner.posX, objRunner.posY, Math.floor(objRunner.intFrameCordeGauche));
       }
 
       //TODO: CAUSE PROBLEME!! JE SAIS MAN!!
