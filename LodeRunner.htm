@@ -300,6 +300,8 @@
     *****************************************************************************************/
   function collisionEchelle(){
     binMonter = false;
+    var x = 0;
+    var y = 0;
 
     for (var row = 0; row < tabObjMap.length; row++) {
       for (var col = 0; col < tabObjMap[row].length; col++) {
@@ -312,6 +314,7 @@
             objRunner.posY +20 >= tabObjMap[row][col].posY - 20 && objRunner.posY +20 <= tabObjMap[row][col].posY + 20) {
 
               binMonter = true;
+
 
           }
         }
@@ -326,10 +329,6 @@
   *****************************************************************************************/
   function collisionMur(){
 
-
-    objRunner.binSurMur = false;
-    objRunner.binChute = false;
-
     for (var row = 0; row < tabObjMap.length; row++) {
       for (var col = 0; col < tabObjMap[row].length; col++) {
 
@@ -341,9 +340,6 @@
             objRunner.posY +25 >= tabObjMap[row][col].posY - 20 && objRunner.posY +25 <= tabObjMap[row][col].posY + 20) {
 
               objRunner.binSurMur = true;
-              objRunner.binChute = true;
-              //not wokring yet
-              //objRunner.posY--;
 
           }
         }
@@ -402,12 +398,18 @@
 
     }
 
+    //binMonter est true ssi runner est sur echelle
     if (binMonter && objRunner.intDirection == 38) {
       objRunner.binMonter = true;
       objRunner.posY -= objRunner.intVitesse/2; //deplacement vers le haut
-      //TODO: VERIFIER SI SE TROUVE SUR UNE ECHELLE A VANT DE MONTER!!
+
       binGauche = false;
       binDroite = false;
+
+    }
+
+    if (!objRunner.binSurMur) {
+      //objRunner.posY += objRunner.intVitesse/2;
     }
   }
 
@@ -591,8 +593,6 @@
 			var intTuileX = intTailleTuile;
       var intTuileY = intTailleTuile;
 
-
-
       for (var row = 0; row < tabMappe.length; row++) {
         for (var col = 0; col < tabMappe[row].length; col++) {
           intTuileX = col * intTailleTuile;
@@ -679,6 +679,7 @@
 	    objC2D.restore(); // Restaure le contexte
 
 	}
+
 
   function keyDown(){
 
