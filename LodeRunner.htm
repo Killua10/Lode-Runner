@@ -451,7 +451,7 @@
     if (objRunner.binMonter) {
       // (258px longeur / 8 frames)*vitesse
       sx = (258/8)*intFrame;
-      objC2D.drawImage(objRunner.objAnimationMonter, sx, sy, 23, 35, objRunner.posX-12, objRunner.posY-12, 23, dh);
+      objC2D.drawImage(objRunner.objAnimationMonter, sx, sy, 23, dh, objRunner.posX-12, objRunner.posY-12, 23, dh);
     }
     //
     objC2D.restore();
@@ -700,6 +700,14 @@
       binMonter = true;
       objRunner.intDirection = 38;
     }
+
+    // Descendre
+    if (x == 40){
+      binMonter = false;
+      objRunner.binMonter = false;
+      objRunner.intDirection = 0;
+    }
+
   }
 
   function keyUp(){
