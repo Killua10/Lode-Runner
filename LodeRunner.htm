@@ -23,6 +23,8 @@
   var binDroite = false;
   var binGauche = false;
   var binMonter = false;
+  var binDescendre = false;
+  var binSurCorde = false;
   //variable de score
   var intCompteurOR = 0;
   var intScore = 0;
@@ -164,10 +166,12 @@
     objRunner.binMonter = false;
     objRunner.binChute = false;
     objRunner.binSurMur = true;
+    objRunner.binDescendre = false;
     objRunner.intFrame = 0;
     objRunner.intFrameGauche = 0;
     objRunner.intFrameDroit = 0;
     objRunner.intFrameMonter = 0;
+    objRunner.intFrameDescendre = 0;
     objRunner.intFrameChute = 0;
   }
 
@@ -227,6 +231,7 @@
     collisionOr();
     collisionEchelle();
     collisionMur();
+    collisionCorde();
 
     if (chronoMarche) {
         var objDateHeure2 = (new Date()).getTime();
@@ -300,8 +305,12 @@
     *****************************************************************************************/
   function collisionEchelle(){
     binMonter = false;
+<<<<<<< HEAD
     var x = 0;
     var y = 0;
+=======
+    binDescendre = false;
+>>>>>>> origin/master
 
     for (var row = 0; row < tabObjMap.length; row++) {
       for (var col = 0; col < tabObjMap[row].length; col++) {
@@ -310,12 +319,20 @@
         // Checks if its a ladder
         if (tabObjMap[row][col].objNom == "ECHELLE") {
           // the square where the ladder is
-          if (objRunner.posX  >= tabObjMap[row][col].posX - 20 && objRunner.posX - objRunner.intLargeur2  <= tabObjMap[row][col].posX + 20 &&
-            objRunner.posY +20 >= tabObjMap[row][col].posY - 20 && objRunner.posY +20 <= tabObjMap[row][col].posY + 20) {
+          if (objRunner.posX  >= tabObjMap[row][col].posX - 15 && objRunner.posX   <= tabObjMap[row][col].posX + 15 &&
+            objRunner.posY +20 >= tabObjMap[row][col].posY - 20 && objRunner.posY + 20 <= tabObjMap[row][col].posY + 20) {
 
               binMonter = true;
 
 
+<<<<<<< HEAD
+=======
+          }
+
+          if (objRunner.posY + 25  >= tabObjMap[row][col].posX - 20 && objRunner.posY + 25 <= tabObjMap[row][col].posX + 20 ) {
+            binDescendre = true;
+
+>>>>>>> origin/master
           }
         }
       }
@@ -347,6 +364,35 @@
     }
   }
 
+  /******************************************************************************************
+    * collisionCorde()
+    * Verifie une collision entre le point X,Y du personnage avec les points X,Y de la corde
+    *
+    *****************************************************************************************/
+  function collisionCorde(){
+
+    binSurCorde = false;
+
+    for (var row = 0; row < tabObjMap.length; row++) {
+      for (var col = 0; col < tabObjMap[row].length; col++) {
+
+
+
+        if (tabObjMap[row][col].objNom == "CORDE") {
+          // the square where the rope is
+          if (objRunner.posX >= tabObjMap[row][col].posX - 20 && objRunner.posX <= tabObjMap[row][col].posX + 20 &&
+            objRunner.posY >= tabObjMap[row][col].posY - 20 && objRunner.posY <= tabObjMap[row][col].posY + 20) {
+
+              binSurCorde = true;
+
+          }
+        }
+      }
+    }
+
+  }
+
+
   function animationRunner(){
     // (FRAME) Animation pour le Runner
 
@@ -372,6 +418,12 @@
       objRunner.intFrameMonter+=0.3;
       if (objRunner.intFrameMonter >= 8) { // 8 frames dans l'image
         objRunner.intFrameMonter -= 8;
+      }
+    }
+    if (objRunner.binDescendre) {
+      objRunner.intFrameDescendre += 0.3
+      if (objRunner.intFrameDescendre >= 8) { // 8 frames dans l'image
+        objRunner.intFrameDescendre -= 8;
       }
     }
 
@@ -410,6 +462,14 @@
 
     if (!objRunner.binSurMur) {
       //objRunner.posY += objRunner.intVitesse/2;
+    }
+
+    if (binDescendre && objRunner.intDirection == 40) {
+      objRunner.binDescendre = true;
+      objRunner.posY += objRunner.intVitesse/2; //deplacement vers le haut
+      //TODO: VERIFIER SI SE TROUVE SUR UNE ECHELLE A VANT DE MONTER!!
+      binGauche = false;
+      binDroite = false;
     }
   }
 
@@ -453,7 +513,15 @@
     if (objRunner.binMonter) {
       // (258px longeur / 8 frames)*vitesse
       sx = (258/8)*intFrame;
-      objC2D.drawImage(objRunner.objAnimationMonter, sx, sy, 23, 35, objRunner.posX-12, objRunner.posY-12, 23, dh);
+      dx = objRunner.posX-12;
+      dy = objRunner.posY-12;
+      objC2D.drawImage(objRunner.objAnimationMonter, sx, sy, 23, dh, dx, dy, 23, dh);
+    }else if (objRunner.binDescendre) {
+      // (258px longeur / 8 frames)*vitesse
+      sx = (258/8)*intFrame;
+      dx = objRunner.posX-12;
+      dy = objRunner.posY-12;
+      objC2D.drawImage(objRunner.objAnimationMonter, sx, sy, 23, dh, dx, dy, 23, dh);
     }
     //
     objC2D.restore();
@@ -475,6 +543,8 @@
 
       if (objRunner.binMonter) {
         dessinerRunner(objRunner.posX, objRunner.posY, Math.floor(objRunner.intFrameMonter));
+      }else if (objRunner.intDirection == 40) {
+        dessinerRunner(objRunner.posX, objRunner.posY, Math.floor(objRunner.intFrameDescendre));
       }
 
       //TODO: CAUSE PROBLEME!! JE SAIS MAN!!
@@ -555,7 +625,8 @@
     objC2D.fillStyle = 'lime';
 
     objC2D.fillText("MODE DEBUG: direction: " + objRunner.intDirection + " - monter: "
-    + objRunner.binMonter + " - surMur: " + objRunner.binSurMur,10,20);
+    + objRunner.binMonter + " - surMur: " + objRunner.binSurMur + " - surCorde: " + binSurCorde +
+    " - binDescendre: " + binDescendre + " - binMonter: " + binMonter,10,20);
 
      objC2D.fillStyle = 'lime';
      objC2D.beginPath();
@@ -566,10 +637,6 @@
      objC2D.font="12px calibri";
      objC2D.fillText("(" + objRunner.posX + ", " + objRunner.posY + ")",objRunner.posX, objRunner.posY-25);
 
-     if (compteur == 0) {
-      console.log(tabObjMap);
-      compteur++;
-    }
 
 
 
@@ -674,6 +741,7 @@
           }
 
 
+
         }
       }
 	    objC2D.restore(); // Restaure le contexte
@@ -701,6 +769,16 @@
       binMonter = true;
       objRunner.intDirection = 38;
     }
+
+    // Descendre
+    if (x == 40 && binDescendre == true){
+      binDescendre = true;
+      //binMonter = false;
+      objRunner.intDirection = 40;
+      //objRunner.binDescendre = true;
+      //objRunner.intDirection = 0;
+    }
+
   }
 
   function keyUp(){
@@ -720,6 +798,13 @@
     if (x == 38){
       binMonter = false;
       objRunner.binMonter = false;
+      objRunner.intDirection = 0;
+    }
+
+    // Descendre
+    if (x == 40){
+      binDescendre = false;
+      objRunner.binDescendre = false;
       objRunner.intDirection = 0;
     }
 
