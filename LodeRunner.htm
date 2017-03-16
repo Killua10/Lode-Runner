@@ -314,7 +314,7 @@
     *
     *****************************************************************************************/
   function collisionEchelle(){
-    //Ronaldo
+
     binMonter = false;
     var x = 0;
     var y = 0;
@@ -327,13 +327,26 @@
         // Checks if its a ladder
         if (tabObjMap[row][col].objNom == "ECHELLE") {
           // the square where the ladder is
-          if (objRunner.posX  >= tabObjMap[row][col].posX - 15 && objRunner.posX   <= tabObjMap[row][col].posX + 15 &&
-            objRunner.posY +20 >= tabObjMap[row][col].posY - 20 && objRunner.posY + 20 <= tabObjMap[row][col].posY + 20) {
+          if (objRunner.posX  >= tabObjMap[row][col].posX - 20 && objRunner.posX <= tabObjMap[row][col].posX + 20 &&
+            objRunner.posY + 20 >= tabObjMap[row][col].posY - 20 && objRunner.posY + 20 <= tabObjMap[row][col].posY + 20) {
 
               binMonter = true;
+
+              if (objRunner.binMonter) {
+                objRunner.posX = tabObjMap[row][col].posX;
+              }
+          }
+
+          if (objRunner.posX  >= tabObjMap[row][col].posX - 20 && objRunner.posX   <= tabObjMap[row][col].posX  &&
+            objRunner.posY >= tabObjMap[row][col].posY  && objRunner.posY  <= tabObjMap[row][col].posY ) {
+
+              //binMonter = true;
               binDescendre = true;
 
           }
+
+
+
         }
       }
     }
@@ -651,9 +664,10 @@
     objC2D.font="20px calibri";
     objC2D.fillStyle = 'lime';
 
-    objC2D.fillText("MODE DEBUG: direction: " + objRunner.intDirection + " - monter: "
+    objC2D.fillText("MODE DEBUG: direction: " + objRunner.intDirection + " - up: "
     + objRunner.binMonter + " - surMur: " + objRunner.binSurMur + " - surCorde: " + binSurCorde +
     " - binDescendre: " + binDescendre + " - binMonter: " + binMonter,10,20);
+
 
      objC2D.fillStyle = 'lime';
      objC2D.beginPath();
@@ -795,7 +809,10 @@
     if (x == 38 && binMonter == true){
       binMonter = true;
       objRunner.intDirection = 38;
+
     }
+
+
 
     // Descendre
     if (x == 40 && binDescendre == true){
