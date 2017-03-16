@@ -304,13 +304,11 @@
     *
     *****************************************************************************************/
   function collisionEchelle(){
+    //Ronaldo
     binMonter = false;
-<<<<<<< HEAD
     var x = 0;
     var y = 0;
-=======
     binDescendre = false;
->>>>>>> origin/master
 
     for (var row = 0; row < tabObjMap.length; row++) {
       for (var col = 0; col < tabObjMap[row].length; col++) {
@@ -323,16 +321,8 @@
             objRunner.posY +20 >= tabObjMap[row][col].posY - 20 && objRunner.posY + 20 <= tabObjMap[row][col].posY + 20) {
 
               binMonter = true;
+              binDescendre = true;
 
-
-<<<<<<< HEAD
-=======
-          }
-
-          if (objRunner.posY + 25  >= tabObjMap[row][col].posX - 20 && objRunner.posY + 25 <= tabObjMap[row][col].posX + 20 ) {
-            binDescendre = true;
-
->>>>>>> origin/master
           }
         }
       }
