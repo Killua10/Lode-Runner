@@ -324,7 +324,7 @@
       for (var col = 0; col < tabObjMap[row].length; col++) {
 
 
-        // Checks if its a ladder 
+        // Checks if its a ladder
         if (tabObjMap[row][col].objNom == "ECHELLE") {
           // the square where the ladder is
           if (objRunner.posX  >= tabObjMap[row][col].posX - 20 && objRunner.posX <= tabObjMap[row][col].posX + 20 &&
@@ -340,7 +340,6 @@
           if (objRunner.posX  >= tabObjMap[row][col].posX - 20 && objRunner.posX   <= tabObjMap[row][col].posX + 20 &&
             objRunner.posY + 23 >= tabObjMap[row][col].posY - 20  && objRunner.posY + 23   <= tabObjMap[row][col].posY + 20 ) {
 
-              //binMonter = true;
               binDescendre = true;
               if (objRunner.binDescendre) {
                 objRunner.posX = tabObjMap[row][col].posX;
@@ -400,6 +399,9 @@
             objRunner.posY >= tabObjMap[row][col].posY - 20 && objRunner.posY <= tabObjMap[row][col].posY + 20) {
 
               binSurCorde = true;
+
+              objRunner.posY = tabObjMap[row][col].posY;
+
 
           }
         }
@@ -500,12 +502,12 @@
       binDroite = false;
     }
 
-    if (binSurCorde && objRunner.intDirection == 1) {
-      objRunner.posX += objRunner.intVitesse/2;
+    if (objRunner.binSurCorde && objRunner.intDirection == 1) {
+      objRunner.posX += objRunner.intVitesse/4;
     }
 
-    if (binSurCorde && objRunner.intDirection == -1) {
-      objRunner.posX -= objRunner.intVitesse/2;
+    if (objRunner.binSurCorde && objRunner.intDirection == -1) {
+      objRunner.posX -= objRunner.intVitesse/4;
     }
 
   }
