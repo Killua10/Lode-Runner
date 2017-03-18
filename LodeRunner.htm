@@ -331,7 +331,6 @@
             objRunner.posY + 20 >= tabObjMap[row][col].posY - 20 && objRunner.posY + 20 <= tabObjMap[row][col].posY + 20) {
 
               binMonter = true;
-
               if (objRunner.binMonter) {
                 objRunner.posX = tabObjMap[row][col].posX;
               }
@@ -361,15 +360,18 @@
   *****************************************************************************************/
   function collisionMur(){
 
+    objRunner.binSurMur = false;
+
     for (var row = 0; row < tabObjMap.length; row++) {
       for (var col = 0; col < tabObjMap[row].length; col++) {
 
 
 
-        if (tabObjMap[row][col].objNom == "MUR") {
-          // the square where the ladder is
-          if (objRunner.posX >= tabObjMap[row][col].posX && objRunner.posX - objRunner.intLargeur2  <= tabObjMap[row][col].posX + 20 &&
-            objRunner.posY +25 >= tabObjMap[row][col].posY - 20 && objRunner.posY +25 <= tabObjMap[row][col].posY + 20) {
+        if (tabObjMap[row][col].objNom == "MUR" ||
+            tabObjMap[row][col].objNom == "ECHELLE") {
+          // Detection du mur de brick en dessous du runner
+          if (objRunner.posX  >= tabObjMap[row][col].posX - 20 && objRunner.posX   <= tabObjMap[row][col].posX + 20 &&
+            objRunner.posY + 23 >= tabObjMap[row][col].posY - 20  && objRunner.posY + 23   <= tabObjMap[row][col].posY + 20 ) {
 
               objRunner.binSurMur = true;
 
@@ -391,8 +393,6 @@
     for (var row = 0; row < tabObjMap.length; row++) {
       for (var col = 0; col < tabObjMap[row].length; col++) {
 
-
-
         if (tabObjMap[row][col].objNom == "CORDE") {
           // the square where the rope is
           if (objRunner.posX >= tabObjMap[row][col].posX - 20 && objRunner.posX <= tabObjMap[row][col].posX + 20 &&
@@ -402,12 +402,10 @@
 
               objRunner.posY = tabObjMap[row][col].posY;
 
-
           }
         }
       }
     }
-
   }
 
 
@@ -468,6 +466,7 @@
       objRunner.posX = objRunner.posX+objRunner.intLargeur2;
     }
 
+
     if (binDroite && objRunner.intDirection != 38) {
       objRunner.intDirection = 1;
       objRunner.posX += objRunner.intVitesse;
@@ -491,7 +490,7 @@
     }
 
     if (!objRunner.binSurMur) {
-      //objRunner.posY += objRunner.intVitesse/2;
+      objRunner.posY += objRunner.intVitesse;
     }
 
     if (binDescendre && objRunner.intDirection == 40) {
@@ -835,8 +834,6 @@
       objRunner.intDirection = 38;
 
     }
-
-
 
     // Descendre
     if (x == 40 && binDescendre == true){
