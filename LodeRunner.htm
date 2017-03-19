@@ -367,8 +367,7 @@
 
 
 
-        if (tabObjMap[row][col].objNom == "MUR" ||
-            tabObjMap[row][col].objNom == "ECHELLE") {
+        if (tabObjMap[row][col].objNom == "MUR" || tabObjMap[row][col].objNom == "ECHELLE") {
           // Detection du mur de brick en dessous du runner
           if (objRunner.posX  >= tabObjMap[row][col].posX - 20 && objRunner.posX   <= tabObjMap[row][col].posX + 20 &&
             objRunner.posY + 23 >= tabObjMap[row][col].posY - 20  && objRunner.posY + 23   <= tabObjMap[row][col].posY + 20 ) {
