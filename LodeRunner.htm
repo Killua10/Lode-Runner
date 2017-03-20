@@ -63,6 +63,12 @@
 
   var tabObjMap = new Array(17);
 
+  /******************************************************************************************
+  * initAnimation()
+  *
+  * initialisation de l'objet canvas et objC2D.
+  * Contient tous les méthodes init des objets à initialiser avant le TICK METHODE
+  *****************************************************************************************/
     function initAnimation() {
         objCanvas = document.getElementById('monCanvas');
         objC2D = objCanvas.getContext('2d');
@@ -81,7 +87,11 @@
 
     }
 
-    // initialisation des images de fond
+    /******************************************************************************************
+    * initImageFond()
+    *
+    * initialisation des images de fond
+    *****************************************************************************************/
     function initImageFond() {
         objImageFond = new Image();
         objImageFond.src = 'img/F.png';
@@ -103,7 +113,11 @@
 
     }
 
-    // initialisation des sons de jeu
+    /******************************************************************************************
+    * initSons()
+    *
+    * initialisation des sons du jeu.
+    *****************************************************************************************/
     function initSons(){
       objSons = new Object();
 
@@ -119,7 +133,11 @@
       objSons.levelup = objSon;
     }
 
-    //Un cycle d'animation
+    /******************************************************************************************
+    * animer()
+    *
+    * Un cycle d'animation
+    *****************************************************************************************/
     function animer() {
         // Requête pour le prochain cycle
         objCycleAnimation = requestAnimationFrame(animer);
@@ -129,18 +147,31 @@
     		dessiner();
 	}
 
-  //Arrêter l'animation
+  /******************************************************************************************
+  * arreterAnimation()
+  *
+  * Arrete l'animation
+  *****************************************************************************************/
 	function arreterAnimation() {
 	    if (objCycleAnimation != null)
 	        cancelAnimationFrame(objCycleAnimation);
 	}
 
-	// Pour effacer le dessin
+  /******************************************************************************************
+  * effacerDessin()
+  *
+  * Efface le dessin après une mise à jour
+  *****************************************************************************************/
 	function effacerDessin() {
 		objC2D.clearRect(0,0, objCanvas.width, objCanvas.height);
 	}
 
-  // initialisation du Runner (personnage principal)
+  /******************************************************************************************
+  * initRunner()
+  *
+  * Initialise l'objet Runner (personnage principal) avec ses images d'animations
+  * et ses coordonnées du jeu.
+  *****************************************************************************************/
   function initRunner(){
     var objImageDebut = new Image();
     objImageDebut.src = 'img/debut.png';
@@ -154,7 +185,6 @@
     objImageCordeDroite.src = 'img/cordeDroit.png';
     var objImageCordeGauche = new Image();
     objImageCordeGauche.src = 'img/cordeGauche.png';
-
 
     objRunner = new Object();
     objRunner.objImage = objImageDebut;
@@ -185,7 +215,11 @@
     objRunner.intFrameCordeGauche = 0;
   }
 
-  //initialisation du fantome (guardien)
+  /******************************************************************************************
+  * initFantome()
+  *
+  * Initialise les guardiens du jeu.
+  *****************************************************************************************/
   function initFantome(){
 
     //tabObjFantomes = new Array();
@@ -216,6 +250,11 @@
 
   }
 
+  /******************************************************************************************
+  * dessinerFantome(posX, posY, intFrame)
+  *
+  * Dessine les guardiens du jeu
+  *****************************************************************************************/
   function dessinerFantome(posX, posY, intFrame){
     objC2D.save();
     objC2D.globalAlpha = 0.8;
@@ -234,15 +273,27 @@
   }
 
 
-	// Pour mettre à jour l'animation
+  /******************************************************************************************
+    * mettreAjourAnimation() - TICK METHODE
+    * Met à jour les animations
+    * Ne doit contenir que des méthodes de mise à jour.
+    *****************************************************************************************/
 	function mettreAjourAnimation(){
-
     animationRunner();
     collisionOr();
     collisionEchelle();
     collisionMur();
     collisionCorde();
+    chronometre();
 
+	}
+
+  /******************************************************************************************
+    * chronometre()
+    * Met à jour le chronometre
+    *
+    *****************************************************************************************/
+  function chronometre(){
     if (chronoMarche) {
         var objDateHeure2 = (new Date()).getTime();
         intMsEcoulees =  objDateHeure2 - objDateHeure1;
@@ -258,8 +309,7 @@
        intSecondeChrono = ajouteZeros(intSecondeChrono);
 
    }
-
-	}
+  }
 
   /******************************************************************************************
     * ajouteZeros(intNbr)
@@ -305,7 +355,6 @@
         }
       }
     }
-
   }
 
   /******************************************************************************************
@@ -343,10 +392,7 @@
               if (objRunner.binDescendre) {
                 objRunner.posX = tabObjMap[row][col].posX;
               }
-
           }
-
-
 
         }
       }
@@ -408,70 +454,77 @@
   }
 
 
+  /******************************************************************************************
+    * animationRunner()
+    * Dessine l'animation du Runner à partir de sa direction.
+    *****************************************************************************************/
   function animationRunner(){
-    // (FRAME) Animation pour le Runner
-
+    // Animation IDLE
     if (objRunner.intDirection == 0) {
       objRunner.intFrame+=0.05;
       if (objRunner.intFrame >= 22) { // 22 frames dans l'image
         objRunner.intFrame -= 22;
       }
     }
+    // Animation courir vers la gauche
     if (objRunner.intDirection == -1 && !binSurCorde) {
       objRunner.intFrameGauche+=1;
       if (objRunner.intFrameGauche >= 27) { // 27 frames dans l'image
         objRunner.intFrameGauche -= 27;
       }
     }
+    // Animation courir vers la droite
     if (objRunner.intDirection == 1 && !binSurCorde) {
       objRunner.intFrameDroit+=1;
       if (objRunner.intFrameDroit >= 27) { // 27 frames dans l'image
         objRunner.intFrameDroit -= 27;
       }
     }
+    // Animation monter
     if (objRunner.binMonter) {
       objRunner.intFrameMonter+=0.3;
       if (objRunner.intFrameMonter >= 8) { // 8 frames dans l'image
         objRunner.intFrameMonter -= 8;
       }
     }
+    // Animation descendre
     if (objRunner.binDescendre) {
       objRunner.intFrameDescendre += 0.3
       if (objRunner.intFrameDescendre >= 8) { // 8 frames dans l'image
         objRunner.intFrameDescendre -= 8;
       }
     }
+    // Animation sur corde vers la droite
     if (binSurCorde && objRunner.intDirection == 1) {
       objRunner.intFrameCordeDroite += 0.3
       if (objRunner.intFrameCordeDroite >= 8) { // 8 frames dans l'image
         objRunner.intFrameCordeDroite -= 8;
       }
     }
+    // Animation sur corde vers la gauche
     if (binSurCorde && objRunner.intDirection == -1) {
       objRunner.intFrameCordeGauche += 0.3
       if (objRunner.intFrameCordeGauche >= 8) { // 8 frames dans l'image
         objRunner.intFrameCordeGauche -= 8;
       }
     }
-
-
+    // Limites X du jeu
     if (objRunner.posX < objRunner.intLargeur - objRunner.intLargeur2) {
       objRunner.posX = objRunner.intLargeur;
       objRunner.posX = objRunner.posX-objRunner.intLargeur2;
     }
-
+    // Limites X du jeu
     if (objRunner.posX > (objCanvas.width - objRunner.intLargeur) + objRunner.intLargeur2) {
       objRunner.posX = objCanvas.width - objRunner.intLargeur;
       objRunner.posX = objRunner.posX+objRunner.intLargeur2;
     }
 
-
+    // Ajustement de variables de direction et controle de vitesse
     if (binDroite && objRunner.intDirection != 38) {
       objRunner.intDirection = 1;
       objRunner.posX += objRunner.intVitesse;
 
     }
-
     if (binGauche && objRunner.intDirection != 38 ) {
       objRunner.intDirection = -1;
       objRunner.posX -= objRunner.intVitesse;
@@ -488,28 +541,35 @@
 
     }
 
+    // Faire tomber le Runner si n'est pas sur un mur
     if (!objRunner.binSurMur) {
       objRunner.posY += objRunner.intVitesse;
     }
 
+    // Descendre l'echelle
     if (binDescendre && objRunner.intDirection == 40) {
       objRunner.binDescendre = true;
       objRunner.posY += objRunner.intVitesse/2; //deplacement vers le bas
-      //TODO: VERIFIER SI SE TROUVE SUR UNE ECHELLE A VANT DE MONTER!!
       binGauche = false;
       binDroite = false;
     }
 
+    //TODO: DO WE NEED THIS?? - IT DOESN'T DO ANYTHING!
+    /*// Vitesses du Runner sur corde
     if (objRunner.binSurCorde && objRunner.intDirection == 1) {
-      objRunner.posX += objRunner.intVitesse/4;
+      bjRunner.posX += objRunner.intVitesse;
     }
 
     if (objRunner.binSurCorde && objRunner.intDirection == -1) {
-      objRunner.posX -= objRunner.intVitesse/4;
-    }
+      objRunner.posX -= objRunner.intVitesse;
+    }*/
 
   }
 
+  /******************************************************************************************
+    * dessinerRunner(x, y, intFrame)
+    * Dessine le Runner dépendamment de sa direction et de son animation
+    *****************************************************************************************/
   function dessinerRunner(x, y, intFrame){
     objC2D.save();
 
@@ -575,7 +635,7 @@
       dw = objRunner.objAnimationCordeDroite.width/8;
       objC2D.drawImage(objRunner.objAnimationCordeGauche, sx, sy, sw, dh, dx, dy, dw, dh);
     }
-    //
+
     objC2D.restore();
 
   }
@@ -614,7 +674,11 @@
 
 	}
 
-  /*HEADS UP DISPLAY*/
+  /******************************************************************************************
+    * dessinerHUD()
+    * Dessiner le HEADS UP DISPLAY
+    * Affiche les variables de score, temps, vie et niveau du jeu.
+    *****************************************************************************************/
   function dessinerHUD(){
 
     //Contour Score
@@ -676,7 +740,13 @@
     objC2D.strokeText(strTemp,   objCanvas.width / 1.12, 710 + 75);
   }
 
-  var compteur = 0 ; //test
+
+
+  /******************************************************************************************
+    * debug()
+    * Methode de debagage (Affiche des variables importants du runner)
+    * Ne doit pas être affiché au version finale (ALPHA) du jeu.
+    *****************************************************************************************/
   function debug(){
     objC2D.textAlign = "left";
     objC2D.font="20px calibri";
@@ -700,12 +770,12 @@
      objC2D.font="12px calibri";
      objC2D.fillText("(" + objRunner.posX + ", " + objRunner.posY + ")",objRunner.posX, objRunner.posY-25);
 
-
-
-
-
   }
 
+  /******************************************************************************************
+    *  formatterScore(intNbr, intTaille)
+    *  Ajoute des zéros au score.
+    *****************************************************************************************/
   function formatterScore(intNbr, intTaille) {
     var strScore = "" + intNbr;
     while (strScore.length < intTaille) {
@@ -715,8 +785,11 @@
 }
 
 
-
-	// Pour dessiner l'image de fond
+/******************************************************************************************
+  *  dessinerMappe()
+  *  Sert à afficher la mappe du jeu à partir du tableau à deux dimensions.
+  *  Initialise un tableau d'objets correspondant au tableau de départ.
+  *****************************************************************************************/
 	function dessinerMappe() {
 	    objC2D.save();  // Sauvegarde le contexte
       var intTailleTuile = 40;
@@ -802,16 +875,17 @@
             tabObjMap[row][col] = objet;
 
           }
-
-
-
         }
       }
 	    objC2D.restore(); // Restaure le contexte
-
 	}
 
-
+  /******************************************************************************************
+    *  keyDown()
+    *  Gestion du clavier KEY DOWN
+    *  Pour la fluidité des touches
+    *  x = event.keyCode
+    *****************************************************************************************/
   function keyDown(){
 
     var x = event.keyCode;
@@ -845,6 +919,12 @@
 
   }
 
+  /******************************************************************************************
+    *  keyUp()
+    *  Gestion du clavier KEY UP
+    *  Pour la fluidité des touches
+    *  x = event.keyCode
+    *****************************************************************************************/
   function keyUp(){
     var x = event.keyCode;
 
