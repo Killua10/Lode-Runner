@@ -203,6 +203,7 @@
     objRunner.binMonter = false;
     objRunner.binChute = false;
     objRunner.binSurMur = true;
+    objRunner.binSurMurCote = false;
     objRunner.binDescendre = false;
     objRunner.binCorde = false;
     objRunner.intFrame = 0;
@@ -283,6 +284,7 @@
     collisionOr();
     collisionEchelle();
     collisionMur();
+    collisionMurCote();
     collisionCorde();
     chronometre();
 
@@ -453,6 +455,32 @@
     }
   }
 
+  /******************************************************************************************
+    * collisionMurCote()
+    * Verifie une collision entre le point X,Y du personnage avec les points X,Y des murs
+    *
+    *****************************************************************************************/
+    function collisionMurCote(){
+
+      objRunner.binSurMurCote = false;
+
+      for (var row = 0; row < tabObjMap.length; row++) {
+        for (var col = 0; col < tabObjMap[row].length; col++) {
+
+
+
+          if (tabObjMap[row][col].objNom == "MUR") {
+            // Detection du mur de brick en dessous du runner
+            if (objRunner.posX  == tabObjMap[row][col].posX + 30) {
+
+                objRunner.binSurMurCote = true;
+
+            }
+          }
+        }
+      }
+    }
+
 
   /******************************************************************************************
     * animationRunner()
@@ -546,6 +574,11 @@
       objRunner.posY += objRunner.intVitesse;
     }
 
+var x = event.keyCode
+    if (x == 40 && binSurCorde) {
+      objRunner.posY += objRunner.intVitesse;
+    }
+
     // Descendre l'echelle
     if (binDescendre && objRunner.intDirection == 40) {
       objRunner.binDescendre = true;
@@ -634,6 +667,13 @@
       dy = objRunner.posY-12;
       dw = objRunner.objAnimationCordeDroite.width/8;
       objC2D.drawImage(objRunner.objAnimationCordeGauche, sx, sy, sw, dh, dx, dy, dw, dh);
+    }else if (binSurCorde  && objRunner.intDirection == 0) {
+      sx = (289/8)*0;
+      sw = objRunner.objAnimationCordeDroite.width/8;
+      dx = objRunner.posX-12;
+      dy = objRunner.posY-12;
+      dw = objRunner.objAnimationCordeDroite.width/8;
+      objC2D.drawImage(objRunner.objAnimationCordeDroite, sx, sy, sw, dh, dx, dy, dw, dh);
     }
 
     objC2D.restore();
@@ -662,6 +702,8 @@
       if (binSurCorde && objRunner.intDirection == 1) {
         dessinerRunner(objRunner.posX, objRunner.posY, Math.floor(objRunner.intFrameCordeDroite));
       }else if (binSurCorde && objRunner.intDirection == -1) {
+        dessinerRunner(objRunner.posX, objRunner.posY, Math.floor(objRunner.intFrameCordeGauche));
+      }else if (binSurCorde  && objRunner.intDirection == 0) {
         dessinerRunner(objRunner.posX, objRunner.posY, Math.floor(objRunner.intFrameCordeGauche));
       }
 
@@ -754,7 +796,7 @@
 
     objC2D.fillText("MODE DEBUG: direction: " + objRunner.intDirection + " - up: "
     + objRunner.binMonter + " - surMur: " + objRunner.binSurMur + " - surCorde: " + binSurCorde +
-    " - binDescendre: " + binDescendre + " - binMonter: " + binMonter,10,20);
+    " - binDescendre: " + binDescendre + " - binMonter: " + binMonter + " - surMurCote: " + objRunner.binSurMurCote ,10,20);
 
 
      objC2D.fillStyle = 'lime';
@@ -769,6 +811,20 @@
      objC2D.closePath();
      objC2D.font="12px calibri";
      objC2D.fillText("(" + objRunner.posX + ", " + objRunner.posY + ")",objRunner.posX, objRunner.posY-25);
+
+     for (var row = 0; row < tabObjMap.length; row++) {
+       for (var col = 0; col < tabObjMap[row].length; col++) {
+
+         if (tabObjMap[row][col].objNom == "MUR") {
+           objC2D.stroke();
+           objC2D.fillStyle = 'lime';
+           objC2D.closePath();
+           objC2D.font="9px calibri";
+           objC2D.fillText("(" + (tabObjMap[row][col].posX + 30) + ", " + tabObjMap[row][col].posY + ")",tabObjMap[row][col].posX-20,
+           tabObjMap[row][col].posY);
+         }
+       }
+     }
 
   }
 
@@ -905,16 +961,19 @@
     if (x == 38 && binMonter == true){
       binMonter = true;
       objRunner.intDirection = 38;
-
     }
 
     // Descendre
-    if (x == 40 && binDescendre == true){
+    if (x == 40 && binDescendre == true && !binSurCorde){
       binDescendre = true;
       //binMonter = false;
       objRunner.intDirection = 40;
       //objRunner.binDescendre = true;
       //objRunner.intDirection = 0;
+    }
+
+    if (x == 40 && binSurCorde) {
+      objRunner.posY += objRunner.intVitesse;
     }
 
   }
@@ -946,10 +1005,14 @@
     }
 
     // Descendre
-    if (x == 40){
+    if (x == 40 && !binSurCorde){
       binDescendre = false;
       objRunner.binDescendre = false;
       objRunner.intDirection = 0;
+    }
+
+    if (x == 40 && binSurCorde) {
+      //objRunner.posY += objRunner.intVitesse;
     }
 
   }
