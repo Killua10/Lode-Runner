@@ -280,9 +280,9 @@
     *****************************************************************************************/
 	function mettreAjourAnimation(){
     animationRunner();
+    collisionMur();
     collisionOr();
     collisionEchelle();
-    collisionMur();
     collisionCorde();
     chronometre();
 
@@ -447,6 +447,11 @@
 
               objRunner.posY = tabObjMap[row][col].posY;
 
+              if (objRunner.intDirection == 40 && binDescendre) {
+                binSurCorde = false;
+                objRunner.posY++;
+
+              }
           }
         }
       }
@@ -753,7 +758,7 @@
     objC2D.fillStyle = 'lime';
 
     objC2D.fillText("MODE DEBUG: direction: " + objRunner.intDirection + " - up: "
-    + objRunner.binMonter + " - surMur: " + objRunner.binSurMur + " - surCorde: " + binSurCorde +
+    + objRunner.binMonter + " - objDesc: " + objRunner.binDescendre +" - surMur: " + objRunner.binSurMur + " - surCorde: " + binSurCorde +
     " - binDescendre: " + binDescendre + " - binMonter: " + binMonter,10,20);
 
 
@@ -890,6 +895,7 @@
 
     var x = event.keyCode;
 
+    //Si on desire mettre en pause le jeu, on decommente
     /*if (chronoMarche) {
       chronoMarche = false;
     }else {*/
