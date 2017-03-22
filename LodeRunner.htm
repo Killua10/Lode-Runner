@@ -38,6 +38,7 @@
   var objDateHeure1 = new Date().getTime();
   var chronoMarche = false;
   var intMsEcoulees = 0;
+  var binTomber = false;
   //tableau du niveau
   var tabMappe = [ ['F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F'],
                    ['F','F','F','F','O','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F'],
@@ -471,7 +472,7 @@
 
           if (tabObjMap[row][col].objNom == "MUR") {
             // Detection du mur de brick en dessous du runner
-            if (objRunner.posX  == tabObjMap[row][col].posX + 30) {
+            if (objRunner.posX  == tabObjMap[row][col].posX + 30 || objRunner.posX   == tabObjMap[row][col].posX - 30) {
 
                 objRunner.binSurMurCote = true;
 
@@ -574,8 +575,7 @@
       objRunner.posY += objRunner.intVitesse;
     }
 
-var x = event.keyCode
-    if (x == 40 && binSurCorde) {
+    if (binTomber && !objRunner.binSurMur) {
       objRunner.posY += objRunner.intVitesse;
     }
 
@@ -796,7 +796,7 @@ var x = event.keyCode
 
     objC2D.fillText("MODE DEBUG: direction: " + objRunner.intDirection + " - up: "
     + objRunner.binMonter + " - surMur: " + objRunner.binSurMur + " - surCorde: " + binSurCorde +
-    " - binDescendre: " + binDescendre + " - binMonter: " + binMonter + " - surMurCote: " + objRunner.binSurMurCote ,10,20);
+    " - binDescendre: " + binDescendre + " - binMonter: " + binMonter + " - surMurCote: " + objRunner.binSurMurCote + " T: " + binTomber ,10,20);
 
 
      objC2D.fillStyle = 'lime';
@@ -972,8 +972,9 @@ var x = event.keyCode
       //objRunner.intDirection = 0;
     }
 
-    if (x == 40 && binSurCorde) {
-      objRunner.posY += objRunner.intVitesse;
+    if (x == 40 && binSurCorde ) {
+      binTomber = true
+      objRunner.intDirection = 40;
     }
 
   }
@@ -1013,6 +1014,8 @@ var x = event.keyCode
 
     if (x == 40 && binSurCorde) {
       //objRunner.posY += objRunner.intVitesse;
+      binTomber = false
+      objRunner.intDirection = 0;
     }
 
   }
