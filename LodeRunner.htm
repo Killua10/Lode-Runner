@@ -24,7 +24,8 @@
   var binGauche = false;
   var binMonter = false;
   var binDescendre = false;
-  var binSurCorde = false;
+  var binX = false;
+  var binZ = false;
   //variable de score
   var intCompteurOR = 0;
   var intScore = 0;
@@ -38,6 +39,8 @@
   var objDateHeure1 = new Date().getTime();
   var chronoMarche = false;
   var intMsEcoulees = 0;
+
+
   //tableau du niveau
   var tabMappe = [ ['F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F'],
                    ['F','F','F','F','O','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F'],
@@ -203,8 +206,11 @@
     objRunner.binMonter = false;
     objRunner.binChute = false;
     objRunner.binSurMur = true;
+    objRunner.binSurMurCote = false;
     objRunner.binDescendre = false;
     objRunner.binCorde = false;
+    objRunner.binTomber = false;
+    objRunner.binSurCorde = false;
     objRunner.intFrame = 0;
     objRunner.intFrameGauche = 0;
     objRunner.intFrameDroit = 0;
@@ -280,10 +286,12 @@
     *****************************************************************************************/
 	function mettreAjourAnimation(){
     animationRunner();
-    collisionMur();
     collisionOr();
     collisionEchelle();
+    collisionMur();
+    collisionMurCote();
     collisionCorde();
+    creuserTrou();
     chronometre();
 
 	}
@@ -413,12 +421,13 @@
 
 
 
-        if (tabObjMap[row][col].objNom == "MUR" || tabObjMap[row][col].objNom == "ECHELLE") {
+        if (tabObjMap[row][col].objNom == "MUR" || tabObjMap[row][col].objNom == "ECHELLE" || tabObjMap[row][col].objNom == "BASE") {
           // Detection du mur de brick en dessous du runner
           if (objRunner.posX  >= tabObjMap[row][col].posX - 20 && objRunner.posX   <= tabObjMap[row][col].posX + 20 &&
             objRunner.posY + 23 >= tabObjMap[row][col].posY - 20  && objRunner.posY + 23   <= tabObjMap[row][col].posY + 20 ) {
 
               objRunner.binSurMur = true;
+              objRunner.binTomber = false;
 
           }
         }
@@ -433,7 +442,7 @@
     *****************************************************************************************/
   function collisionCorde(){
 
-    binSurCorde = false;
+    objRunner.binSurCorde = false;
 
     for (var row = 0; row < tabObjMap.length; row++) {
       for (var col = 0; col < tabObjMap[row].length; col++) {
@@ -443,20 +452,97 @@
           if (objRunner.posX >= tabObjMap[row][col].posX - 20 && objRunner.posX <= tabObjMap[row][col].posX + 20 &&
             objRunner.posY >= tabObjMap[row][col].posY - 20 && objRunner.posY <= tabObjMap[row][col].posY + 20) {
 
-              binSurCorde = true;
-
-              objRunner.posY = tabObjMap[row][col].posY;
-
-              if (objRunner.intDirection == 40 && binDescendre) {
-                binSurCorde = false;
-                objRunner.posY++;
+              if (!objRunner.binTomber) {
+                objRunner.binSurCorde = true;
+                objRunner.posY = tabObjMap[row][col].posY;
 
               }
+
           }
         }
       }
     }
   }
+
+  /******************************************************************************************
+    * collisionMurCote()
+    * Verifie une collision entre le point X,Y du personnage avec les points X,Y des murs
+    *
+    *****************************************************************************************/
+    function collisionMurCote(){
+
+      objRunner.binSurMurCote = false;
+      var intCoordX = 0;
+
+      for (var row = 0; row < tabObjMap.length; row++) {
+        for (var col = 0; col < tabObjMap[row].length; col++) {
+
+
+
+          if (tabObjMap[row][col].objNom == "MUR") {
+            // Detection du mur de brick en dessous du runner
+            if (objRunner.posX + 15>= tabObjMap[row][col].posX - 20 && objRunner.posX <= tabObjMap[row][col].posX + 20 &&
+              objRunner.posY - 15>= tabObjMap[row][col].posY - 20 && objRunner.posY <= tabObjMap[row][col].posY + 20) {
+
+                objRunner.binSurMurCote = true;
+
+
+            }
+          }
+        }
+      }
+    }
+
+    /******************************************************************************************
+      * creuserTrou()
+      *
+      *
+      *****************************************************************************************/
+      function creuserTrou(){
+
+        var binVerdict = false;
+
+        for (var row = 0; row < tabObjMap.length; row++) {
+          for (var col = 0; col < tabObjMap[row].length; col++) {
+
+
+            // conditions: sur mur / or / corde
+            //
+            if (objRunner.posX +35 >= tabObjMap[row][col].posX  - 20 && objRunner.posX +35<= tabObjMap[row][col].posX + 20 &&
+                objRunner.posY >= tabObjMap[row][col].posY -20  && objRunner.posY <= tabObjMap[row][col].posY + 20){
+                  if (tabObjMap[row][col].objNom == "OR" || tabObjMap[row][col].objNom == "ECHELLE" || objRunner.binSurCorde || objRunner.binMonter){ //echelle marche pas?
+                    binVerdict = false;
+                  }else{
+                    binVerdict = true;
+                  }
+
+              }
+
+            if (tabObjMap[row][col].objNom == "MUR" && binVerdict) {
+              // Detection du mur de brick en dessous du runner
+
+                if (binX) {
+                  if (objRunner.posX +35 >= tabObjMap[row][col].posX  - 20 && objRunner.posX +35<= tabObjMap[row][col].posX + 20 &&
+                      objRunner.posY +45>= tabObjMap[row][col].posY -20  && objRunner.posY+45 <= tabObjMap[row][col].posY + 20){
+                      tabMappe[row][col] = 'F';
+                      //add timer
+                      //add sound
+                    }
+                  }
+
+                if (binZ) {
+                  if (objRunner.posX -35 >= tabObjMap[row][col].posX  - 20 && objRunner.posX -35<= tabObjMap[row][col].posX + 20 &&
+                      objRunner.posY +45>= tabObjMap[row][col].posY -20  && objRunner.posY+45 <= tabObjMap[row][col].posY + 20){
+                      tabMappe[row][col] = 'F';
+                      //add timer
+                      //add same sound
+                    }
+                  }
+                }
+              }
+            }
+
+        }
 
 
   /******************************************************************************************
@@ -472,14 +558,14 @@
       }
     }
     // Animation courir vers la gauche
-    if (objRunner.intDirection == -1 && !binSurCorde) {
+    if (objRunner.intDirection == -1 && !objRunner.binSurCorde) {
       objRunner.intFrameGauche+=1;
       if (objRunner.intFrameGauche >= 27) { // 27 frames dans l'image
         objRunner.intFrameGauche -= 27;
       }
     }
     // Animation courir vers la droite
-    if (objRunner.intDirection == 1 && !binSurCorde) {
+    if (objRunner.intDirection == 1 && !objRunner.binSurCorde) {
       objRunner.intFrameDroit+=1;
       if (objRunner.intFrameDroit >= 27) { // 27 frames dans l'image
         objRunner.intFrameDroit -= 27;
@@ -500,25 +586,25 @@
       }
     }
     // Animation sur corde vers la droite
-    if (binSurCorde && objRunner.intDirection == 1) {
+    if (objRunner.binSurCorde && objRunner.intDirection == 1) {
       objRunner.intFrameCordeDroite += 0.3
       if (objRunner.intFrameCordeDroite >= 8) { // 8 frames dans l'image
         objRunner.intFrameCordeDroite -= 8;
       }
     }
     // Animation sur corde vers la gauche
-    if (binSurCorde && objRunner.intDirection == -1) {
+    if (objRunner.binSurCorde && objRunner.intDirection == -1) {
       objRunner.intFrameCordeGauche += 0.3
       if (objRunner.intFrameCordeGauche >= 8) { // 8 frames dans l'image
         objRunner.intFrameCordeGauche -= 8;
       }
     }
-    // Limites X du jeu
-    if (objRunner.posX < objRunner.intLargeur - objRunner.intLargeur2) {
+    // Limites X du jeu gauche
+    if (objRunner.posX < objRunner.intLargeur - objRunner.intLargeur2 ) {
       objRunner.posX = objRunner.intLargeur;
       objRunner.posX = objRunner.posX-objRunner.intLargeur2;
     }
-    // Limites X du jeu
+    // Limites X du jeu droite
     if (objRunner.posX > (objCanvas.width - objRunner.intLargeur) + objRunner.intLargeur2) {
       objRunner.posX = objCanvas.width - objRunner.intLargeur;
       objRunner.posX = objRunner.posX+objRunner.intLargeur2;
@@ -549,6 +635,13 @@
     // Faire tomber le Runner si n'est pas sur un mur
     if (!objRunner.binSurMur) {
       objRunner.posY += objRunner.intVitesse;
+    }
+
+    if (objRunner.binTomber && !objRunner.binSurMur) {
+
+
+      objRunner.posY += objRunner.intVitesse;
+
     }
 
     // Descendre l'echelle
@@ -587,14 +680,14 @@
     var dw = 0;
     var dh = 35;
 
-    if (objRunner.intDirection == 0 && !binSurCorde) {
+    if (objRunner.intDirection == 0 && !objRunner.binSurCorde) {
       sx = (524/22)*intFrame;
       sw = objRunner.objImage.width/22;
       dx = objRunner.posX-12;
       dy = objRunner.posY-12;
       dw = objRunner.objImage.width/22;
       objC2D.drawImage(objRunner.objImage, sx, sy, sw, sh, dx, dy, dw, dh);
-    }else if (objRunner.intDirection == -1 && !binSurCorde) {
+    }else if (objRunner.intDirection == -1 && !objRunner.binSurCorde) {
       sx = (826/27)*intFrame;
       sx = Math.floor(sx);
       sw = objRunner.objAnimationGauche.width/27;
@@ -602,7 +695,7 @@
       dy = objRunner.posY-12;
       dw = objRunner.objAnimationGauche.width/27;
       objC2D.drawImage(objRunner.objAnimationGauche, sx, sy, sw, sh, dx, dy, dw, dh);
-    }else if (objRunner.intDirection == 1 && !binSurCorde) {
+    }else if (objRunner.intDirection == 1 && !objRunner.binSurCorde) {
       sx = (826/27)*intFrame;
       sw = objRunner.objAnimationDroit.width/27;
       dx = objRunner.posX-12;
@@ -625,20 +718,27 @@
       objC2D.drawImage(objRunner.objAnimationMonter, sx, sy, 23, dh, dx, dy, 23, dh);
     }
 
-    if (binSurCorde && objRunner.intDirection == 1) {
+    if (objRunner.binSurCorde && objRunner.intDirection == 1) {
       sx = (289/8)*intFrame;
       sw = objRunner.objAnimationCordeDroite.width/8;
       dx = objRunner.posX-12;
       dy = objRunner.posY-12;
       dw = objRunner.objAnimationCordeDroite.width/8;
       objC2D.drawImage(objRunner.objAnimationCordeDroite, sx, sy, sw, dh, dx, dy, dw, dh);
-    }else if (binSurCorde && objRunner.intDirection == -1) {
+    }else if (objRunner.binSurCorde && objRunner.intDirection == -1) {
       sx = (289/8)*intFrame;
       sw = objRunner.objAnimationCordeDroite.width/8;
       dx = objRunner.posX-12;
       dy = objRunner.posY-12;
       dw = objRunner.objAnimationCordeDroite.width/8;
       objC2D.drawImage(objRunner.objAnimationCordeGauche, sx, sy, sw, dh, dx, dy, dw, dh);
+    }else if (objRunner.binSurCorde  && objRunner.intDirection == 0) {
+      sx = (289/8)*0;
+      sw = objRunner.objAnimationCordeDroite.width/8;
+      dx = objRunner.posX-12;
+      dy = objRunner.posY-12;
+      dw = objRunner.objAnimationCordeDroite.width/8;
+      objC2D.drawImage(objRunner.objAnimationCordeDroite, sx, sy, sw, dh, dx, dy, dw, dh);
     }
 
     objC2D.restore();
@@ -652,9 +752,9 @@
 
       if (objRunner.intDirection == 0) {
         dessinerRunner(objRunner.posX, objRunner.posY, Math.floor(objRunner.intFrame));
-      }else if (objRunner.intDirection == -1 && !binSurCorde) {
+      }else if (objRunner.intDirection == -1 && !objRunner.binSurCorde) {
         dessinerRunner(objRunner.posX, objRunner.posY, Math.floor(objRunner.intFrameGauche));
-      }else if (objRunner.intDirection == 1 && !binSurCorde) {
+      }else if (objRunner.intDirection == 1 && !objRunner.binSurCorde) {
         dessinerRunner(objRunner.posX, objRunner.posY, Math.floor(objRunner.intFrameDroit));
       }
 
@@ -664,9 +764,11 @@
         dessinerRunner(objRunner.posX, objRunner.posY, Math.floor(objRunner.intFrameDescendre));
       }
 
-      if (binSurCorde && objRunner.intDirection == 1) {
+      if (objRunner.binSurCorde && objRunner.intDirection == 1) {
         dessinerRunner(objRunner.posX, objRunner.posY, Math.floor(objRunner.intFrameCordeDroite));
-      }else if (binSurCorde && objRunner.intDirection == -1) {
+      }else if (objRunner.binSurCorde && objRunner.intDirection == -1) {
+        dessinerRunner(objRunner.posX, objRunner.posY, Math.floor(objRunner.intFrameCordeGauche));
+      }else if (objRunner.binSurCorde  && objRunner.intDirection == 0) {
         dessinerRunner(objRunner.posX, objRunner.posY, Math.floor(objRunner.intFrameCordeGauche));
       }
 
@@ -758,8 +860,8 @@
     objC2D.fillStyle = 'lime';
 
     objC2D.fillText("MODE DEBUG: direction: " + objRunner.intDirection + " - up: "
-    + objRunner.binMonter + " - objDesc: " + objRunner.binDescendre +" - surMur: " + objRunner.binSurMur + " - surCorde: " + binSurCorde +
-    " - binDescendre: " + binDescendre + " - binMonter: " + binMonter,10,20);
+    + objRunner.binMonter + " - surMur: " + objRunner.binSurMur + " - surCorde: " + objRunner.binSurCorde +
+    " - binDescendre: " + binDescendre + " - binMonter: " + binMonter + " - surMurCote: " + objRunner.binSurMurCote + " T: " + objRunner.binTomber ,10,20);
 
 
      objC2D.fillStyle = 'lime';
@@ -769,11 +871,29 @@
      objC2D.fillStyle = 'red';
      objC2D.fillRect(objRunner.posX, objRunner.posY+20, 5,5);
 
+     objC2D.fillStyle = 'pink';
+     objC2D.fillRect(objRunner.posX+10, objRunner.posY, 5,5);
+     objC2D.fillRect(objRunner.posX-10, objRunner.posY, 5,5);
+
      objC2D.stroke();
      objC2D.fillStyle = 'lime';
      objC2D.closePath();
      objC2D.font="12px calibri";
      objC2D.fillText("(" + objRunner.posX + ", " + objRunner.posY + ")",objRunner.posX, objRunner.posY-25);
+
+     for (var row = 0; row < tabObjMap.length; row++) {
+       for (var col = 0; col < tabObjMap[row].length; col++) {
+
+         if (tabObjMap[row][col].objNom == "MUR") {
+           objC2D.stroke();
+           objC2D.fillStyle = 'lime';
+           objC2D.closePath();
+           objC2D.font="9px calibri";
+           objC2D.fillText("(" + (tabObjMap[row][col].posX + 30) + ", " + tabObjMap[row][col].posY + ")",tabObjMap[row][col].posX-20,
+           tabObjMap[row][col].posY);
+         }
+       }
+     }
 
   }
 
@@ -895,33 +1015,49 @@
 
     var x = event.keyCode;
 
-    //Si on desire mettre en pause le jeu, on decommente
     /*if (chronoMarche) {
       chronoMarche = false;
     }else {*/
-      chronoMarche = true;
-      objDateHeure1 = new Date();
+    chronoMarche = true;
+    objDateHeure1 = new Date();
     //}
+    binDroite = false
+    binGauche = false
+
+
 
     // Deplacement droite
-    if (x == 39)  binDroite = true;
+    if (x == 39 && (objRunner.binSurMur || objRunner.binSurCorde))  binDroite = true;
     // Deplacement gauche
-    if (x == 37)  binGauche = true;
+    if (x == 37 && (objRunner.binSurMur || objRunner.binSurCorde))  binGauche = true;
     // Monter
     if (x == 38 && binMonter == true){
       binMonter = true;
       objRunner.intDirection = 38;
-
     }
 
     // Descendre
-    if (x == 40 && binDescendre == true){
+    if (x == 40 && binDescendre == true && !objRunner.binSurCorde){
       binDescendre = true;
       //binMonter = false;
       objRunner.intDirection = 40;
       //objRunner.binDescendre = true;
       //objRunner.intDirection = 0;
     }
+
+    if (x == 40 && objRunner.binSurCorde ) {
+      objRunner.binTomber = true
+      objRunner.intDirection = 40;
+    }
+
+    if (x == 88) { //X
+      binX = true;
+    }
+
+    if (x == 90) { //Z
+      binZ = true;
+    }
+
 
   }
 
@@ -935,12 +1071,12 @@
     var x = event.keyCode;
 
     // Deplacement droite
-    if (x == 39){
+    if (x == 39 ){
       binDroite = false;
       objRunner.intDirection = 0;
     }
     // Deplacement gauche
-    if (x == 37){
+    if (x == 37 ){
       binGauche = false;
       objRunner.intDirection = 0;
     }
@@ -952,10 +1088,24 @@
     }
 
     // Descendre
-    if (x == 40){
+    if (x == 40 && !objRunner.binSurCorde){
       binDescendre = false;
       objRunner.binDescendre = false;
       objRunner.intDirection = 0;
+    }
+
+    if (x == 40 && objRunner.binSurCorde) {
+      //objRunner.posY += objRunner.intVitesse;
+      objRunner.binTomber = false
+      objRunner.intDirection = 0;
+    }
+
+    if (x == 88) { //X
+      binX = false;
+    }
+
+    if (x == 90) { //Z
+      binZ = false;
     }
 
   }
