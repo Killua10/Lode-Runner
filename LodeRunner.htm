@@ -39,8 +39,6 @@
   var objDateHeure1 = new Date().getTime();
   var chronoMarche = false;
   var intMsEcoulees = 0;
-
-
   //tableau du niveau
   var tabMappe = [ ['F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F'],
                    ['F','F','F','F','O','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F'],
@@ -472,7 +470,7 @@
     function collisionMurCote(){
 
       objRunner.binSurMurCote = false;
-      var intCoordX = 0;
+
 
       for (var row = 0; row < tabObjMap.length; row++) {
         for (var col = 0; col < tabObjMap[row].length; col++) {
@@ -480,7 +478,7 @@
 
 
           if (tabObjMap[row][col].objNom == "MUR") {
-            // Detection du mur de brick en dessous du runner
+
             if (objRunner.posX + 15>= tabObjMap[row][col].posX - 20 && objRunner.posX <= tabObjMap[row][col].posX + 20 &&
               objRunner.posY - 15>= tabObjMap[row][col].posY - 20 && objRunner.posY <= tabObjMap[row][col].posY + 20) {
 
@@ -492,6 +490,7 @@
         }
       }
     }
+
 
     /******************************************************************************************
       * creuserTrou()
@@ -543,6 +542,7 @@
             }
 
         }
+
 
 
   /******************************************************************************************
@@ -637,11 +637,10 @@
       objRunner.posY += objRunner.intVitesse;
     }
 
+
     if (objRunner.binTomber && !objRunner.binSurMur) {
 
-
       objRunner.posY += objRunner.intVitesse;
-
     }
 
     // Descendre l'echelle
@@ -770,6 +769,8 @@
         dessinerRunner(objRunner.posX, objRunner.posY, Math.floor(objRunner.intFrameCordeGauche));
       }else if (objRunner.binSurCorde  && objRunner.intDirection == 0) {
         dessinerRunner(objRunner.posX, objRunner.posY, Math.floor(objRunner.intFrameCordeGauche));
+      }else if (objRunner.binSurCorde  && objRunner.intDirection == 0) {
+        dessinerRunner(objRunner.posX, objRunner.posY, Math.floor(objRunner.intFrameCordeGauche));
       }
 
       //TODO: CAUSE PROBLEME!! JE SAIS MAN!!
@@ -860,8 +861,10 @@
     objC2D.fillStyle = 'lime';
 
     objC2D.fillText("MODE DEBUG: direction: " + objRunner.intDirection + " - up: "
+
     + objRunner.binMonter + " - surMur: " + objRunner.binSurMur + " - surCorde: " + objRunner.binSurCorde +
     " - binDescendre: " + binDescendre + " - binMonter: " + binMonter + " - surMurCote: " + objRunner.binSurMurCote + " T: " + objRunner.binTomber ,10,20);
+
 
 
      objC2D.fillStyle = 'lime';
@@ -1037,13 +1040,16 @@
     }
 
     // Descendre
+
     if (x == 40 && binDescendre == true && !objRunner.binSurCorde){
+
       binDescendre = true;
       //binMonter = false;
       objRunner.intDirection = 40;
       //objRunner.binDescendre = true;
       //objRunner.intDirection = 0;
     }
+
 
     if (x == 40 && objRunner.binSurCorde ) {
       objRunner.binTomber = true
@@ -1057,6 +1063,7 @@
     if (x == 90) { //Z
       binZ = true;
     }
+
 
 
   }
@@ -1088,11 +1095,14 @@
     }
 
     // Descendre
+
     if (x == 40 && !objRunner.binSurCorde){
+
       binDescendre = false;
       objRunner.binDescendre = false;
       objRunner.intDirection = 0;
     }
+
 
     if (x == 40 && objRunner.binSurCorde) {
       //objRunner.posY += objRunner.intVitesse;
@@ -1107,6 +1117,7 @@
     if (x == 90) { //Z
       binZ = false;
     }
+
 
   }
 
