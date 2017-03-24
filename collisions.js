@@ -40,9 +40,12 @@ function collisionOr(objCharacter){
   }
 
   if (intCompteurOR == 6 && objRunner.posX == 740 && objRunner.posY == 40 ) {
-    initAnimation();
-    intCompteurNiveau++;
-    intCompteurOR = 0;
+    //effacerDessin();
+    //initAnimation();
+      objRunner.posX = 560;
+      objRunner.posY = 577;
+      intCompteurNiveau++;
+      intCompteurOR = 0;
   }
 }
 

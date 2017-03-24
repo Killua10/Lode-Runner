@@ -59,10 +59,13 @@
         }
         initImageFond();
         initRunner();
-        if (intCompteurNiveau == 1) {
-          initFantome(0,"fantome0.png",90,565);
-          initFantome(1,"fantome1.png",200,370);
-          initFantome(2,"fantome2.png",600,257);
+        initFantome(0,"fantome0.png",90,577);
+        initFantome(1,"fantome1.png",200,370);
+        initFantome(2,"fantome2.png",300,257);
+        if (intCompteurNiveau == 2) {
+          initFantome(3,"fantome3.png",800,550);
+        }else if (intCompteurNiveau == 3) {
+          initFantome(4,"fantome4.png",400,257);
         }
         initSons();
         dessiner(); // Dessiner une première fois
@@ -315,9 +318,8 @@
         dessinerRunner(objRunner.posX, objRunner.posY, Math.floor(objRunner.intFrameCordeGauche));
       }
 
-
-      if(intCompteurNiveau == 2){
-          dessinerFantome(objFantome.posX, objFantome.posY, Math.floor(objFantome.intFrame));
+      for (var i = 0; i < tabFantome.length; i++) {
+        dessinerFantome(tabFantome[i].posX, tabFantome[i].posY, Math.floor(tabFantome[i].intFrame));
       }
 
 
