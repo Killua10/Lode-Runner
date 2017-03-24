@@ -245,6 +245,13 @@ function dessinerRunner(x, y, intFrame){
 
 }
 
+var intTimer = 0;
+var col2 = 0;
+var row2 = 0;
+var intCompteur = 0;
+var intCompteur2 = 0;
+var ecoule = 0;
+var binCreuser = true;
 /******************************************************************************************
   * creuserTrou()
   *
@@ -253,6 +260,9 @@ function dessinerRunner(x, y, intFrame){
   function creuserTrou(){
 
     var binVerdict = false;
+    /*intTimer = 0;
+    col2 = 0;
+    row2 = 0;*/
 
     for (var row = 0; row < tabObjMap.length; row++) {
       for (var col = 0; col < tabObjMap[row].length; col++) {
@@ -273,25 +283,63 @@ function dessinerRunner(x, y, intFrame){
         if (tabObjMap[row][col].objNom == "MUR") {
           // Detection du mur de brick en dessous du runner
 
-            if (binX && binVerdict) {
+            if (binX && binVerdict && binCreuser) {
               if (objRunner.posX +35 >= tabObjMap[row][col].posX  - 20 && objRunner.posX +35<= tabObjMap[row][col].posX + 20 &&
                   objRunner.posY +45>= tabObjMap[row][col].posY -20  && objRunner.posY+45 <= tabObjMap[row][col].posY + 20){
                   tabMap[row][col] = 'F';
                   //add timer
+                  if ( intCompteur2 < 1) {
+                      intTimer = intMiliSecondeChrono;
+                      binCreuser = false;
+                  }
+                  intCompteur2++;
+                  //console.log(intMiliSecondeChrono - intTimer)
+                  col2 = col;
+                  row2 = row;
                   objSons.creuser.play();
                 }
               }
 
-            if (binZ && binVerdict) {
+            if (binZ && binVerdict && binCreuser) {
               if (objRunner.posX -35 >= tabObjMap[row][col].posX  - 20 && objRunner.posX -35<= tabObjMap[row][col].posX + 20 &&
                   objRunner.posY +45>= tabObjMap[row][col].posY -20  && objRunner.posY+45 <= tabObjMap[row][col].posY + 20){
                   tabMap[row][col] = 'F';
                   //add timer
+                  if ( intCompteur < 1) {
+                      intTimer = intMiliSecondeChrono;
+                      binCreuser = false;
+                  }
+
+
+                  intCompteur++;
+
+                  col2 = col;
+                  row2 = row;
+                  //setTimeout(timerCreuser(tabMap,row,col), 8000);
                   objSons.creuser.play();
                 }
               }
             }
           }
+        }
+
+    ecoule = intMiliSecondeChrono - intTimer;
+
+    if (col2 != 0 && row2 != 0) {
+        timerCreuser();
+        //intTimer = 0;
+    }
+
+
+    }
+
+    function timerCreuser() {
+        if ( ecoule >= 8000) {
+          console.log("Ronaldo")
+            tabMap[row2][col2] = 'M';
+            binCreuser = true;
+            intCompteur = 0;
+            intTimer = 0
         }
 
     }

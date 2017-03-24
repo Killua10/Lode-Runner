@@ -169,9 +169,9 @@ function collisionCorde(){
             objCharacter.posY - 15>= tabObjMap[row][col].posY - 20 && objCharacter.posY <= tabObjMap[row][col].posY + 20) {
 
               objCharacter.binSurMurCote = true;
-              if (objRunner.intDirection == 1) {
+              if (objFantome.intDirection == 1) {
                 objCharacter.posX = tabObjMap[row][col].posX - 35;
-              } else if (objRunner.intDirection == -1) {
+              } else if (objFantome.intDirection == -1) {
                 objCharacter.posX = tabObjMap[row][col].posX + 20;
               }
 
