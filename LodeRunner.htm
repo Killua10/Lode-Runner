@@ -132,6 +132,22 @@
       objSon.setAttribute('src', 'sons/levelup.mp3');
       objSon.load();
       objSons.levelup = objSon;
+
+      objSon = document.createElement('audio');
+      objSon.setAttribute('src', 'sons/creuser.mp3');
+      objSon.load();
+      objSons.creuser = objSon;
+
+      objSon = document.createElement('audio');
+      objSon.volume = 0.2;
+      objSon.setAttribute('src', 'sons/meurt.mp3');
+      objSon.load();
+      objSons.meurt = objSon;
+
+      objSon = document.createElement('audio');
+      objSon.setAttribute('src', 'sons/coeur.mp3');
+      objSon.load();
+      objSons.coeur = objSon;
     }
 
     /******************************************************************************************
@@ -201,6 +217,7 @@
     objRunner.posY = 577;
     objRunner.intVitesse = 4;
     objRunner.intDirection = 0; //-1=left, 0=middle, +1=right
+    objRunner.binMeurt = false;
     objRunner.binMonter = false;
     objRunner.binChute = false;
     objRunner.binSurMur = true;
@@ -227,17 +244,19 @@
   function initFantome(){
 
     //tabObjFantomes = new Array();
-    var objFantome = null;
+    //var objFantome = null;
 
     objFantome = new Object();
-      var objImageFantome0 = new Image();
-      objImageFantome0.src = 'img/fantome0.png';
-
-      objFantome.objImage = objImageFantome0;
-      objFantome.intVitesse = 2;
-      objFantome.intFrame = 0;
-      objFantome.posX = 300; // random
-      objFantome.posY = 575; // random
+    var objImageFantome0 = new Image();
+    objImageFantome0.src = 'img/fantome0.png';
+    objFantome.objImage = objImageFantome0;
+    objFantome.intVitesse = 4;
+    objFantome.intFrame = 0;
+    objFantome.intLargeur = 40;
+    objFantome.intLimite = 10;
+    objFantome.intLongeur = 40;
+    objFantome.posX = 90;
+    objFantome.posY = 577;
     //tabObjFantomes.push(objFantome);
 
     /*var objImageFantome1 = new Image();
@@ -284,6 +303,7 @@
     *****************************************************************************************/
 	function mettreAjourAnimation(){
     animationRunner();
+    animationFantome();
     collisionOr();
     collisionEchelle();
     collisionMur();
@@ -517,24 +537,24 @@
 
               }
 
-            if (tabObjMap[row][col].objNom == "MUR" && binVerdict) {
+            if (tabObjMap[row][col].objNom == "MUR") {
               // Detection du mur de brick en dessous du runner
 
-                if (binX) {
+                if (binX && binVerdict) {
                   if (objRunner.posX +35 >= tabObjMap[row][col].posX  - 20 && objRunner.posX +35<= tabObjMap[row][col].posX + 20 &&
                       objRunner.posY +45>= tabObjMap[row][col].posY -20  && objRunner.posY+45 <= tabObjMap[row][col].posY + 20){
                       tabMappe[row][col] = 'F';
                       //add timer
-                      //add sound
+                      objSons.creuser.play();
                     }
                   }
 
-                if (binZ) {
+                if (binZ && binVerdict) {
                   if (objRunner.posX -35 >= tabObjMap[row][col].posX  - 20 && objRunner.posX -35<= tabObjMap[row][col].posX + 20 &&
                       objRunner.posY +45>= tabObjMap[row][col].posY -20  && objRunner.posY+45 <= tabObjMap[row][col].posY + 20){
                       tabMappe[row][col] = 'F';
                       //add timer
-                      //add same sound
+                      objSons.creuser.play();
                     }
                   }
                 }
@@ -544,7 +564,44 @@
         }
 
 
+  /******************************************************************************************
+    * animationFantome()
+    *
+    *****************************************************************************************/
+    function animationFantome(){
+      // Animation IDLE
+      objFantome.intFrame+=0.3;
+      if (objFantome.intFrame >= 12) {
+        objFantome.intFrame -= 12;
+      }
 
+      if (objFantome.posX <= objRunner.posX) {
+        objFantome.posX++;
+
+      }else if(objFantome.posX >= objRunner.posX){
+        objFantome.posX--;
+      }
+
+      if (objFantome.posX == objRunner.posX && objFantome.posY == objRunner.posY) {
+        objRunner.binMeurt = true;
+        //make timer or game over.. check document.
+      }
+
+      if (objFantome.posX <= objFantome.intLimite && objFantome.posY == objRunner.posY) {
+        objFantome.posX++;
+      }
+
+      //SON BATTEMENT DE COEUR SI PROCHE DU RUNNER
+      if (objFantome.posX >= objRunner.posX-200 && objFantome.posY == objRunner.posY) {
+        objSons.coeur.play();
+      }else{
+        objSons.coeur.pause();
+      }
+
+
+
+
+    }
   /******************************************************************************************
     * animationRunner()
     * Dessine l'animation du Runner à partir de sa direction.
@@ -639,7 +696,6 @@
 
 
     if (objRunner.binTomber && !objRunner.binSurMur) {
-
       objRunner.posY += objRunner.intVitesse;
     }
 
@@ -651,15 +707,10 @@
       binDroite = false;
     }
 
-    //TODO: DO WE NEED THIS?? - IT DOESN'T DO ANYTHING!
-    /*// Vitesses du Runner sur corde
-    if (objRunner.binSurCorde && objRunner.intDirection == 1) {
-      bjRunner.posX += objRunner.intVitesse;
-    }
+    if (objRunner.binMeurt) {
+      objSons.meurt.play();
 
-    if (objRunner.binSurCorde && objRunner.intDirection == -1) {
-      objRunner.posX -= objRunner.intVitesse;
-    }*/
+    }
 
   }
 
@@ -773,8 +824,8 @@
         dessinerRunner(objRunner.posX, objRunner.posY, Math.floor(objRunner.intFrameCordeGauche));
       }
 
-      //TODO: CAUSE PROBLEME!! JE SAIS MAN!!
-      //dessinerFantome(objFantome.posX, objFantome.posY, Math.floor(objFantome.intFrame));
+
+      dessinerFantome(objFantome.posX, objFantome.posY, Math.floor(objFantome.intFrame));
 
       dessinerHUD();
       debug();
@@ -889,7 +940,7 @@
 
          if (tabObjMap[row][col].objNom == "MUR") {
            objC2D.stroke();
-           objC2D.fillStyle = 'lime';
+           objC2D.fillStyle = 'yellow';
            objC2D.closePath();
            objC2D.font="9px calibri";
            objC2D.fillText("(" + (tabObjMap[row][col].posX + 30) + ", " + tabObjMap[row][col].posY + ")",tabObjMap[row][col].posX-20,
@@ -1023,6 +1074,7 @@
     }else {*/
     chronoMarche = true;
     objDateHeure1 = new Date();
+
     //}
     binDroite = false
     binGauche = false
