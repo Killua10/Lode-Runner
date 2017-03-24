@@ -7,18 +7,16 @@
   <title>Lode Runner par Ariel Sashcov et Mohamed Cherifi</title>
   <link rel="stylesheet" type="text/css" href="" />
   <!-- Code JavaScript local -->
+  <script type="text/javascript" src="collisions.js"></script>
+  <script type="text/javascript" src="Map.js"></script>
+  <script type="text/javascript" src="Runner.js"></script>
+  <script type="text/javascript" src="HUD.js"></script>
   <script type="text/javascript">
   //variables du canvas
 	var objCanvas = null;
 	var objC2D = null;
 	var objCycleAnimation = null;
-  //objets du jeu
-	var objImageFond = null;
-  var objImageEchelle = null;
-  var objImageCorde = null;
-  var objImageMur = null;
-  var objImageOr = null;
-  var objImageBase = null;
+
   //variables de touche
   var binDroite = false;
   var binGauche = false;
@@ -32,35 +30,15 @@
   var intCompteurNiveau = 1;
   var intCompteurVie = 5;
   //variable pour le chronometre
-  var intHeureChrono = 0;
   var intMinuteChrono = 0;
   var intSecondeChrono = 0;
   var intMiliSecondeChrono = 0;
   var objDateHeure1 = new Date().getTime();
   var chronoMarche = false;
   var intMsEcoulees = 0;
+  var tabFantome = [];
   //tableau du niveau
-  var tabMappe = [ ['F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F'],
-                   ['F','F','F','F','O','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F'],
-                   ['M','M','M','M','M','M','M','E','M','M','M','M','M','M','M','F','F','F','F','F','F','F','F','F','F','F','F','F'],
-                   ['F','F','F','F','F','F','F','E','C','C','C','C','C','C','C','C','C','C','F','F','F','F','F','O','F','F','F','F'],
-                   ['F','F','F','F','F','F','F','E','F','F','F','F','M','M','E','F','F','F','M','M','M','M','M','M','M','E','M','M'],
-                   ['F','F','F','F','F','F','F','E','F','F','F','F','M','M','E','F','F','F','F','F','F','F','F','F','F','E','F','F'],
-                   ['F','F','F','F','F','F','F','E','F','F','F','F','M','M','E','F','F','F','F','F','F','F','O','F','F','E','F','F'],
-                   ['M','M','E','M','M','M','M','M','F','F','F','F','M','M','M','M','M','M','M','M','E','M','M','M','M','M','M','M'],
-                   ['F','F','E','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','E','F','F','F','F','F','F','F'],
-                   ['F','F','E','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','E','F','F','F','F','F','F','F'],
-                   ['M','M','M','M','M','M','M','M','M','E','M','M','M','M','M','M','M','M','M','M','E','F','F','F','F','F','F','F'],
-                   ['F','F','F','F','F','F','F','F','F','E','F','F','F','F','F','F','F','F','F','F','E','F','F','F','F','F','F','F'],
-                   ['F','F','F','F','F','F','F','O','F','E','C','C','C','C','C','C','C','C','C','C','E','F','F','F','O','F','F','F'],
-                   ['F','F','F','F','E','M','M','M','M','M','M','F','F','F','F','F','F','F','F','F','M','M','M','M','M','M','M','E'],
-                   ['F','F','F','F','E','F','F','F','F','F','F','F','F','F','F','F','F','F','O','F','F','F','F','F','F','F','F','E'],
-                   ['M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M','M'],
-                   ['B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B','B'],
-                   ['F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F'],
-                   ['F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F'],
-                   ['F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F'],
-                   ['F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F','F'] ];
+
 
   var tabObjMap = new Array(17);
 
@@ -81,74 +59,18 @@
         }
         initImageFond();
         initRunner();
-        initFantome();
+        if (intCompteurNiveau == 1) {
+          initFantome(0,"fantome0.png",90,565);
+          initFantome(1,"fantome1.png",200,370);
+          initFantome(2,"fantome2.png",600,257);
+        }
         initSons();
-	      dessiner(); // Dessiner une première fois
+        dessiner(); // Dessiner une première fois
         animer();
 
     }
 
-    /******************************************************************************************
-    * initImageFond()
-    *
-    * initialisation des images de fond
-    *****************************************************************************************/
-    function initImageFond() {
-        objImageFond = new Image();
-        objImageFond.src = 'img/F.png';
 
-				objImageEchelle = new Image();
-        objImageEchelle.src = 'img/E.png';
-
-				objImageCorde = new Image();
-        objImageCorde.src = 'img/C.png';
-
-				objImageMur = new Image();
-        objImageMur.src = 'img/M.png';
-
-				objImageOr = new Image();
-        objImageOr.src = 'img/O.png';
-
-				objImageBase = new Image();
-        objImageBase.src = 'img/B.png';
-
-    }
-
-    /******************************************************************************************
-    * initSons()
-    *
-    * initialisation des sons du jeu.
-    *****************************************************************************************/
-    function initSons(){
-      objSons = new Object();
-
-      var objSon = document.createElement('audio');
-      objSon.volume = 0.2;
-      objSon.setAttribute('src', 'sons/coin.mp3');
-      objSon.load();
-      objSons.rammaserOr = objSon;
-
-      objSon = document.createElement('audio');
-      objSon.setAttribute('src', 'sons/levelup.mp3');
-      objSon.load();
-      objSons.levelup = objSon;
-
-      objSon = document.createElement('audio');
-      objSon.setAttribute('src', 'sons/creuser.mp3');
-      objSon.load();
-      objSons.creuser = objSon;
-
-      objSon = document.createElement('audio');
-      objSon.volume = 0.2;
-      objSon.setAttribute('src', 'sons/meurt.mp3');
-      objSon.load();
-      objSons.meurt = objSon;
-
-      objSon = document.createElement('audio');
-      objSon.setAttribute('src', 'sons/coeur.mp3');
-      objSon.load();
-      objSons.coeur = objSon;
-    }
 
     /******************************************************************************************
     * animer()
@@ -184,79 +106,35 @@
 	}
 
   /******************************************************************************************
-  * initRunner()
-  *
-  * Initialise l'objet Runner (personnage principal) avec ses images d'animations
-  * et ses coordonnées du jeu.
-  *****************************************************************************************/
-  function initRunner(){
-    var objImageDebut = new Image();
-    objImageDebut.src = 'img/debut.png';
-    var objImageDroit = new Image();
-    objImageDroit.src = 'img/courirDroit.png';
-    var objImageGauche = new Image();
-    objImageGauche.src = 'img/courirGauche.png';
-    var objImageMonter = new Image();
-    objImageMonter.src = 'img/monter.png';
-    var objImageCordeDroite = new Image();
-    objImageCordeDroite.src = 'img/cordeDroit.png';
-    var objImageCordeGauche = new Image();
-    objImageCordeGauche.src = 'img/cordeGauche.png';
-
-    objRunner = new Object();
-    objRunner.objImage = objImageDebut;
-    objRunner.objAnimationDroit = objImageDroit;
-    objRunner.objAnimationGauche = objImageGauche;
-    objRunner.objAnimationMonter = objImageMonter;
-    objRunner.objAnimationCordeDroite = objImageCordeDroite;
-    objRunner.objAnimationCordeGauche = objImageCordeGauche;
-    objRunner.intLongeur = 35;
-    objRunner.intLargeur = 24;
-    objRunner.intLargeur2 = 12;
-    objRunner.posX = objCanvas.width/2;
-    objRunner.posY = 577;
-    objRunner.intVitesse = 4;
-    objRunner.intDirection = 0; //-1=left, 0=middle, +1=right
-    objRunner.binMeurt = false;
-    objRunner.binMonter = false;
-    objRunner.binChute = false;
-    objRunner.binSurMur = true;
-    objRunner.binSurMurCote = false;
-    objRunner.binDescendre = false;
-    objRunner.binCorde = false;
-    objRunner.binTomber = false;
-    objRunner.binSurCorde = false;
-    objRunner.intFrame = 0;
-    objRunner.intFrameGauche = 0;
-    objRunner.intFrameDroit = 0;
-    objRunner.intFrameMonter = 0;
-    objRunner.intFrameDescendre = 0;
-    objRunner.intFrameChute = 0;
-    objRunner.intFrameCordeDroite = 0;
-    objRunner.intFrameCordeGauche = 0;
-  }
-
-  /******************************************************************************************
   * initFantome()
   *
   * Initialise les guardiens du jeu.
   *****************************************************************************************/
-  function initFantome(){
+  function initFantome(intNumFantome,strImage,posX,posY){
 
     //tabObjFantomes = new Array();
     //var objFantome = null;
 
     objFantome = new Object();
-    var objImageFantome0 = new Image();
-    objImageFantome0.src = 'img/fantome0.png';
-    objFantome.objImage = objImageFantome0;
+    var objImageFantome = new Image();
+    objImageFantome.src = 'img/'+strImage;
+    objFantome.objImage = objImageFantome;
+    objFantome.intNumFantome = intNumFantome;
+    objFantome.strNom = "fantome";
+    objFantome.intnbrOr = 0;
     objFantome.intVitesse = 4;
     objFantome.intFrame = 0;
     objFantome.intLargeur = 40;
     objFantome.intLimite = 10;
     objFantome.intLongeur = 40;
-    objFantome.posX = 90;
-    objFantome.posY = 577;
+    objFantome.binSurMur = false;
+    objFantome.binSurMurCote = false;
+    objFantome.binTomber = false;
+    objFantome.posX = posX;
+    objFantome.posY = posY;
+    /*objFantome.posX = 90;
+    objFantome.posY = 577;*/
+    tabFantome.push(objFantome)
     //tabObjFantomes.push(objFantome);
 
     /*var objImageFantome1 = new Image();
@@ -282,14 +160,10 @@
     objC2D.save();
     objC2D.globalAlpha = 0.8;
 
-    /*for (var noFantome = 0; noFantome < tabObjFantomes.length; noFantome++) {
-      var objFantome = tabObjFantomes[noFantome];
+    for (var i = 0; i < tabFantome.length; i++) {
+      objC2D.drawImage(tabFantome[i].objImage, (tabFantome[i].objImage.width/12)*intFrame, 0, 36, 40, tabFantome[i].posX-12, tabFantome[i].posY-12, 36, 40);
+    }
 
-
-
-    }*/
-
-    objC2D.drawImage(objFantome.objImage, (objFantome.objImage.width/12)*intFrame, 0, 36, 40, objFantome.posX-12, objFantome.posY-12, 36, 40);
 
     objC2D.restore();
 
@@ -303,14 +177,30 @@
     *****************************************************************************************/
 	function mettreAjourAnimation(){
     animationRunner();
-    animationFantome();
-    collisionOr();
+    for (var i = 0; i < tabFantome.length; i++) {
+      animationFantome(tabFantome[i]);
+    }
+
+    collisionOr(objRunner);
+    for (var i = 0; i < tabFantome.length; i++) {
+      collisionOr(tabFantome[i]);
+    }
+
     collisionEchelle();
-    collisionMur();
-    collisionMurCote();
+    collisionMur(objRunner);
+    for (var i = 0; i < tabFantome.length; i++) {
+      collisionMur(tabFantome[i]);
+    }
+
+    collisionMurCote(objRunner);
+    for (var i = 0; i < tabFantome.length; i++) {
+      collisionMurCote(tabFantome[i]);
+    }
     collisionCorde();
     creuserTrou();
     chronometre();
+
+
 
 	}
 
@@ -349,250 +239,42 @@
   }
 
   /******************************************************************************************
-    * collisionEchelle()
-    * Verifie une collision entre le point X,Y du personnage avec les points X,Y
-    * des lingots d'or
-    *
-    *****************************************************************************************/
-  function collisionOr(){
-
-    for (var row = 0; row < tabObjMap.length; row++) {
-      for (var col = 0; col < tabObjMap[row].length; col++) {
-        var objet = new Object();
-
-        if (tabObjMap[row][col].objNom == "OR") {
-          if (objRunner.posX >= tabObjMap[row][col].posX - 20 && objRunner.posX <= tabObjMap[row][col].posX + 20 &&
-            objRunner.posY >= tabObjMap[row][col].posY - 20 && objRunner.posY <= tabObjMap[row][col].posY + 20) {
-
-              objet.objNom = "FOND";
-              objet.objImage = objImageFond;
-              objet.intLongeur = 40;
-              objet.intLargeur = 40;
-              objet.posX = tabObjMap[row][col].posX;
-              objet.posY = tabObjMap[row][col].posY;
-
-              tabMappe[row][col] = 'F';
-              tabObjMap[row][col] = objet;
-              objSons.rammaserOr.play();
-              intCompteurOR++;
-              intScore += 250;
-
-          }
-        }
-      }
-    }
-  }
-
-  /******************************************************************************************
-    * collisionEchelle()
-    * Verifie une collision entre le point X,Y du personnage avec les points X,Y des echelles
-    *
-    *****************************************************************************************/
-  function collisionEchelle(){
-
-    binMonter = false;
-    var x = 0;
-    var y = 0;
-    binDescendre = false;
-
-    for (var row = 0; row < tabObjMap.length; row++) {
-      for (var col = 0; col < tabObjMap[row].length; col++) {
-
-
-        // Checks if its a ladder
-        if (tabObjMap[row][col].objNom == "ECHELLE") {
-          // the square where the ladder is
-          if (objRunner.posX  >= tabObjMap[row][col].posX - 20 && objRunner.posX <= tabObjMap[row][col].posX + 20 &&
-            objRunner.posY + 20 >= tabObjMap[row][col].posY - 20 && objRunner.posY + 20 <= tabObjMap[row][col].posY + 20) {
-
-              binMonter = true;
-              if (objRunner.binMonter) {
-                objRunner.posX = tabObjMap[row][col].posX;
-              }
-          }
-
-          if (objRunner.posX  >= tabObjMap[row][col].posX - 20 && objRunner.posX   <= tabObjMap[row][col].posX + 20 &&
-            objRunner.posY + 23 >= tabObjMap[row][col].posY - 20  && objRunner.posY + 23   <= tabObjMap[row][col].posY + 20 ) {
-
-              binDescendre = true;
-              if (objRunner.binDescendre) {
-                objRunner.posX = tabObjMap[row][col].posX;
-              }
-          }
-
-        }
-      }
-    }
-  }
-
-/******************************************************************************************
-  * collisionMur()
-  * Verifie une collision entre le point X,Y du personnage avec les points X,Y des murs
-  *
-  *****************************************************************************************/
-  function collisionMur(){
-
-    objRunner.binSurMur = false;
-
-    for (var row = 0; row < tabObjMap.length; row++) {
-      for (var col = 0; col < tabObjMap[row].length; col++) {
-
-
-
-        if (tabObjMap[row][col].objNom == "MUR" || tabObjMap[row][col].objNom == "ECHELLE" || tabObjMap[row][col].objNom == "BASE") {
-          // Detection du mur de brick en dessous du runner
-          if (objRunner.posX  >= tabObjMap[row][col].posX - 20 && objRunner.posX   <= tabObjMap[row][col].posX + 20 &&
-            objRunner.posY + 23 >= tabObjMap[row][col].posY - 20  && objRunner.posY + 23   <= tabObjMap[row][col].posY + 20 ) {
-
-              objRunner.binSurMur = true;
-              objRunner.binTomber = false;
-
-          }
-        }
-      }
-    }
-  }
-
-  /******************************************************************************************
-    * collisionCorde()
-    * Verifie une collision entre le point X,Y du personnage avec les points X,Y de la corde
-    *
-    *****************************************************************************************/
-  function collisionCorde(){
-
-    objRunner.binSurCorde = false;
-
-    for (var row = 0; row < tabObjMap.length; row++) {
-      for (var col = 0; col < tabObjMap[row].length; col++) {
-
-        if (tabObjMap[row][col].objNom == "CORDE") {
-          // the square where the rope is
-          if (objRunner.posX >= tabObjMap[row][col].posX - 20 && objRunner.posX <= tabObjMap[row][col].posX + 20 &&
-            objRunner.posY >= tabObjMap[row][col].posY - 20 && objRunner.posY <= tabObjMap[row][col].posY + 20) {
-
-              if (!objRunner.binTomber) {
-                objRunner.binSurCorde = true;
-                objRunner.posY = tabObjMap[row][col].posY;
-
-              }
-
-          }
-        }
-      }
-    }
-  }
-
-  /******************************************************************************************
-    * collisionMurCote()
-    * Verifie une collision entre le point X,Y du personnage avec les points X,Y des murs
-    *
-    *****************************************************************************************/
-    function collisionMurCote(){
-
-      objRunner.binSurMurCote = false;
-
-
-      for (var row = 0; row < tabObjMap.length; row++) {
-        for (var col = 0; col < tabObjMap[row].length; col++) {
-
-
-
-          if (tabObjMap[row][col].objNom == "MUR") {
-
-            if (objRunner.posX + 15>= tabObjMap[row][col].posX - 20 && objRunner.posX <= tabObjMap[row][col].posX + 20 &&
-              objRunner.posY - 15>= tabObjMap[row][col].posY - 20 && objRunner.posY <= tabObjMap[row][col].posY + 20) {
-
-                objRunner.binSurMurCote = true;
-
-
-            }
-          }
-        }
-      }
-    }
-
-
-    /******************************************************************************************
-      * creuserTrou()
-      *
-      *
-      *****************************************************************************************/
-      function creuserTrou(){
-
-        var binVerdict = false;
-
-        for (var row = 0; row < tabObjMap.length; row++) {
-          for (var col = 0; col < tabObjMap[row].length; col++) {
-
-
-            // conditions: sur mur / or / corde
-            //
-            if (objRunner.posX +35 >= tabObjMap[row][col].posX  - 20 && objRunner.posX +35<= tabObjMap[row][col].posX + 20 &&
-                objRunner.posY >= tabObjMap[row][col].posY -20  && objRunner.posY <= tabObjMap[row][col].posY + 20){
-                  if (tabObjMap[row][col].objNom == "OR" || tabObjMap[row][col].objNom == "ECHELLE" || objRunner.binSurCorde || objRunner.binMonter){ //echelle marche pas?
-                    binVerdict = false;
-                  }else{
-                    binVerdict = true;
-                  }
-
-              }
-
-            if (tabObjMap[row][col].objNom == "MUR") {
-              // Detection du mur de brick en dessous du runner
-
-                if (binX && binVerdict) {
-                  if (objRunner.posX +35 >= tabObjMap[row][col].posX  - 20 && objRunner.posX +35<= tabObjMap[row][col].posX + 20 &&
-                      objRunner.posY +45>= tabObjMap[row][col].posY -20  && objRunner.posY+45 <= tabObjMap[row][col].posY + 20){
-                      tabMappe[row][col] = 'F';
-                      //add timer
-                      objSons.creuser.play();
-                    }
-                  }
-
-                if (binZ && binVerdict) {
-                  if (objRunner.posX -35 >= tabObjMap[row][col].posX  - 20 && objRunner.posX -35<= tabObjMap[row][col].posX + 20 &&
-                      objRunner.posY +45>= tabObjMap[row][col].posY -20  && objRunner.posY+45 <= tabObjMap[row][col].posY + 20){
-                      tabMappe[row][col] = 'F';
-                      //add timer
-                      objSons.creuser.play();
-                    }
-                  }
-                }
-              }
-            }
-
-        }
-
-
-  /******************************************************************************************
     * animationFantome()
     *
     *****************************************************************************************/
-    function animationFantome(){
+    function animationFantome(objFantomeAnimer){
       // Animation IDLE
-      objFantome.intFrame+=0.3;
-      if (objFantome.intFrame >= 12) {
-        objFantome.intFrame -= 12;
+      objFantomeAnimer.intFrame+=0.3;
+      if (objFantomeAnimer.intFrame >= 12) {
+        objFantomeAnimer.intFrame -= 12;
       }
 
-      if (objFantome.posX <= objRunner.posX) {
-        objFantome.posX++;
+      if (intSecondeChrono != 0) {
+        if (objFantomeAnimer.posX <= objRunner.posX) {
+          objFantomeAnimer.posX++;
 
-      }else if(objFantome.posX >= objRunner.posX){
-        objFantome.posX--;
+        }else if(objFantomeAnimer.posX >= objRunner.posX){
+          objFantomeAnimer.posX--;
+        }
       }
 
-      if (objFantome.posX == objRunner.posX && objFantome.posY == objRunner.posY) {
+
+      if (objFantomeAnimer.posX == objRunner.posX && objFantomeAnimer.posY == objRunner.posY) {
         objRunner.binMeurt = true;
         //make timer or game over.. check document.
       }
 
-      if (objFantome.posX <= objFantome.intLimite && objFantome.posY == objRunner.posY) {
-        objFantome.posX++;
+      if (objFantomeAnimer.posX <= objFantomeAnimer.intLimite && objFantomeAnimer.posY == objRunner.posY) {
+        objFantomeAnimer.posX++;
+      }
+
+      // Faire tomber le fantome si n'est pas sur un mur
+      if (!objFantomeAnimer.binSurMur) {
+        objFantomeAnimer.posY += objFantomeAnimer.intVitesse;
       }
 
       //SON BATTEMENT DE COEUR SI PROCHE DU RUNNER
-      if (objFantome.posX >= objRunner.posX-200 && objFantome.posY == objRunner.posY) {
+      if (objFantomeAnimer.posX >= objRunner.posX-200 && objFantomeAnimer.posY == objRunner.posY) {
         objSons.coeur.play();
       }else{
         objSons.coeur.pause();
@@ -602,198 +284,7 @@
 
 
     }
-  /******************************************************************************************
-    * animationRunner()
-    * Dessine l'animation du Runner à partir de sa direction.
-    *****************************************************************************************/
-  function animationRunner(){
-    // Animation IDLE
-    if (objRunner.intDirection == 0) {
-      objRunner.intFrame+=0.05;
-      if (objRunner.intFrame >= 22) { // 22 frames dans l'image
-        objRunner.intFrame -= 22;
-      }
-    }
-    // Animation courir vers la gauche
-    if (objRunner.intDirection == -1 && !objRunner.binSurCorde) {
-      objRunner.intFrameGauche+=1;
-      if (objRunner.intFrameGauche >= 27) { // 27 frames dans l'image
-        objRunner.intFrameGauche -= 27;
-      }
-    }
-    // Animation courir vers la droite
-    if (objRunner.intDirection == 1 && !objRunner.binSurCorde) {
-      objRunner.intFrameDroit+=1;
-      if (objRunner.intFrameDroit >= 27) { // 27 frames dans l'image
-        objRunner.intFrameDroit -= 27;
-      }
-    }
-    // Animation monter
-    if (objRunner.binMonter) {
-      objRunner.intFrameMonter+=0.3;
-      if (objRunner.intFrameMonter >= 8) { // 8 frames dans l'image
-        objRunner.intFrameMonter -= 8;
-      }
-    }
-    // Animation descendre
-    if (objRunner.binDescendre) {
-      objRunner.intFrameDescendre += 0.3
-      if (objRunner.intFrameDescendre >= 8) { // 8 frames dans l'image
-        objRunner.intFrameDescendre -= 8;
-      }
-    }
-    // Animation sur corde vers la droite
-    if (objRunner.binSurCorde && objRunner.intDirection == 1) {
-      objRunner.intFrameCordeDroite += 0.3
-      if (objRunner.intFrameCordeDroite >= 8) { // 8 frames dans l'image
-        objRunner.intFrameCordeDroite -= 8;
-      }
-    }
-    // Animation sur corde vers la gauche
-    if (objRunner.binSurCorde && objRunner.intDirection == -1) {
-      objRunner.intFrameCordeGauche += 0.3
-      if (objRunner.intFrameCordeGauche >= 8) { // 8 frames dans l'image
-        objRunner.intFrameCordeGauche -= 8;
-      }
-    }
-    // Limites X du jeu gauche
-    if (objRunner.posX < objRunner.intLargeur - objRunner.intLargeur2 ) {
-      objRunner.posX = objRunner.intLargeur;
-      objRunner.posX = objRunner.posX-objRunner.intLargeur2;
-    }
-    // Limites X du jeu droite
-    if (objRunner.posX > (objCanvas.width - objRunner.intLargeur) + objRunner.intLargeur2) {
-      objRunner.posX = objCanvas.width - objRunner.intLargeur;
-      objRunner.posX = objRunner.posX+objRunner.intLargeur2;
-    }
 
-    // Ajustement de variables de direction et controle de vitesse
-    if (binDroite && objRunner.intDirection != 38) {
-      objRunner.intDirection = 1;
-      objRunner.posX += objRunner.intVitesse;
-
-    }
-    if (binGauche && objRunner.intDirection != 38 ) {
-      objRunner.intDirection = -1;
-      objRunner.posX -= objRunner.intVitesse;
-
-    }
-
-    //binMonter est true ssi runner est sur echelle
-    if (binMonter && objRunner.intDirection == 38) {
-      objRunner.binMonter = true;
-      objRunner.posY -= objRunner.intVitesse/2; //deplacement vers le haut
-
-      binGauche = false;
-      binDroite = false;
-
-    }
-
-    // Faire tomber le Runner si n'est pas sur un mur
-    if (!objRunner.binSurMur) {
-      objRunner.posY += objRunner.intVitesse;
-    }
-
-
-    if (objRunner.binTomber && !objRunner.binSurMur) {
-      objRunner.posY += objRunner.intVitesse;
-    }
-
-    // Descendre l'echelle
-    if (binDescendre && objRunner.intDirection == 40) {
-      objRunner.binDescendre = true;
-      objRunner.posY += objRunner.intVitesse/2; //deplacement vers le bas
-      binGauche = false;
-      binDroite = false;
-    }
-
-    if (objRunner.binMeurt) {
-      objSons.meurt.play();
-
-    }
-
-  }
-
-  /******************************************************************************************
-    * dessinerRunner(x, y, intFrame)
-    * Dessine le Runner dépendamment de sa direction et de son animation
-    *****************************************************************************************/
-  function dessinerRunner(x, y, intFrame){
-    objC2D.save();
-
-    var sx;
-    var sy = 0;
-    var sw = 0;
-    var sh = 35;
-    var dx = 0;
-    var dy = 0;
-    var dw = 0;
-    var dh = 35;
-
-    if (objRunner.intDirection == 0 && !objRunner.binSurCorde) {
-      sx = (524/22)*intFrame;
-      sw = objRunner.objImage.width/22;
-      dx = objRunner.posX-12;
-      dy = objRunner.posY-12;
-      dw = objRunner.objImage.width/22;
-      objC2D.drawImage(objRunner.objImage, sx, sy, sw, sh, dx, dy, dw, dh);
-    }else if (objRunner.intDirection == -1 && !objRunner.binSurCorde) {
-      sx = (826/27)*intFrame;
-      sx = Math.floor(sx);
-      sw = objRunner.objAnimationGauche.width/27;
-      dx = objRunner.posX-12;
-      dy = objRunner.posY-12;
-      dw = objRunner.objAnimationGauche.width/27;
-      objC2D.drawImage(objRunner.objAnimationGauche, sx, sy, sw, sh, dx, dy, dw, dh);
-    }else if (objRunner.intDirection == 1 && !objRunner.binSurCorde) {
-      sx = (826/27)*intFrame;
-      sw = objRunner.objAnimationDroit.width/27;
-      dx = objRunner.posX-12;
-      dy = objRunner.posY-12;
-      dw = objRunner.objAnimationDroit.width/27;
-      objC2D.drawImage(objRunner.objAnimationDroit, sx, sy, sw, sh, dx, dy, dw, dh);
-    }
-
-    if (objRunner.binMonter) {
-      // (258px longeur / 8 frames)*vitesse
-      sx = (258/8)*intFrame;
-      dx = objRunner.posX-12;
-      dy = objRunner.posY-12;
-      objC2D.drawImage(objRunner.objAnimationMonter, sx, sy, 23, dh, dx, dy, 23, dh);
-    }else if (objRunner.binDescendre) {
-      // (258px longeur / 8 frames)*vitesse
-      sx = (258/8)*intFrame;
-      dx = objRunner.posX-12;
-      dy = objRunner.posY-12;
-      objC2D.drawImage(objRunner.objAnimationMonter, sx, sy, 23, dh, dx, dy, 23, dh);
-    }
-
-    if (objRunner.binSurCorde && objRunner.intDirection == 1) {
-      sx = (289/8)*intFrame;
-      sw = objRunner.objAnimationCordeDroite.width/8;
-      dx = objRunner.posX-12;
-      dy = objRunner.posY-12;
-      dw = objRunner.objAnimationCordeDroite.width/8;
-      objC2D.drawImage(objRunner.objAnimationCordeDroite, sx, sy, sw, dh, dx, dy, dw, dh);
-    }else if (objRunner.binSurCorde && objRunner.intDirection == -1) {
-      sx = (289/8)*intFrame;
-      sw = objRunner.objAnimationCordeDroite.width/8;
-      dx = objRunner.posX-12;
-      dy = objRunner.posY-12;
-      dw = objRunner.objAnimationCordeDroite.width/8;
-      objC2D.drawImage(objRunner.objAnimationCordeGauche, sx, sy, sw, dh, dx, dy, dw, dh);
-    }else if (objRunner.binSurCorde  && objRunner.intDirection == 0) {
-      sx = (289/8)*0;
-      sw = objRunner.objAnimationCordeDroite.width/8;
-      dx = objRunner.posX-12;
-      dy = objRunner.posY-12;
-      dw = objRunner.objAnimationCordeDroite.width/8;
-      objC2D.drawImage(objRunner.objAnimationCordeDroite, sx, sy, sw, dh, dx, dy, dw, dh);
-    }
-
-    objC2D.restore();
-
-  }
 
 
 	// Pour dessiner
@@ -825,7 +316,10 @@
       }
 
 
-      dessinerFantome(objFantome.posX, objFantome.posY, Math.floor(objFantome.intFrame));
+      if(intCompteurNiveau == 2){
+          dessinerFantome(objFantome.posX, objFantome.posY, Math.floor(objFantome.intFrame));
+      }
+
 
       dessinerHUD();
       debug();
@@ -833,231 +327,13 @@
 
 	}
 
-  /******************************************************************************************
-    * dessinerHUD()
-    * Dessiner le HEADS UP DISPLAY
-    * Affiche les variables de score, temps, vie et niveau du jeu.
-    *****************************************************************************************/
-  function dessinerHUD(){
-
-    //Contour Score
-    objC2D.beginPath(); // Définir un nouveau tracé
-    objC2D.strokeStyle = 'rgb(236, 193, 13)';
-    objC2D.rect(10, 680 + 10, 1100, 130);
-    objC2D.lineWidth = 5;
-    objC2D.stroke();
-    objC2D.beginPath(); // Définir un nouveau tracé
-    objC2D.strokeStyle = 'black';
-    objC2D.rect(10, 680 + 10, 1100, 130);
-    objC2D.lineWidth = 3;
-    objC2D.stroke();
-
-    // Score
-    objC2D.beginPath();
-    objC2D.fillStyle = 'rgb(236, 193, 13)';
-
-    var strScore = 'Score:' + formatterScore(intScore,7);
-    objC2D.font = '55pt Old English Text MT';
-
-    objC2D.textAlign = "center";
-    objC2D.textBaseline = "middle";
-    objC2D.strokeStyle = 'black';
-
-    objC2D.fillText(strScore, objCanvas.width / 4.49, 680 + 75 );
-    objC2D.lineWidth = 2;
-    objC2D.strokeText(strScore,  objCanvas.width / 4.49, 680 + 75 );
-
-    // Chrono
-    objC2D.beginPath();
-    objC2D.fillStyle = 'rgb(148, 62, 13)';
-    var strTemp = 'Temps:' + intMinuteChrono + ":" + intSecondeChrono;
-    objC2D.font = '55pt Old English Text MT';
-    objC2D.strokeStyle = 'black';
-    objC2D.fillText(strTemp, objCanvas.width / 1.62, 680 + 75 );
-    objC2D.lineWidth = 2;
-    objC2D.strokeText(strTemp,   objCanvas.width / 1.62, 680 + 75);
-
-    // Niveau
-
-    objC2D.beginPath();
-    objC2D.fillStyle = 'rgb(236, 193, 13)';
-    var strTemp = 'Niveau:' + intCompteurNiveau;
-    objC2D.font = '50pt Brush Script MT';
-    objC2D.strokeStyle = 'black';
-    objC2D.fillText(strTemp, objCanvas.width / 1.12, 650 + 75 );
-    objC2D.lineWidth = 2;
-    objC2D.strokeText(strTemp,   objCanvas.width / 1.12, 650 + 75);
-
-    // Vie
-    objC2D.beginPath();
-    objC2D.fillStyle = 'rgb(236, 193, 13)';
-    var strTemp = 'Vies:' + intCompteurVie;
-    objC2D.font = '50pt Brush Script MT';
-    objC2D.strokeStyle = 'black';
-    objC2D.fillText(strTemp, objCanvas.width / 1.12, 710 + 75 );
-    objC2D.lineWidth = 2;
-    objC2D.strokeText(strTemp,   objCanvas.width / 1.12, 710 + 75);
-  }
 
 
 
-  /******************************************************************************************
-    * debug()
-    * Methode de debagage (Affiche des variables importants du runner)
-    * Ne doit pas être affiché au version finale (ALPHA) du jeu.
-    *****************************************************************************************/
-  function debug(){
-    objC2D.textAlign = "left";
-    objC2D.font="20px calibri";
-    objC2D.fillStyle = 'lime';
-
-    objC2D.fillText("MODE DEBUG: direction: " + objRunner.intDirection + " - up: "
-
-    + objRunner.binMonter + " - surMur: " + objRunner.binSurMur + " - surCorde: " + objRunner.binSurCorde +
-    " - binDescendre: " + binDescendre + " - binMonter: " + binMonter + " - surMurCote: " + objRunner.binSurMurCote + " T: " + objRunner.binTomber ,10,20);
 
 
 
-     objC2D.fillStyle = 'lime';
-     objC2D.beginPath();
-     objC2D.fillRect(objRunner.posX, objRunner.posY, 5,5);
 
-     objC2D.fillStyle = 'red';
-     objC2D.fillRect(objRunner.posX, objRunner.posY+20, 5,5);
-
-     objC2D.fillStyle = 'pink';
-     objC2D.fillRect(objRunner.posX+10, objRunner.posY, 5,5);
-     objC2D.fillRect(objRunner.posX-10, objRunner.posY, 5,5);
-
-     objC2D.stroke();
-     objC2D.fillStyle = 'lime';
-     objC2D.closePath();
-     objC2D.font="12px calibri";
-     objC2D.fillText("(" + objRunner.posX + ", " + objRunner.posY + ")",objRunner.posX, objRunner.posY-25);
-
-     for (var row = 0; row < tabObjMap.length; row++) {
-       for (var col = 0; col < tabObjMap[row].length; col++) {
-
-         if (tabObjMap[row][col].objNom == "MUR") {
-           objC2D.stroke();
-           objC2D.fillStyle = 'yellow';
-           objC2D.closePath();
-           objC2D.font="9px calibri";
-           objC2D.fillText("(" + (tabObjMap[row][col].posX + 30) + ", " + tabObjMap[row][col].posY + ")",tabObjMap[row][col].posX-20,
-           tabObjMap[row][col].posY);
-         }
-       }
-     }
-
-  }
-
-  /******************************************************************************************
-    *  formatterScore(intNbr, intTaille)
-    *  Ajoute des zéros au score.
-    *****************************************************************************************/
-  function formatterScore(intNbr, intTaille) {
-    var strScore = "" + intNbr;
-    while (strScore.length < intTaille) {
-        strScore = "0" + strScore;
-    }
-    return strScore;
-}
-
-
-/******************************************************************************************
-  *  dessinerMappe()
-  *  Sert à afficher la mappe du jeu à partir du tableau à deux dimensions.
-  *  Initialise un tableau d'objets correspondant au tableau de départ.
-  *****************************************************************************************/
-	function dessinerMappe() {
-	    objC2D.save();  // Sauvegarde le contexte
-      var intTailleTuile = 40;
-			var intTuileX = intTailleTuile;
-      var intTuileY = intTailleTuile;
-
-      for (var row = 0; row < tabMappe.length; row++) {
-        for (var col = 0; col < tabMappe[row].length; col++) {
-          intTuileX = col * intTailleTuile;
-					intTuileY = row * intTailleTuile;
-
-          var objet = new Object();
-
-          switch (tabMappe[row][col]) {
-            case 'F': objC2D.drawImage(objImageFond, intTuileX, intTuileY, 40, 40);
-            objet.objNom = "FOND";
-            objet.objImage = objImageFond;
-            objet.intLongeur = 40;
-            objet.intLargeur = 40;
-            objet.posX = intTuileX + 20;
-            objet.posY = intTuileY + 20;
-              break;
-
-            case 'E': objC2D.drawImage(objImageEchelle, intTuileX, intTuileY, 40, 40);
-            objet.objNom = "ECHELLE";
-            objet.objImage = objImageEchelle;
-            objet.intLongeur = 40;
-            objet.intLargeur = 40;
-            objet.posX = intTuileX + 20;
-            objet.posY = intTuileY + 20;
-              break;
-
-            case 'C': objC2D.drawImage(objImageCorde, intTuileX, intTuileY, 40, 40);
-            objet.objNom = "CORDE";
-            objet.objImage = objImageCorde;
-            objet.intLongeur = 40;
-            objet.intLargeur = 40;
-            objet.posX = intTuileX + 20;
-            objet.posY = intTuileY + 20;
-              break;
-
-            case 'M': objC2D.drawImage(objImageMur, intTuileX, intTuileY, 40, 40);
-            objet.objNom = "MUR";
-            objet.objImage = objImageMur;
-            objet.intLongeur = 40;
-            objet.intLargeur = 40;
-            objet.posX = intTuileX + 20;
-            objet.posY = intTuileY + 20;
-              break;
-
-            case 'O': objC2D.drawImage(objImageOr, intTuileX, intTuileY, 40, 40);
-            objet.objNom = "OR";
-            objet.objImage = objImageFond;
-            objet.intLongeur = 40;
-            objet.intLargeur = 40;
-            objet.posX = intTuileX + 20;
-            objet.posY = intTuileY + 20;
-              break;
-
-            case 'B': objC2D.drawImage(objImageBase, intTuileX, intTuileY, 40, 40);
-            objet.objNom = "BASE";
-            objet.objImage = objImageBase;
-            objet.intLongeur = 40;
-            objet.intLargeur = 40;
-            objet.posX = intTuileX + 20;
-            objet.posY = intTuileY + 20;
-              break;
-          }
-
-          if (row < 17 && col < 28) {
-            tabObjMap[row][col] = objet;
-          }
-
-          // Verification victoire
-          if (intCompteurOR == 6 && col == 18 && row >= 0 && row <= 3 ) {
-            objet.objNom = "ECHELLE";
-            objet.objImage = objImageEchelle;
-            objet.intLongeur = 40;
-            objet.intLargeur = 40;
-            objet.posX = intTuileX + 20;
-            objet.posY = intTuileY + 20;
-            objC2D.drawImage(objImageEchelle, intTuileX, intTuileY, 40, 40);
-            tabObjMap[row][col] = objet;
-
-          }
-        }
-      }
-	    objC2D.restore(); // Restaure le contexte
-	}
 
   /******************************************************************************************
     *  keyDown()
