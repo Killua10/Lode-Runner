@@ -52,6 +52,9 @@ function initImageFond() {
     objImageBase = new Image();
     objImageBase.src = 'img/B.png';
 
+    objImageTrou = new Image();
+    objImageTrou.src = 'img/T.png';
+
 }
 
 /******************************************************************************************
@@ -123,6 +126,17 @@ function initImageFond() {
             objet.objImage = objImageBase;
             objet.intLongeur = 40;
             objet.intLargeur = 40;
+            objet.posX = intTuileX + 20;
+            objet.posY = intTuileY + 20;
+              break;
+
+            case 'T': objC2D.drawImage(objImageTrou, intTuileX, intTuileY, 40, 40);
+            objet.objNom = "TROU";
+            objet.objImage = objImageTrou;
+            objet.intLongeur = 40;
+            objet.intLargeur = 40;
+            objet.intTimer = 0;
+            objet.intEcoule = 0;
             objet.posX = intTuileX + 20;
             objet.posY = intTuileY + 20;
               break;

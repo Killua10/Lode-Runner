@@ -62,11 +62,11 @@
         initFantome(0,"fantome0.png",90,577);
         initFantome(1,"fantome1.png",200,370);
         initFantome(2,"fantome2.png",300,257);
-        //if (intCompteurNiveau == 2) {
+        if (intCompteurNiveau == 2) {
           initFantome(3,"fantome3.png",800,550);
-        //}else if (intCompteurNiveau == 3) {
+        }else if (intCompteurNiveau == 3) {
           initFantome(4,"fantome4.png",400,257);
-        //}
+        }
         initSons();
         dessiner(); // Dessiner une première fois
         animer();
@@ -133,7 +133,6 @@
     objFantome.binSurMur = false;
     objFantome.binSurMurCote = false;
     objFantome.binTomber = false;
-    objFantome.intDirection = 0;
     objFantome.posX = posX;
     objFantome.posY = posY;
     /*objFantome.posX = 90;
@@ -217,7 +216,6 @@
     if (chronoMarche) {
         var objDateHeure2 = (new Date()).getTime();
         intMsEcoulees =  objDateHeure2 - objDateHeure1;
-        //console.log(intMiliSecondeChrono);
 
         objDateHeure1 = objDateHeure2;
 
@@ -230,7 +228,6 @@
        intSecondeChrono = ajouteZeros(intSecondeChrono);
 
    }
-
   }
 
   /******************************************************************************************
@@ -258,11 +255,9 @@
       if (intSecondeChrono != 0) {
         if (objFantomeAnimer.posX <= objRunner.posX) {
           objFantomeAnimer.posX++;
-          objFantome.intDirection = 1;
 
         }else if(objFantomeAnimer.posX >= objRunner.posX){
           objFantomeAnimer.posX--;
-            objFantome.intDirection = -1;
         }
       }
 
@@ -333,13 +328,6 @@
 
 
 	}
-
-
-
-
-
-
-
 
 
   /******************************************************************************************

@@ -245,12 +245,12 @@ function dessinerRunner(x, y, intFrame){
 
 }
 
-var intTimer = 0;
+//var intTimer = 0;
 var col2 = 0;
 var row2 = 0;
 var intCompteur = 0;
 var intCompteur2 = 0;
-var ecoule = 0;
+//var ecoule = 0;
 var binCreuser = true;
 /******************************************************************************************
   * creuserTrou()
@@ -286,10 +286,10 @@ var binCreuser = true;
             if (binX && binVerdict && binCreuser) {
               if (objRunner.posX +35 >= tabObjMap[row][col].posX  - 20 && objRunner.posX +35<= tabObjMap[row][col].posX + 20 &&
                   objRunner.posY +45>= tabObjMap[row][col].posY -20  && objRunner.posY+45 <= tabObjMap[row][col].posY + 20){
-                  tabMap[row][col] = 'F';
+                  tabMap[row][col] = 'T';
                   //add timer
                   if ( intCompteur2 < 1) {
-                      intTimer = intMiliSecondeChrono;
+                      tabObjMap[row][col].intTimer = intMiliSecondeChrono;
                       binCreuser = false;
                   }
                   intCompteur2++;
@@ -303,11 +303,13 @@ var binCreuser = true;
             if (binZ && binVerdict && binCreuser) {
               if (objRunner.posX -35 >= tabObjMap[row][col].posX  - 20 && objRunner.posX -35<= tabObjMap[row][col].posX + 20 &&
                   objRunner.posY +45>= tabObjMap[row][col].posY -20  && objRunner.posY+45 <= tabObjMap[row][col].posY + 20){
-                  tabMap[row][col] = 'F';
+                  tabMap[row][col] = 'T';
                   //add timer
+
                   if ( intCompteur < 1) {
-                      intTimer = intMiliSecondeChrono;
-                      binCreuser = false;
+
+                      tabObjMap[row][col].intTimer = intMiliSecondeChrono;
+                      //binCreuser = false;
                   }
 
 
@@ -320,12 +322,16 @@ var binCreuser = true;
                 }
               }
             }
+            if (tabObjMap[row][col] == 'T') {
+              tabObjMap[row][col].intEcoule = intMiliSecondeChrono - tabObjMap[row][col].intTimer;
+
+            }
           }
         }
 
-    ecoule = intMiliSecondeChrono - intTimer;
 
-    if (col2 != 0 && row2 != 0) {
+
+    if (col != 0 && row != 0) {
         timerCreuser();
         //intTimer = 0;
     }
@@ -334,12 +340,22 @@ var binCreuser = true;
     }
 
     function timerCreuser() {
-        if ( ecoule >= 8000) {
-          console.log("Ronaldo")
-            tabMap[row2][col2] = 'M';
-            binCreuser = true;
-            intCompteur = 0;
-            intTimer = 0
+
+      for (var row = 0; row < tabObjMap.length; row++) {
+        for (var col = 0; col < tabObjMap[row].length; col++) {
+            if (tabObjMap[row][col].objNom == "TROU") {
+              if (tabObjMap[row][col].intEcoule >= 8000) {
+
+                  tabMap[row][col] = 'M';
+                  binCreuser = true;
+                  intCompteur = 0;
+                  tabObjMap[row][col].intTimer = 0
+              }
+            }
+
         }
+      }
+
+
 
     }

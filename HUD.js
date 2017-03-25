@@ -113,12 +113,12 @@ function debug(){
    for (var row = 0; row < tabObjMap.length; row++) {
      for (var col = 0; col < tabObjMap[row].length; col++) {
 
-       if (tabObjMap[row][col].objNom == "MUR") {
+       if (tabObjMap[row][col].objNom == "TROU") {
          objC2D.stroke();
-         objC2D.fillStyle = 'yellow';
+         objC2D.fillStyle = 'gold';
          objC2D.closePath();
          objC2D.font="9px calibri";
-         objC2D.fillText("(" + (tabObjMap[row][col].posX + 30) + ", " + tabObjMap[row][col].posY + ")",tabObjMap[row][col].posX-20,
+         objC2D.fillText(tabObjMap[row][col].intTimer ,tabObjMap[row][col].posX-10,
          tabObjMap[row][col].posY);
        }
      }
