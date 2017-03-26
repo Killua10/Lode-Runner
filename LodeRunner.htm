@@ -3,454 +3,449 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="fr" xml:lang="fr">
 <head>
 
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <title>Lode Runner par Ariel Sashcov et Mohamed Cherifi</title>
-  <link rel="stylesheet" type="text/css" href="" />
-  <!-- Code JavaScript local -->
-  <script type="text/javascript" src="collisions.js"></script>
-  <script type="text/javascript" src="Map.js"></script>
-  <script type="text/javascript" src="Runner.js"></script>
-  <script type="text/javascript" src="HUD.js"></script>
-  <script type="text/javascript">
-  //variables du canvas
-	var objCanvas = null;
-	var objC2D = null;
-	var objCycleAnimation = null;
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>Lode Runner par Ariel Sashcov et Mohamed Cherifi</title>
+    <link rel="stylesheet" type="text/css" href=""/>
+    <!-- Code JavaScript local -->
+    <script type="text/javascript" src="collisions.js"></script>
+    <script type="text/javascript" src="Map.js"></script>
+    <script type="text/javascript" src="Runner.js"></script>
+    <script type="text/javascript" src="HUD.js"></script>
+    <script type="text/javascript">
+        //variables du canvas
+        var objCanvas = null;
+        var objC2D = null;
+        var objCycleAnimation = null;
 
-  //variables de touche
-  var binDroite = false;
-  var binGauche = false;
-  var binMonter = false;
-  var binDescendre = false;
-  var binX = false;
-  var binZ = false;
-  //variable de score
-  var intCompteurOR = 0;
-  var intScore = 0;
-  var intCompteurNiveau = 1;
-  var intCompteurVie = 5;
-  //variable pour le chronometre
-  var intMinuteChrono = 0;
-  var intSecondeChrono = 0;
-  var intMiliSecondeChrono = 0;
-  var objDateHeure1 = new Date().getTime();
-  var chronoMarche = false;
-  var intMsEcoulees = 0;
-  var tabFantome = [];
-  //tableau du niveau
+        //variables de touche
+        var binDroite = false;
+        var binGauche = false;
+        var binMonter = false;
+        var binDescendre = false;
+        var binX = false;
+        var binZ = false;
+        //variable de score
+        var intCompteurOR = 0;
+        var intScore = 0;
+        var intCompteurNiveau = 1;
+        var intCompteurVie = 5;
+        //variable pour le chronometre
+        var intMinuteChrono = 0;
+        var intSecondeChrono = 0;
+        var intMiliSecondeChrono = 0;
+        var objDateHeure1 = new Date().getTime();
+        var chronoMarche = false;
+        var intMsEcoulees = 0;
+        var tabFantome = [];
+        //tableau du niveau
 
 
-  var tabObjMap = new Array(17);
+        var tabObjMap = new Array(17);
 
-  /******************************************************************************************
-  * initAnimation()
-  *
-  * initialisation de l'objet canvas et objC2D.
-  * Contient tous les méthodes init des objets à initialiser avant le TICK METHODE
-  *****************************************************************************************/
-    function initAnimation() {
-        objCanvas = document.getElementById('monCanvas');
-        objC2D = objCanvas.getContext('2d');
-        objC2D.imageSmoothingEnabled = false;
-        intMinuteChrono = ajouteZeros(intMinuteChrono);
-        intSecondeChrono = ajouteZeros(intSecondeChrono);
-        for (var i = 0; i < tabObjMap.length; i++) {
-          tabObjMap[i] = new Array();
+        /******************************************************************************************
+         * initAnimation()
+         *
+         * initialisation de l'objet canvas et objC2D.
+         * Contient tous les méthodes init des objets à initialiser avant le TICK METHODE
+         *****************************************************************************************/
+        function initAnimation() {
+            objCanvas = document.getElementById('monCanvas');
+            objC2D = objCanvas.getContext('2d');
+            objC2D.imageSmoothingEnabled = false;
+            intMinuteChrono = ajouteZeros(intMinuteChrono);
+            intSecondeChrono = ajouteZeros(intSecondeChrono);
+            for (var i = 0; i < tabObjMap.length; i++) {
+                tabObjMap[i] = new Array();
+            }
+            initImageFond();
+            initRunner();
+            initFantome(0, "fantome0.png", 90, 577);
+            initFantome(1, "fantome1.png", 200, 370);
+            initFantome(2, "fantome2.png", 300, 257);
+            if (intCompteurNiveau == 2) {
+                initFantome(3, "fantome3.png", 800, 550);
+            } else if (intCompteurNiveau == 3) {
+                initFantome(4, "fantome4.png", 400, 257);
+            }
+            initSons();
+            dessiner(); // Dessiner une première fois
+            animer();
+
         }
-        initImageFond();
-        initRunner();
-        initFantome(0,"fantome0.png",90,577);
-        initFantome(1,"fantome1.png",200,370);
-        initFantome(2,"fantome2.png",300,257);
-        if (intCompteurNiveau == 2) {
-          initFantome(3,"fantome3.png",800,550);
-        }else if (intCompteurNiveau == 3) {
-          initFantome(4,"fantome4.png",400,257);
+
+
+        /******************************************************************************************
+         * animer()
+         *
+         * Un cycle d'animation
+         *****************************************************************************************/
+        function animer() {
+            // Requête pour le prochain cycle
+            objCycleAnimation = requestAnimationFrame(animer);
+            // Le cycle d'animation
+            effacerDessin();
+            mettreAjourAnimation();
+            dessiner();
         }
-        initSons();
-        dessiner(); // Dessiner une première fois
-        animer();
 
-    }
-
-
-
-    /******************************************************************************************
-    * animer()
-    *
-    * Un cycle d'animation
-    *****************************************************************************************/
-    function animer() {
-        // Requête pour le prochain cycle
-        objCycleAnimation = requestAnimationFrame(animer);
-    		// Le cycle d'animation
-    		effacerDessin();
-    		mettreAjourAnimation();
-    		dessiner();
-	}
-
-  /******************************************************************************************
-  * arreterAnimation()
-  *
-  * Arrete l'animation
-  *****************************************************************************************/
-	function arreterAnimation() {
-	    if (objCycleAnimation != null)
-	        cancelAnimationFrame(objCycleAnimation);
-	}
-
-  /******************************************************************************************
-  * effacerDessin()
-  *
-  * Efface le dessin après une mise à jour
-  *****************************************************************************************/
-	function effacerDessin() {
-		objC2D.clearRect(0,0, objCanvas.width, objCanvas.height);
-	}
-
-  /******************************************************************************************
-  * initFantome()
-  *
-  * Initialise les guardiens du jeu.
-  *****************************************************************************************/
-  function initFantome(intNumFantome,strImage,posX,posY){
-
-    //tabObjFantomes = new Array();
-    //var objFantome = null;
-
-    objFantome = new Object();
-    var objImageFantome = new Image();
-    objImageFantome.src = 'img/'+strImage;
-    objFantome.objImage = objImageFantome;
-    objFantome.intNumFantome = intNumFantome;
-    objFantome.strNom = "fantome";
-    objFantome.intnbrOr = 0;
-    objFantome.intVitesse = 4;
-    objFantome.intFrame = 0;
-    objFantome.intLargeur = 40;
-    objFantome.intLimite = 10;
-    objFantome.intLongeur = 40;
-    objFantome.binSurMur = false;
-    objFantome.binSurMurCote = false;
-    objFantome.binTomber = false;
-    objFantome.posX = posX;
-    objFantome.posY = posY;
-    /*objFantome.posX = 90;
-    objFantome.posY = 577;*/
-    tabFantome.push(objFantome)
-    //tabObjFantomes.push(objFantome);
-
-    /*var objImageFantome1 = new Image();
-    objImageFantome1.src = 'img/fantome1.png';
-    var objImageFantome2 = new Image();
-    objImageFantome2.src = 'img/fantome2.png';
-    var objImageFantome3 = new Image();
-    objImageFantome3.src = 'img/fantome3.png';
-    var objImageFantome4 = new Image();
-    objImageFantome4.src = 'img/fantome4.png';
-    var objImageFantome5 = new Image();
-    objImageFantome5.src = 'img/fantome5.png';*/
-
-
-  }
-
-  /******************************************************************************************
-  * dessinerFantome(posX, posY, intFrame)
-  *
-  * Dessine les guardiens du jeu
-  *****************************************************************************************/
-  function dessinerFantome(posX, posY, intFrame){
-    objC2D.save();
-    objC2D.globalAlpha = 0.8;
-
-    for (var i = 0; i < tabFantome.length; i++) {
-      objC2D.drawImage(tabFantome[i].objImage, (tabFantome[i].objImage.width/12)*intFrame, 0, 36, 40, tabFantome[i].posX-12, tabFantome[i].posY-12, 36, 40);
-    }
-
-
-    objC2D.restore();
-
-  }
-
-
-  /******************************************************************************************
-    * mettreAjourAnimation() - TICK METHODE
-    * Met à jour les animations
-    * Ne doit contenir que des méthodes de mise à jour.
-    *****************************************************************************************/
-	function mettreAjourAnimation(){
-    animationRunner();
-    for (var i = 0; i < tabFantome.length; i++) {
-      animationFantome(tabFantome[i]);
-    }
-
-    collisionOr(objRunner);
-    for (var i = 0; i < tabFantome.length; i++) {
-      collisionOr(tabFantome[i]);
-    }
-
-    collisionEchelle();
-    collisionMur(objRunner);
-    for (var i = 0; i < tabFantome.length; i++) {
-      collisionMur(tabFantome[i]);
-    }
-
-    collisionMurCote(objRunner);
-    for (var i = 0; i < tabFantome.length; i++) {
-      collisionMurCote(tabFantome[i]);
-    }
-    collisionCorde();
-    creuserTrou();
-    chronometre();
-    timerCreuser();
-
-
-	}
-
-  /******************************************************************************************
-    * chronometre()
-    * Met à jour le chronometre
-    *
-    *****************************************************************************************/
-  function chronometre(){
-    if (chronoMarche) {
-        var objDateHeure2 = (new Date()).getTime();
-        intMsEcoulees =  objDateHeure2 - objDateHeure1;
-
-        objDateHeure1 = objDateHeure2;
-
-       intMiliSecondeChrono += intMsEcoulees;
-
-       intMinuteChrono = parseInt((intMiliSecondeChrono/(1000*60))%60)
-       intSecondeChrono = ((intMiliSecondeChrono % 60000) / 1000).toFixed(0);
-
-       intMinuteChrono = ajouteZeros(intMinuteChrono);
-       intSecondeChrono = ajouteZeros(intSecondeChrono);
-
-   }
-  }
-
-  /******************************************************************************************
-    * ajouteZeros(intNbr)
-    * Ajoute un zero si le nombre est plus petit que 10.
-    *
-    *****************************************************************************************/
-  function ajouteZeros(intNbr) {
-
-  return (intNbr < 10 ? '0' : '') + intNbr;
-
-  }
-
-  /******************************************************************************************
-    * animationFantome()
-    *
-    *****************************************************************************************/
-    function animationFantome(objFantomeAnimer){
-      // Animation IDLE
-      objFantomeAnimer.intFrame+=0.3;
-      if (objFantomeAnimer.intFrame >= 12) {
-        objFantomeAnimer.intFrame -= 12;
-      }
-
-      if (intSecondeChrono != 0) {
-        if (objFantomeAnimer.posX <= objRunner.posX) {
-          objFantomeAnimer.posX++;
-
-        }else if(objFantomeAnimer.posX >= objRunner.posX){
-          objFantomeAnimer.posX--;
+        /******************************************************************************************
+         * arreterAnimation()
+         *
+         * Arrete l'animation
+         *****************************************************************************************/
+        function arreterAnimation() {
+            if (objCycleAnimation != null)
+                cancelAnimationFrame(objCycleAnimation);
         }
-      }
+
+        /******************************************************************************************
+         * effacerDessin()
+         *
+         * Efface le dessin après une mise à jour
+         *****************************************************************************************/
+        function effacerDessin() {
+            objC2D.clearRect(0, 0, objCanvas.width, objCanvas.height);
+        }
+
+        /******************************************************************************************
+         * initFantome()
+         *
+         * Initialise les guardiens du jeu.
+         *****************************************************************************************/
+        function initFantome(intNumFantome, strImage, posX, posY) {
+
+            //tabObjFantomes = new Array();
+            //var objFantome = null;
+
+            objFantome = new Object();
+            var objImageFantome = new Image();
+            objImageFantome.src = 'img/' + strImage;
+            objFantome.objImage = objImageFantome;
+            objFantome.intNumFantome = intNumFantome;
+            objFantome.strNom = "fantome";
+            objFantome.intnbrOr = 0;
+            objFantome.intVitesse = 4;
+            objFantome.intFrame = 0;
+            objFantome.intLargeur = 40;
+            objFantome.intLimite = 10;
+            objFantome.intLongeur = 40;
+            objFantome.binSurMur = false;
+            objFantome.binSurMurCote = false;
+            objFantome.binTomber = false;
+            objFantome.posX = posX;
+            objFantome.posY = posY;
+            /*objFantome.posX = 90;
+             objFantome.posY = 577;*/
+            tabFantome.push(objFantome)
+            //tabObjFantomes.push(objFantome);
+
+            /*var objImageFantome1 = new Image();
+             objImageFantome1.src = 'img/fantome1.png';
+             var objImageFantome2 = new Image();
+             objImageFantome2.src = 'img/fantome2.png';
+             var objImageFantome3 = new Image();
+             objImageFantome3.src = 'img/fantome3.png';
+             var objImageFantome4 = new Image();
+             objImageFantome4.src = 'img/fantome4.png';
+             var objImageFantome5 = new Image();
+             objImageFantome5.src = 'img/fantome5.png';*/
 
 
-      if (objFantomeAnimer.posX == objRunner.posX && objFantomeAnimer.posY == objRunner.posY) {
-        objRunner.binMeurt = true;
-        //make timer or game over.. check document.
-      }
+        }
 
-      if (objFantomeAnimer.posX <= objFantomeAnimer.intLimite && objFantomeAnimer.posY == objRunner.posY) {
-        objFantomeAnimer.posX++;
-      }
+        /******************************************************************************************
+         * dessinerFantome(posX, posY, intFrame)
+         *
+         * Dessine les guardiens du jeu
+         *****************************************************************************************/
+        function dessinerFantome(posX, posY, intFrame) {
+            objC2D.save();
+            objC2D.globalAlpha = 0.8;
 
-      // Faire tomber le fantome si n'est pas sur un mur
-      if (!objFantomeAnimer.binSurMur) {
-        objFantomeAnimer.posY += objFantomeAnimer.intVitesse;
-      }
-
-      //SON BATTEMENT DE COEUR SI PROCHE DU RUNNER
-      if (objFantomeAnimer.posX >= objRunner.posX-200 && objFantomeAnimer.posY == objRunner.posY) {
-        objSons.coeur.play();
-      }else{
-        objSons.coeur.pause();
-      }
+            for (var i = 0; i < tabFantome.length; i++) {
+                objC2D.drawImage(tabFantome[i].objImage, (tabFantome[i].objImage.width / 12) * intFrame, 0, 36, 40, tabFantome[i].posX - 12, tabFantome[i].posY - 12, 36, 40);
+            }
 
 
+            objC2D.restore();
+
+        }
 
 
-    }
+        /******************************************************************************************
+         * mettreAjourAnimation() - TICK METHODE
+         * Met à jour les animations
+         * Ne doit contenir que des méthodes de mise à jour.
+         *****************************************************************************************/
+        function mettreAjourAnimation() {
+            animationRunner();
+            for (var i = 0; i < tabFantome.length; i++) {
+                animationFantome(tabFantome[i]);
+            }
+
+            collisionOr(objRunner);
+            for (var i = 0; i < tabFantome.length; i++) {
+                collisionOr(tabFantome[i]);
+            }
+
+            collisionEchelle();
+            collisionMur(objRunner);
+            for (var i = 0; i < tabFantome.length; i++) {
+                collisionMur(tabFantome[i]);
+            }
+
+            collisionMurCote(objRunner);
+            for (var i = 0; i < tabFantome.length; i++) {
+                collisionMurCote(tabFantome[i]);
+            }
+            collisionCorde();
+            creuserTrou();
+            chronometre();
+            timerCreuser();
 
 
+        }
 
-	// Pour dessiner
-	function dessiner() {
-	    dessinerMappe();
+        /******************************************************************************************
+         * chronometre()
+         * Met à jour le chronometre
+         *
+         *****************************************************************************************/
+        function chronometre() {
+            if (chronoMarche) {
+                var objDateHeure2 = (new Date()).getTime();
+                intMsEcoulees = objDateHeure2 - objDateHeure1;
 
-      if (objRunner.intDirection == 0) {
-        dessinerRunner(objRunner.posX, objRunner.posY, Math.floor(objRunner.intFrame));
-      }else if (objRunner.intDirection == -1 && !objRunner.binSurCorde) {
-        dessinerRunner(objRunner.posX, objRunner.posY, Math.floor(objRunner.intFrameGauche));
-      }else if (objRunner.intDirection == 1 && !objRunner.binSurCorde) {
-        dessinerRunner(objRunner.posX, objRunner.posY, Math.floor(objRunner.intFrameDroit));
-      }
+                objDateHeure1 = objDateHeure2;
 
-      if (objRunner.binMonter) {
-        dessinerRunner(objRunner.posX, objRunner.posY, Math.floor(objRunner.intFrameMonter));
-      }else if (objRunner.intDirection == 40) {
-        dessinerRunner(objRunner.posX, objRunner.posY, Math.floor(objRunner.intFrameDescendre));
-      }
+                intMiliSecondeChrono += intMsEcoulees;
 
-      if (objRunner.binSurCorde && objRunner.intDirection == 1) {
-        dessinerRunner(objRunner.posX, objRunner.posY, Math.floor(objRunner.intFrameCordeDroite));
-      }else if (objRunner.binSurCorde && objRunner.intDirection == -1) {
-        dessinerRunner(objRunner.posX, objRunner.posY, Math.floor(objRunner.intFrameCordeGauche));
-      }else if (objRunner.binSurCorde  && objRunner.intDirection == 0) {
-        dessinerRunner(objRunner.posX, objRunner.posY, Math.floor(objRunner.intFrameCordeGauche));
-      }else if (objRunner.binSurCorde  && objRunner.intDirection == 0) {
-        dessinerRunner(objRunner.posX, objRunner.posY, Math.floor(objRunner.intFrameCordeGauche));
-      }
+                intMinuteChrono = parseInt((intMiliSecondeChrono / (1000 * 60)) % 60)
+                intSecondeChrono = ((intMiliSecondeChrono % 60000) / 1000).toFixed(0);
 
-      for (var i = 0; i < tabFantome.length; i++) {
-        dessinerFantome(tabFantome[i].posX, tabFantome[i].posY, Math.floor(tabFantome[i].intFrame));
-      }
+                intMinuteChrono = ajouteZeros(intMinuteChrono);
+                intSecondeChrono = ajouteZeros(intSecondeChrono);
 
+            }
+        }
 
-      dessinerHUD();
-      debug();
+        /******************************************************************************************
+         * ajouteZeros(intNbr)
+         * Ajoute un zero si le nombre est plus petit que 10.
+         *
+         *****************************************************************************************/
+        function ajouteZeros(intNbr) {
 
+            return (intNbr < 10 ? '0' : '') + intNbr;
 
-	}
+        }
 
+        /******************************************************************************************
+         * animationFantome()
+         *
+         *****************************************************************************************/
+        function animationFantome(objFantomeAnimer) {
+            // Animation IDLE
+            objFantomeAnimer.intFrame += 0.3;
+            if (objFantomeAnimer.intFrame >= 12) {
+                objFantomeAnimer.intFrame -= 12;
+            }
 
-  /******************************************************************************************
-    *  keyDown()
-    *  Gestion du clavier KEY DOWN
-    *  Pour la fluidité des touches
-    *  x = event.keyCode
-    *****************************************************************************************/
-  function keyDown(){
+            if (intSecondeChrono != 0) {
+                if (objFantomeAnimer.posX <= objRunner.posX) {
+                    objFantomeAnimer.posX++;
 
-    var x = event.keyCode;
-
-    /*if (chronoMarche) {
-      chronoMarche = false;
-    }else {*/
-    chronoMarche = true;
-    objDateHeure1 = new Date();
-
-    //}
-    binDroite = false
-    binGauche = false
+                } else if (objFantomeAnimer.posX >= objRunner.posX) {
+                    objFantomeAnimer.posX--;
+                }
+            }
 
 
+            if (objFantomeAnimer.posX == objRunner.posX && objFantomeAnimer.posY == objRunner.posY) {
+                objRunner.binMeurt = true;
+                //make timer or game over.. check document.
+            }
 
-    // Deplacement droite
-    if (x == 39 && (objRunner.binSurMur || objRunner.binSurCorde))  binDroite = true;
-    // Deplacement gauche
-    if (x == 37 && (objRunner.binSurMur || objRunner.binSurCorde))  binGauche = true;
-    // Monter
-    if (x == 38 && binMonter == true){
-      binMonter = true;
-      objRunner.intDirection = 38;
-    }
+            if (objFantomeAnimer.posX <= objFantomeAnimer.intLimite && objFantomeAnimer.posY == objRunner.posY) {
+                objFantomeAnimer.posX++;
+            }
 
-    // Descendre
+            // Faire tomber le fantome si n'est pas sur un mur
+            if (!objFantomeAnimer.binSurMur) {
+                objFantomeAnimer.posY += objFantomeAnimer.intVitesse;
+            }
 
-    if (x == 40 && binDescendre == true && !objRunner.binSurCorde){
-
-      binDescendre = true;
-      //binMonter = false;
-      objRunner.intDirection = 40;
-      //objRunner.binDescendre = true;
-      //objRunner.intDirection = 0;
-    }
-
-
-    if (x == 40 && objRunner.binSurCorde ) {
-      objRunner.binTomber = true
-      objRunner.intDirection = 40;
-    }
-
-    if (x == 88) { //X
-      binX = true;
-    }
-
-    if (x == 90) { //Z
-      binZ = true;
-    }
+            //SON BATTEMENT DE COEUR SI PROCHE DU RUNNER
+            if (objFantomeAnimer.posX >= objRunner.posX - 200 && objFantomeAnimer.posY == objRunner.posY) {
+                objSons.coeur.play();
+            } else {
+                objSons.coeur.pause();
+            }
 
 
-
-  }
-
-  /******************************************************************************************
-    *  keyUp()
-    *  Gestion du clavier KEY UP
-    *  Pour la fluidité des touches
-    *  x = event.keyCode
-    *****************************************************************************************/
-  function keyUp(){
-    var x = event.keyCode;
-
-    // Deplacement droite
-    if (x == 39 ){
-      binDroite = false;
-      objRunner.intDirection = 0;
-    }
-    // Deplacement gauche
-    if (x == 37 ){
-      binGauche = false;
-      objRunner.intDirection = 0;
-    }
-    // Monter
-    if (x == 38){
-      binMonter = false;
-      objRunner.binMonter = false;
-      objRunner.intDirection = 0;
-    }
-
-    // Descendre
-
-    if (x == 40 && !objRunner.binSurCorde){
-
-      binDescendre = false;
-      objRunner.binDescendre = false;
-      objRunner.intDirection = 0;
-    }
+        }
 
 
-    if (x == 40 && objRunner.binSurCorde) {
-      //objRunner.posY += objRunner.intVitesse;
-      objRunner.binTomber = false
-      objRunner.intDirection = 0;
-    }
+        // Pour dessiner
+        function dessiner() {
+            dessinerMappe();
 
-    if (x == 88) { //X
-      binX = false;
-    }
+            if (objRunner.intDirection == 0) {
+                dessinerRunner(objRunner.posX, objRunner.posY, Math.floor(objRunner.intFrame));
+            } else if (objRunner.intDirection == -1 && !objRunner.binSurCorde) {
+                dessinerRunner(objRunner.posX, objRunner.posY, Math.floor(objRunner.intFrameGauche));
+            } else if (objRunner.intDirection == 1 && !objRunner.binSurCorde) {
+                dessinerRunner(objRunner.posX, objRunner.posY, Math.floor(objRunner.intFrameDroit));
+            }
 
-    if (x == 90) { //Z
-      binZ = false;
-    }
+            if (objRunner.binMonter) {
+                dessinerRunner(objRunner.posX, objRunner.posY, Math.floor(objRunner.intFrameMonter));
+            } else if (objRunner.intDirection == 40) {
+                dessinerRunner(objRunner.posX, objRunner.posY, Math.floor(objRunner.intFrameDescendre));
+            }
+
+            if (objRunner.binSurCorde && objRunner.intDirection == 1) {
+                dessinerRunner(objRunner.posX, objRunner.posY, Math.floor(objRunner.intFrameCordeDroite));
+            } else if (objRunner.binSurCorde && objRunner.intDirection == -1) {
+                dessinerRunner(objRunner.posX, objRunner.posY, Math.floor(objRunner.intFrameCordeGauche));
+            } else if (objRunner.binSurCorde && objRunner.intDirection == 0) {
+                dessinerRunner(objRunner.posX, objRunner.posY, Math.floor(objRunner.intFrameCordeGauche));
+            } else if (objRunner.binSurCorde && objRunner.intDirection == 0) {
+                dessinerRunner(objRunner.posX, objRunner.posY, Math.floor(objRunner.intFrameCordeGauche));
+            }
+
+            for (var i = 0; i < tabFantome.length; i++) {
+                dessinerFantome(tabFantome[i].posX, tabFantome[i].posY, Math.floor(tabFantome[i].intFrame));
+            }
 
 
-  }
+            dessinerHUD();
+            debug();
 
-   </script>
+
+        }
+
+
+        /******************************************************************************************
+         *  keyDown()
+         *  Gestion du clavier KEY DOWN
+         *  Pour la fluidité des touches
+         *  x = event.keyCode
+         *****************************************************************************************/
+        function keyDown() {
+
+            var x = event.keyCode;
+
+            /*if (chronoMarche) {
+             chronoMarche = false;
+             }else {*/
+            chronoMarche = true;
+            objDateHeure1 = new Date();
+
+            //}
+            binDroite = false
+            binGauche = false
+
+
+            // Deplacement droite
+            if (x == 39 && (objRunner.binSurMur || objRunner.binSurCorde)) binDroite = true;
+            // Deplacement gauche
+            if (x == 37 && (objRunner.binSurMur || objRunner.binSurCorde)) binGauche = true;
+            // Monter
+            if (x == 38 && binMonter == true) {
+                binMonter = true;
+                objRunner.intDirection = 38;
+            }
+
+            // Descendre
+
+            if (x == 40 && binDescendre == true && !objRunner.binSurCorde) {
+
+                binDescendre = true;
+                //binMonter = false;
+                objRunner.intDirection = 40;
+                //objRunner.binDescendre = true;
+                //objRunner.intDirection = 0;
+            }
+
+
+            if (x == 40 && objRunner.binSurCorde) {
+                objRunner.binTomber = true
+                objRunner.intDirection = 40;
+            }
+
+            if (x == 88) { //X
+                binX = true;
+            }
+
+            if (x == 90) { //Z
+                binZ = true;
+            }
+
+
+        }
+
+        /******************************************************************************************
+         *  keyUp()
+         *  Gestion du clavier KEY UP
+         *  Pour la fluidité des touches
+         *  x = event.keyCode
+         *****************************************************************************************/
+        function keyUp() {
+            var x = event.keyCode;
+
+            // Deplacement droite
+            if (x == 39) {
+                binDroite = false;
+                objRunner.intDirection = 0;
+            }
+            // Deplacement gauche
+            if (x == 37) {
+                binGauche = false;
+                objRunner.intDirection = 0;
+            }
+            // Monter
+            if (x == 38) {
+                binMonter = false;
+                objRunner.binMonter = false;
+                objRunner.intDirection = 0;
+            }
+
+            // Descendre
+
+            if (x == 40 && !objRunner.binSurCorde) {
+
+                binDescendre = false;
+                objRunner.binDescendre = false;
+                objRunner.intDirection = 0;
+            }
+
+
+            if (x == 40 && objRunner.binSurCorde) {
+                //objRunner.posY += objRunner.intVitesse;
+                objRunner.binTomber = false
+                objRunner.intDirection = 0;
+            }
+
+            if (x == 88) { //X
+                binX = false;
+            }
+
+            if (x == 90) { //Z
+                binZ = false;
+            }
+
+
+        }
+
+    </script>
 </head>
 
 <body onload="initAnimation()">
-	<canvas id="monCanvas" width="1120" height="830" style="display: block; margin: auto;" onkeydown="keyDown()" onkeyup="keyUp()" tabindex="1">
-		Votre navigateur ne supporte pas la balise canvas
-	</canvas
+<canvas id="monCanvas" width="1120" height="830" style="display: block; margin: auto;" onkeydown="keyDown()"
+        onkeyup="keyUp()" tabindex="1">
+    Votre navigateur ne supporte pas la balise canvas
+</canvas
 </body>
 
 </html>
