@@ -135,7 +135,7 @@ function initImageFond() {
             objet.objImage = objImageTrou;
             objet.intLongeur = 40;
             objet.intLargeur = 40;
-            objet.intTimer = 0;
+            objet.intTemps = ((new Date().getTime() % 60000) / 1000).toFixed(0)
             objet.intEcoule = 0;
             objet.posX = intTuileX + 20;
             objet.posY = intTuileY + 20;

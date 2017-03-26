@@ -118,7 +118,8 @@ function debug(){
          objC2D.fillStyle = 'gold';
          objC2D.closePath();
          objC2D.font="9px calibri";
-         objC2D.fillText(tabObjMap[row][col].intTimer ,tabObjMap[row][col].posX-10,
+         
+         objC2D.fillText(tabObjMap[row][col].intTemps ,tabObjMap[row][col].posX-10,
          tabObjMap[row][col].posY);
        }
      }

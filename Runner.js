@@ -288,6 +288,7 @@ var binCreuser = true;
                   objRunner.posY +45>= tabObjMap[row][col].posY -20  && objRunner.posY+45 <= tabObjMap[row][col].posY + 20){
                   tabMap[row][col] = 'T';
                   //add timer
+                  //verifie si le moment present est plus grand que ce temps + 8000
                   if ( intCompteur2 < 1) {
                       tabObjMap[row][col].intTimer = intMiliSecondeChrono;
                       binCreuser = false;
@@ -332,7 +333,7 @@ var binCreuser = true;
 
 
     if (col != 0 && row != 0) {
-        timerCreuser();
+        //timerCreuser();
         //intTimer = 0;
     }
 
@@ -341,13 +342,17 @@ var binCreuser = true;
 
     function timerCreuser() {
 
+      var maintenant = new Date().getTime();
+
+
       for (var row = 0; row < tabObjMap.length; row++) {
         for (var col = 0; col < tabObjMap[row].length; col++) {
             if (tabObjMap[row][col].objNom == "TROU") {
-              if (tabObjMap[row][col].intEcoule >= 8000) {
+
+              if (maintenant >= tabObjMap[row][col].intTemps+8000)  {
 
                   tabMap[row][col] = 'M';
-                  binCreuser = true;
+                  //binCreuser = true;
                   intCompteur = 0;
                   tabObjMap[row][col].intTimer = 0
               }
@@ -355,7 +360,4 @@ var binCreuser = true;
 
         }
       }
-
-
-
     }
