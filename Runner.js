@@ -260,7 +260,7 @@ function dessinerRunner(x, y, intFrame) {
         objC2D.drawImage(objRunner.objAnimationCordeDroite, sx, sy, sw, dh, dx, dy, dw, dh);
     }
 
-    if (objRunner.intDirection == 40) {
+    if (objRunner.intDirection == 40 && !objRunner.binSurMur) {
         sx = (524 / 22) * 0;
         sw = objRunner.objImage.width / 22;
         dx = objRunner.posX - 12;

@@ -195,8 +195,8 @@ function collisionMurCote(objCharacter) {
 
 }
 
-function verififcationVictoire() {
-    if (intCompteurOR == 6 && objRunner.posX == 740 && objRunner.posY == 40) {
+function verificationVictoire() {
+    if (intCompteurOR == 6 && objRunner.posX == 740 && objRunner.posY <= 40) {
         //effacerDessin();
         intCompteurNiveau++;
         //initAnimation();

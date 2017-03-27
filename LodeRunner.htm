@@ -61,7 +61,7 @@
             initRunner();
             initFantome(0, "fantome0.png", 188, 255);
             initFantome(1, "fantome1.png", 200, 370);
-            initFantome(2, "fantome2.png", 250, 495);
+            initFantome(2, "fantome2.png", 100, 255);
             initSons();
             dessiner(); // Dessiner une première fois
             animer();
@@ -220,7 +220,10 @@
 
             collisionOr(objRunner);
             for (var i = 0; i < tabFantome.length; i++) {
-                collisionOr(tabFantome[i]);
+                if (tabFantome[i].intnbrOr == 0) {
+                    collisionOr(tabFantome[i]);
+                }
+
             }
 
 
@@ -238,7 +241,7 @@
             creuserTrou();
             chronometre();
             timerCreuser();
-            verififcationVictoire();
+            verificationVictoire();
 
 
         }
