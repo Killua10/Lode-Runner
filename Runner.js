@@ -118,12 +118,27 @@ function animationRunner() {
     }
 
     // Ajustement de variables de direction et controle de vitesse
-    if (binDroite && objRunner.intDirection != 38) {
+    if (tabObjMap[parseInt(objRunner.posY / 40)][parseInt(objRunner.posX / 40) + 1] != null) {
+        if (binDroite && objRunner.intDirection != 38 && tabObjMap[parseInt(objRunner.posY / 40)][parseInt(objRunner.posX / 40) + 1].objNom != "MUR" && tabObjMap[parseInt((objRunner.posY +20) / 40)][parseInt(objRunner.posX / 40) + 1].objNom != "MUR") {
+            objRunner.intDirection = 1;
+            objRunner.posX += objRunner.intVitesse;
+
+        }
+    }
+    else if(binDroite && objRunner.intDirection != 38 && tabObjMap[parseInt(objRunner.posY / 40)][parseInt((objRunner.posX + 20) / 40)] != null){
         objRunner.intDirection = 1;
         objRunner.posX += objRunner.intVitesse;
 
     }
-    if (binGauche && objRunner.intDirection != 38) {
+
+    if (tabObjMap[parseInt(objRunner.posY / 40)][parseInt(objRunner.posX / 40) - 1] != null) {
+
+        if (binGauche && objRunner.intDirection != 38 && tabObjMap[parseInt(objRunner.posY / 40)][parseInt((objRunner.posX + 20) / 40) - 1].objNom != "MUR" && tabObjMap[parseInt((objRunner.posY +20) / 40)][parseInt((objRunner.posX +20) / 40) - 1].objNom != "MUR") {
+            objRunner.intDirection = -1;
+            objRunner.posX -= objRunner.intVitesse;
+
+        }
+    }else if(binGauche && objRunner.intDirection != 38 && tabObjMap[parseInt(objRunner.posY / 40)][parseInt((objRunner.posX - 20) / 40)] != null){
         objRunner.intDirection = -1;
         objRunner.posX -= objRunner.intVitesse;
 

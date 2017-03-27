@@ -91,6 +91,12 @@ function debug() {
         + objRunner.binMonter + " - surMur: " + objRunner.binSurMur + " - surCorde: " + objRunner.binSurCorde +
         " - binDescendre: " + binDescendre + " - binMonter: " + binMonter + " - surMurCote: " + objRunner.binSurMurCote + " T: " + objRunner.binTomber, 10, 20);
 
+    if (tabObjMap[parseInt(objRunner.posY / 40)][parseInt(objRunner.posX / 40) + 1] != null) {
+
+
+        objC2D.fillText(tabObjMap[parseInt(objRunner.posY / 40)][parseInt(objRunner.posX / 40) + 1].objNom, 10, 40);
+    }
+
 
     objC2D.fillStyle = 'lime';
     objC2D.beginPath();
@@ -102,26 +108,11 @@ function debug() {
     objC2D.fillStyle = 'pink';
     objC2D.fillRect(objRunner.posX + 10, objRunner.posY, 5, 5);
     objC2D.fillRect(objRunner.posX - 10, objRunner.posY, 5, 5);
-
     objC2D.stroke();
+
     objC2D.fillStyle = 'lime';
     objC2D.closePath();
     objC2D.font = "12px calibri";
     objC2D.fillText("(" + objRunner.posX + ", " + objRunner.posY + ")", objRunner.posX, objRunner.posY - 25);
-
-    for (var row = 0; row < tabObjMap.length; row++) {
-        for (var col = 0; col < tabObjMap[row].length; col++) {
-
-            if (tabObjMap[row][col].objNom == "TROU") {
-                objC2D.stroke();
-                objC2D.fillStyle = 'gold';
-                objC2D.closePath();
-                objC2D.font = "9px calibri";
-
-                objC2D.fillText(tabObjMap[row][col].intTemps, tabObjMap[row][col].posX - 10,
-                    tabObjMap[row][col].posY);
-            }
-        }
-    }
 
 }

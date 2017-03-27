@@ -23,8 +23,10 @@ function collisionOr(objCharacter) {
 
                     tabMap[row][col] = 'F';
                     tabObjMap[row][col] = objet;
-                    if (objCharacter.strNom == "fantome") {
-                        objFantome.intnbrOr++;
+                    if (objCharacter.strNom == "fantome" && objCharacter.intnbrOr == 0) {
+                        objCharacter.intnbrOr++;
+                        console.log(objCharacter.intnbrOr)
+
                     } else {
                         objSons.rammaserOr.play();
                         intCompteurOR++;
@@ -37,14 +39,7 @@ function collisionOr(objCharacter) {
         }
     }
 
-    if (intCompteurOR == 6 && objRunner.posX == 740 && objRunner.posY == 40) {
-        //effacerDessin();
-        //initAnimation();
-        objRunner.posX = 560;
-        objRunner.posY = 577;
-        intCompteurNiveau++;
-        intCompteurOR = 0;
-    }
+
 }
 
 /******************************************************************************************
@@ -135,7 +130,7 @@ function collisionCorde() {
 
                     if (!objRunner.binTomber) {
                         objRunner.binSurCorde = true;
-                        objRunner.posY = tabObjMap[row][col].posY;
+                        objRunner.posY = tabObjMap[row][col].posY - 1;
 
                     }
 
@@ -161,19 +156,54 @@ function collisionMurCote(objCharacter) {
 
             if (tabObjMap[row][col].objNom == "MUR") {
 
-                if (objCharacter.posX + 15 >= tabObjMap[row][col].posX - 20 && objCharacter.posX <= tabObjMap[row][col].posX + 20 &&
-                    objCharacter.posY - 15 >= tabObjMap[row][col].posY - 20 && objCharacter.posY <= tabObjMap[row][col].posY + 20) {
+                if (objCharacter.posX + 20 > tabObjMap[row][col].posX -20 && objCharacter.posX-20 < tabObjMap[row][col].posX + 20 &&
+                    objCharacter.posY + 23 > tabObjMap[row][col].posY -19 && objCharacter.posY-12 < tabObjMap[row][col].posY + 19) {
 
                     objCharacter.binSurMurCote = true;
-                    if (objFantome.intDirection == 1) {
-                        objCharacter.posX = tabObjMap[row][col].posX - 35;
-                    } else if (objFantome.intDirection == -1) {
-                        objCharacter.posX = tabObjMap[row][col].posX + 20;
+                    if (objCharacter.intDirection == 1 && objCharacter.posX + 20 > tabObjMap[row][col].posX -20 ) {
+                        //objCharacter.posX = tabObjMap[row][col].posX - 25;
+                    } else if (objCharacter.intDirection == -1 && objCharacter.posX-20 < tabObjMap[row][col].posX + 20 ) {
+                        //objCharacter.posX = tabObjMap[row][col].posX + 25;
                     }
 
 
                 }
             }
         }
+    }
+
+    /*var y = parseInt((objCharacter.posY + 20) / 40);
+     var x = parseInt((objCharacter.posX + 20) / 40);
+     console.log("x: " + x)
+     console.log("y: " + y)
+     if (x +1 <28)
+     if (tabObjMap[y][x + 1].objNom == "MUR" )
+     objCharacter.binSurMurCote = true;
+
+     if (x-1>0)
+     if (tabObjMap[y][x - 1].objNom == "MUR")
+     objCharacter.binSurMurCote = true;
+
+     if (objCharacter.binSurMurCote == true) {
+     if (objCharacter.intDirection == 1) {
+     objCharacter.posX = tabObjMap[y][x].posX - 33;
+     } else if (objCharacter.intDirection == -1) {
+     objCharacter.posX = tabObjMap[y][x-1].posX +33;
+     }
+     }*/
+
+
+}
+
+function verififcationVictoire() {
+    if (intCompteurOR == 6 && objRunner.posX == 740 && objRunner.posY == 40) {
+        //effacerDessin();
+        intCompteurNiveau++;
+        //initAnimation();
+        initNiveau();
+        /*objRunner.posX = 560;
+         objRunner.posY = 577;*/
+
+        intCompteurOR = 0;
     }
 }

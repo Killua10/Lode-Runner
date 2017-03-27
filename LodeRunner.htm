@@ -59,18 +59,49 @@
             }
             initImageFond();
             initRunner();
-            initFantome(0, "fantome0.png", 90, 577);
+            initFantome(0, "fantome0.png", 188, 255);
             initFantome(1, "fantome1.png", 200, 370);
-            initFantome(2, "fantome2.png", 300, 257);
-            if (intCompteurNiveau == 2) {
-                initFantome(3, "fantome3.png", 800, 550);
-            } else if (intCompteurNiveau == 3) {
-                initFantome(4, "fantome4.png", 400, 257);
-            }
+            initFantome(2, "fantome2.png", 250, 495);
             initSons();
             dessiner(); // Dessiner une première fois
             animer();
 
+        }
+
+        function initNiveau() {
+            genereNewMap();
+
+            //objDateHeure1 = new Date().getTime();
+            intMinuteChrono = 0;
+            intSecondeChrono = 0;
+            intMiliSecondeChrono = 0;
+            intMinuteChrono = ajouteZeros(intMinuteChrono);
+            intSecondeChrono = ajouteZeros(intSecondeChrono);
+
+            initRunner();
+            tabFantome[0].posX = 90;
+            tabFantome[0].posY = 577;
+            tabFantome[1].posX = 200;
+            tabFantome[1].posY = 370;
+            tabFantome[2].posX = 300;
+            tabFantome[2].posY = 257;
+            if (intCompteurNiveau == 2) {
+                initFantome(3, "fantome3.png", 910, 495);
+            } else if (intCompteurNiveau == 3) {
+                initFantome(4, "fantome4.png", 400, 370);
+            }
+            console.log(tabFantome)
+
+            /*for (var i = 0; i < tabFantome.length; i++) {
+             tabFantome[i].posX =  800 + random
+             tabFantome[i].posY =  550 + random
+             }*/
+
+            //initSons();
+            dessinerMappe();
+            // dessiner(); // Dessiner une première fois
+            //animer();
+            chronoMarche = false;
         }
 
 
@@ -158,12 +189,16 @@
          *
          * Dessine les guardiens du jeu
          *****************************************************************************************/
-        function dessinerFantome(posX, posY, intFrame) {
+        function dessinerFantome(objFantome, posX, posY, intFrame) {
             objC2D.save();
             objC2D.globalAlpha = 0.8;
 
-            for (var i = 0; i < tabFantome.length; i++) {
-                objC2D.drawImage(tabFantome[i].objImage, (tabFantome[i].objImage.width / 12) * intFrame, 0, 36, 40, tabFantome[i].posX - 12, tabFantome[i].posY - 12, 36, 40);
+            objC2D.drawImage(objFantome.objImage, (objFantome.objImage.width / 12) * intFrame, 0, 36, 40, posX - 12, posY - 12, 36, 40);
+            if (objFantome.intnbrOr != 0) {
+                objC2D.fillStyle = 'gold';
+                objC2D.closePath();
+                objC2D.font = "16px calibri";
+                objC2D.fillText(objFantome.intnbrOr, objFantome.posX + 2, objFantome.posY - 10);
             }
 
 
@@ -188,6 +223,7 @@
                 collisionOr(tabFantome[i]);
             }
 
+
             collisionEchelle();
             collisionMur(objRunner);
             for (var i = 0; i < tabFantome.length; i++) {
@@ -202,6 +238,7 @@
             creuserTrou();
             chronometre();
             timerCreuser();
+            verififcationVictoire();
 
 
         }
@@ -315,9 +352,13 @@
             }
 
             for (var i = 0; i < tabFantome.length; i++) {
-                dessinerFantome(tabFantome[i].posX, tabFantome[i].posY, Math.floor(tabFantome[i].intFrame));
-            }
+                dessinerFantome(tabFantome[i], tabFantome[i].posX, tabFantome[i].posY, Math.floor(tabFantome[i].intFrame));
+                if (tabFantome[i].intnbrOr > 0) {
+                    objC2D.fillStyle = 'gold';
+                    objC2D.font = "16px calibri";
+                }
 
+            }
 
             dessinerHUD();
             debug();
@@ -336,13 +377,10 @@
 
             var x = event.keyCode;
 
-            /*if (chronoMarche) {
-             chronoMarche = false;
-             }else {*/
-            chronoMarche = true;
-            objDateHeure1 = new Date();
-
-            //}
+            if (!chronoMarche) {
+                chronoMarche = true;
+                objDateHeure1 = new Date();
+            }
             binDroite = false
             binGauche = false
 
