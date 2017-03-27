@@ -119,13 +119,15 @@ function animationRunner() {
 
     // Ajustement de variables de direction et controle de vitesse
     if (tabObjMap[parseInt(objRunner.posY / 40)][parseInt(objRunner.posX / 40) + 1] != null) {
-        if (binDroite && objRunner.intDirection != 38 && tabObjMap[parseInt(objRunner.posY / 40)][parseInt(objRunner.posX / 40) + 1].objNom != "MUR" && tabObjMap[parseInt((objRunner.posY +20) / 40)][parseInt(objRunner.posX / 40) + 1].objNom != "MUR") {
+        if (binDroite && objRunner.intDirection != 38 && tabObjMap[parseInt(objRunner.posY / 40)][parseInt(objRunner.posX / 40) + 1].objNom != "MUR" && tabObjMap[parseInt((objRunner.posY +20) / 40)][parseInt(objRunner.posX / 40) + 1].objNom != "MUR"&& (objRunner.binSurMur
+            || objRunner.binSurCorde) ) {
             objRunner.intDirection = 1;
             objRunner.posX += objRunner.intVitesse;
 
         }
     }
-    else if(binDroite && objRunner.intDirection != 38 && tabObjMap[parseInt(objRunner.posY / 40)][parseInt((objRunner.posX + 20) / 40)] != null){
+    else if(binDroite && objRunner.intDirection != 38 && tabObjMap[parseInt(objRunner.posY / 40)][parseInt((objRunner.posX + 20) / 40)] != null&& (objRunner.binSurMur
+        || objRunner.binSurCorde)){
         objRunner.intDirection = 1;
         objRunner.posX += objRunner.intVitesse;
 
@@ -133,12 +135,14 @@ function animationRunner() {
 
     if (tabObjMap[parseInt(objRunner.posY / 40)][parseInt(objRunner.posX / 40) - 1] != null) {
 
-        if (binGauche && objRunner.intDirection != 38 && tabObjMap[parseInt(objRunner.posY / 40)][parseInt((objRunner.posX + 20) / 40) - 1].objNom != "MUR" && tabObjMap[parseInt((objRunner.posY +20) / 40)][parseInt((objRunner.posX +20) / 40) - 1].objNom != "MUR") {
+        if (binGauche && objRunner.intDirection != 38 && tabObjMap[parseInt(objRunner.posY / 40)][parseInt((objRunner.posX + 20) / 40) - 1].objNom != "MUR" && tabObjMap[parseInt((objRunner.posY +20) / 40)][parseInt((objRunner.posX +20) / 40) - 1].objNom != "MUR" && (objRunner.binSurMur
+            || objRunner.binSurCorde) ) {
             objRunner.intDirection = -1;
             objRunner.posX -= objRunner.intVitesse;
 
         }
-    }else if(binGauche && objRunner.intDirection != 38 && tabObjMap[parseInt(objRunner.posY / 40)][parseInt((objRunner.posX - 20) / 40)] != null){
+    }else if(binGauche && objRunner.intDirection != 38 && tabObjMap[parseInt(objRunner.posY / 40)][parseInt((objRunner.posX - 20) / 40)] != null && (objRunner.binSurMur
+        || objRunner.binSurCorde) ){
         objRunner.intDirection = -1;
         objRunner.posX -= objRunner.intVitesse;
 
@@ -160,9 +164,9 @@ function animationRunner() {
     }
 
 
-    if (objRunner.binTomber && !objRunner.binSurMur) {
+    /*if (objRunner.binTomber && !objRunner.binSurMur) {
         objRunner.posY += objRunner.intVitesse;
-    }
+    }*/
 
     // Descendre l'echelle
     if (binDescendre && objRunner.intDirection == 40) {
