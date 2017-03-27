@@ -30,7 +30,7 @@ function initRunner() {
     objRunner.intLargeur = 24;
     objRunner.intLargeur2 = 12;
     objRunner.posX = objCanvas.width / 2;
-    objRunner.posY = 577;
+    objRunner.posY = 579;
     objRunner.intVitesse = 4;
     objRunner.intDirection = 0; //-1=left, 0=middle, +1=right
     objRunner.binMeurt = false;
@@ -258,6 +258,15 @@ function dessinerRunner(x, y, intFrame) {
         dy = objRunner.posY - 12;
         dw = objRunner.objAnimationCordeDroite.width / 8;
         objC2D.drawImage(objRunner.objAnimationCordeDroite, sx, sy, sw, dh, dx, dy, dw, dh);
+    }
+
+    if (objRunner.intDirection == 40) {
+        sx = (524 / 22) * 0;
+        sw = objRunner.objImage.width / 22;
+        dx = objRunner.posX - 12;
+        dy = objRunner.posY - 12;
+        dw = objRunner.objImage.width / 22;
+        objC2D.drawImage(objRunner.objImage, sx, sy, sw, sh, dx, dy, dw, dh);
     }
 
     objC2D.restore();
