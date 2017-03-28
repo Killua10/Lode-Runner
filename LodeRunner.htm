@@ -233,6 +233,7 @@
             chronometre();
             timerCreuser();
             verificationVictoire();
+            objSons.background.play();
 
 
         }
@@ -294,8 +295,15 @@
 
             if (objFantomeAnimer.posX == objRunner.posX && objFantomeAnimer.posY == objRunner.posY) {
                 objRunner.binMeurt = true;
+                //objRunner.posY -= objFantomeAnimer.intVitesse;
                 //make timer or game over.. check document.
+            }else {
+              objRunner.binMeurt = false;
             }
+
+            /*if (objRunner.binMeurt == true) {
+              objRunner.posY -= objFantomeAnimer.intVitesse;
+            }*/
 
             if (objFantomeAnimer.posX <= objFantomeAnimer.intLimite && objFantomeAnimer.posY == objRunner.posY) {
                 objFantomeAnimer.posX++;

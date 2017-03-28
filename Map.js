@@ -222,6 +222,12 @@ function initSons() {
     objSon.load();
     objSons.chute = objSon;
 
+    objSon = document.createElement('audio');
+    objSon.volume = 0.01;
+    objSon.setAttribute('src', 'sons/background.mp3');
+    objSon.load();
+    objSons.background = objSon;
+
 
 }
 

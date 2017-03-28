@@ -161,6 +161,10 @@ function animationRunner() {
     // Faire tomber le Runner si n'est pas sur un mur
     if (!objRunner.binSurMur) {
         objRunner.posY += objRunner.intVitesse;
+        if (!objRunner.binSurCorde) {
+          objSons.chute.play();
+        }
+
     }
 
 
@@ -179,6 +183,8 @@ function animationRunner() {
     if (objRunner.binMeurt) {
         objSons.meurt.play();
 
+    }else {
+        objSons.meurt.pause();
     }
 
 }
@@ -366,13 +372,6 @@ function timerCreuser() {
 
     }
 
-    if (binSons == true) {
-      objSons.trouremplit.play();
-      binSons = false;
-    }else {
-      objSons.trouremplit.pause();
-    }
-    console.log(binSons);
 
 
     //intCompteur= 0;
