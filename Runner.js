@@ -353,13 +353,29 @@ function creuserTrou() {
 }
 
 function timerCreuser() {
+  //intCompteur = 0;
+  var binSons = false;
 
     for (var i = 0; i < tabCreuser.length; i++) {
         if (intMiliSecondeChrono >= tabCreuser[i].intTimer) {
             tabMap[tabCreuser[i].row][tabCreuser[i].col] = 'M';
             tabObjMap[tabCreuser[i].row][tabCreuser[i].col].intTimer = 0;
+            binSons = true;
+
         }
 
     }
+
+    if (binSons == true) {
+      objSons.trouremplit.play();
+      binSons = false;
+    }else {
+      objSons.trouremplit.pause();
+    }
+    console.log(binSons);
+
+
+    //intCompteur= 0;
+
 
 }
