@@ -103,7 +103,7 @@ function collisionMur(objCharacter) {
                     objCharacter.posY + 23 >= tabObjMap[row][col].posY - 20 && objCharacter.posY + 23 <= tabObjMap[row][col].posY + 20) {
 
                     objCharacter.binSurMur = true;
-                    objCharacter.binTomber = false;
+                    objCharacter.binTomber = false; //--
 
                 }
             }

@@ -206,6 +206,23 @@ function initSons() {
     objSon.setAttribute('src', 'sons/coeur.mp3');
     objSon.load();
     objSons.coeur = objSon;
+
+    objSon = document.createElement('audio');
+    objSon.setAttribute('src', 'sons/trouremplit.mp3');
+    objSon.load();
+    objSons.trouremplit = objSon;
+
+    objSon = document.createElement('audio');
+    objSon.setAttribute('src', 'sons/gardetomber.mp3');
+    objSon.load();
+    objSons.gardetomber = objSon;
+
+    objSon = document.createElement('audio');
+    objSon.setAttribute('src', 'sons/chute.mp3');
+    objSon.load();
+    objSons.chute = objSon;
+
+
 }
 
 function genereNewMap() {
