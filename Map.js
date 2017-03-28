@@ -213,9 +213,9 @@ function initSons() {
     objSons.trouremplit = objSon;
 
     objSon = document.createElement('audio');
-    objSon.setAttribute('src', 'sons/gardetomber.mp3');
+    objSon.setAttribute('src', 'sons/gardemeurt.mp3');
     objSon.load();
-    objSons.gardetomber = objSon;
+    objSons.gardemeurt = objSon;
 
     objSon = document.createElement('audio');
     objSon.setAttribute('src', 'sons/chute.mp3');
@@ -227,6 +227,11 @@ function initSons() {
     objSon.setAttribute('src', 'sons/background.mp3');
     objSon.load();
     objSons.background = objSon;
+
+    objSon = document.createElement('audio');
+    objSon.setAttribute('src', 'sons/fantome-or.mp3');
+    objSon.load();
+    objSons.fantomeOr = objSon;
 
 
 }

@@ -312,6 +312,7 @@
             // Faire tomber le fantome si n'est pas sur un mur
             if (!objFantomeAnimer.binSurMur) {
                 objFantomeAnimer.posY += objFantomeAnimer.intVitesse;
+                objSons.gardemeurt.play();
             }
 
             //SON BATTEMENT DE COEUR SI PROCHE DU RUNNER

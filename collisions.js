@@ -25,7 +25,7 @@ function collisionOr(objCharacter) {
                     tabObjMap[row][col] = objet;
                     if (objCharacter.strNom == "fantome" && objCharacter.intnbrOr == 0) {
                         objCharacter.intnbrOr++;
-                        console.log(objCharacter.intnbrOr)
+                        objSons.fantomeOr.play();
 
                     } else {
                         objSons.rammaserOr.play();
