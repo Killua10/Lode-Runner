@@ -42,7 +42,6 @@
 
 
         var tabObjMap = new Array(17);
-
         /******************************************************************************************
          * initAnimation()
          *
@@ -53,6 +52,7 @@
             objCanvas = document.getElementById('monCanvas');
             objC2D = objCanvas.getContext('2d');
             objC2D.imageSmoothingEnabled = false;
+
             intMinuteChrono = ajouteZeros(intMinuteChrono);
             intSecondeChrono = ajouteZeros(intSecondeChrono);
             for (var i = 0; i < tabObjMap.length; i++) {
@@ -60,7 +60,7 @@
             }
             initImageFond();
             initRunner();
-            initFantome(0, "fantome0.png", 188, 255);
+            initFantome(0, "fantome0.png", 750, 255);
             initFantome(1, "fantome1.png", 200, 370);
             initFantome(2, "fantome2.png", 100, 255);
             initSons();
@@ -471,9 +471,10 @@
         }
 
     </script>
+
 </head>
 
-<body onload="initAnimation()">
+<body onload="initAnimation()" bgcolor="#1e1e1e">
 <canvas id="monCanvas" width="1120" height="830" style="display: block; margin: auto;" onkeydown="keyDown()"
         onkeyup="keyUp()" tabindex="1">
     Votre navigateur ne supporte pas la balise canvas
